@@ -16,7 +16,8 @@ const s3CLientProvider:Provider = {
             },
             forcePathStyle:true
         } as S3ClientConfig)
-    }
+    },
+    inject:[ConfigService]
 }
 
 
