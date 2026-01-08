@@ -16,7 +16,8 @@ export const config = function(){
         port:getEnv("PORT"),
         garageEndpoint:getEnv("GARAGE_ENDPOINT"),
         garageAccessKey:getEnv("GARAGE_ACCESS_KEY"),
-        garageSecretKey:getEnv("GARAGE_SECRET_KEY") 
+        garageSecretKey:getEnv("GARAGE_SECRET_KEY"),
+        garageBucket:getEnv("GARAGE_BUCKET") 
 
     }
 }
