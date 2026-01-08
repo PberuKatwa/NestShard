@@ -10,9 +10,15 @@ function getEnv(key:string): string {
 
 }
 
-export const config = {
-    PORT:getEnv("PORT"),
-    GARAGE_ENDPOINT:getEnv("GARAGE_ENDPOINT"),
-    GARAGE_ACCESS_KEY:getEnv("GARAGE_ACCESS_KEY"),
-    GARAGE_SECRET_KEY:getEnv("GARAGE_SECRET_KEY")
+export const config = function(){
+    return{
+
+        port:getEnv("PORT"),
+        garageEndpoint:getEnv("GARAGE_ENDPOINT"),
+        garageAccessKey:getEnv("GARAGE_ACCESS_KEY"),
+        garageSecretKey:getEnv("GARAGE_SECRET_KEY") 
+
+    }
 }
+
+export default config
