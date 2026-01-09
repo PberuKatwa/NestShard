@@ -5,15 +5,14 @@ import { AppService } from './app.service';
 import { config } from './config';
 import { UploadModule } from './modules/upload.module';
 import { AppLoggerModule } from './logger/logger.module';
+import { GarageModule } from './modules/garage.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load:[config],
-      isGlobal:true
-    }), 
+    ConfigModule.forRoot({ load:[config], isGlobal:true }), 
     UploadModule,
-    AppLoggerModule
+    AppLoggerModule,
+    GarageModule
   ],
   controllers: [AppController],
   providers: [AppService],

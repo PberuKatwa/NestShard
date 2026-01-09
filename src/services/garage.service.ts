@@ -9,21 +9,27 @@ import type { AppLogger } from "../logger/winston.logger"
 
 @Injectable()
 export class GarageService {
+
   constructor(
     @Inject(S3_CLIENT) private readonly s3: S3Client,
     private readonly configService: ConfigService,
 
     @Inject(APP_LOGGER) private readonly logger:AppLogger
+
   ) {}
 
   async uploadFile(file: Express.Multer.File) {
 
     try{
 
+      this.logger.info(`Beginning upload of file from garage service`)
+
       const bucket = this.configService.get<string>('garageBucket');
       const timestamp = Date.now();
       const ext = path.extname(file.originalname)
-      const key = `${randomUUID()}-${timestamp}.${ext}`
+      const key = `${randomUUID()}-${timestamp}${ext}`
+
+      this.logger.warn(`Attempting upload of file:${key} and bucket:${bucket}`)
 
       await this.s3.send(
         new PutObjectCommand({
@@ -33,6 +39,8 @@ export class GarageService {
           ContentType:file.mimetype
         })
       )
+
+      this.logger.info(`Successfully uploaded file:${key}`)
 
       return {
         key,
