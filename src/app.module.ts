@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { config } from './config';
 import { UploadModule } from './modules/upload.module';
+import { AppLoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { UploadModule } from './modules/upload.module';
       load:[config],
       isGlobal:true
     }), 
-    UploadModule
+    UploadModule,
+    AppLoggerModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-import { logger } from "./logger";
+import { logger } from "./winston.logger";
 
 export const APP_LOGGER = 'APP_LOGGER';
 
