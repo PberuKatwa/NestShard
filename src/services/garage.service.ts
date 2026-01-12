@@ -36,16 +36,15 @@ export class GarageService {
 
       this.logger.info(`Beginning upload of file from garage service`)
 
-      const bucket = this.configService.get<string>('garageBucket');
       const timestamp = Date.now();
       const ext = path.extname(file.originalname)
       const key = `${randomUUID()}-${timestamp}${ext}`
 
-      this.logger.warn(`Attempting upload of file:${key} and bucket:${bucket}`)
+      this.logger.warn(`Attempting upload of file:${key} and bucket:${this.bucket}`)
 
       await this.s3.send(
         new PutObjectCommand({
-          Bucket:bucket,
+          Bucket:this.bucket,
           Key:key,
           Body:file.buffer,
           ContentType:file.mimetype
