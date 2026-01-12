@@ -24,17 +24,16 @@ export class FilesController{
         data:files
       }
 
-      return res.status(200).json({
-        success: true,
-        message: `Successfully fetched files of length:${files.length}`,
-        data:files
-      })
+      return res.status(200).json(response)
     } catch (error) {
+
       this.logger.error(`Error in listing S3 files form bucket`, error)
-      return res.status(500).json({
+      const response: ApiResponse<Array<any> > = {
         success: false,
         message:error.message
-      })
+      }
+
+      return res.status(500).json(response)
     }
   }
 
