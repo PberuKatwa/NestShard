@@ -67,14 +67,33 @@ export class GarageService {
   async listFiles() {
     try {
 
-      this.logger.info(`Beginnig listing of files from s3 ....`)
+      this.logger.info(`Attempting to list files from s3.`)
       const response = await this.s3.send(
         new ListObjectsV2Command({
           Bucket: this.bucket
         })
       )
 
-      console.log("filessss" ,response)
+      console.log("filessss", response)
+
+      if (!response.Contents || response.Contents.length === 0) throw new Error(`No files found in the bucket:${this.bucket}.`)
+
+      const files = response.Contents.map(
+        function (file) {
+          return {
+            key: file.Key,
+            lastModified: file.LastModified,
+            etag: file.ETag,
+            size: file.Size,
+            storageClass:file.StorageClass
+          }
+        }
+      )
+
+      this.logger.info(`Files of length:${files.length} were found in bucket:${this.bucket}`)
+
+      return files
+
 
     } catch (error) {
       throw error;
