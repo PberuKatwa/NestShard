@@ -3,6 +3,7 @@ import { GarageService } from "src/services/garage.service";
 import type { Response } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
+import type { ApiResponse } from "src/types/api.types";
 
 @Controller('files')
 export class FilesController{
@@ -15,12 +16,18 @@ export class FilesController{
   @Get()
   async listS3Files( @Res() res:Response ) {
     try {
-      const response = await this.garageService.listFiles()
+      const files = await this.garageService.listFiles()
+
+      const response: ApiResponse< Array<any>  > = {
+        success: true,
+        message: `Successfully fetched files of length:${files.length}`,
+        data:files
+      }
 
       return res.status(200).json({
         success: true,
-        message: `Successfully fetched files of length:${response.length}`,
-        data:response
+        message: `Successfully fetched files of length:${files.length}`,
+        data:files
       })
     } catch (error) {
       this.logger.error(`Error in listing S3 files form bucket`, error)
