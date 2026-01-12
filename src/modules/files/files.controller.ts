@@ -1,4 +1,4 @@
-import { Get, Controller, Res, Req, Inject, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Get, Controller, Res, Req, Inject, Post, UploadedFile, UseInterceptors, Param } from "@nestjs/common";
 import { GarageService } from "src/services/garage.service";
 import type { Response, Request } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
@@ -73,6 +73,38 @@ export class FilesController{
     }
   }
 
+  @Get(':key')
+  async getFile(
+    @Param('key') key: string,
+    @Res() res: Response,
+  ) {
+
+    try {
+
+      const file = await this.garageService.fetchFileByKey(key);
+
+
+    } catch (error) {
+
+      this.logger.error(`Error in fetching files by key`, error)
+      const response: ApiResponse<Array<any> > = {
+        success: false,
+        message:error.message
+      }
+
+      return res.status(500).json(response)
+    }
+    const file = await this.garageService.fetchFileByKey(key);
+
+    res.setHeader('Content-Type', file.contentType || 'application/octet-stream');
+    if(!file.contentLength) throw new Error(`No Content`)
+    res.setHeader('Content-Length', file.contentLength);
+
+    // inline = display in browser (PDF/image)
+    res.setHeader('Content-Disposition', `inline; filename="${key}"`);
+
+    file.stream.pipe(res);
+  }
 
 
 }
