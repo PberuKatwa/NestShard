@@ -13,7 +13,7 @@ import path from 'path';
 import { S3_CLIENT } from '../storage/garage.storage';
 import { APP_LOGGER } from 'src/logger/logger.provider';
 import type { AppLogger } from '../logger/winston.logger';
-import type { listFilesRes } from 'src/types/storage.types';
+import type { listFilesRes, keyFileFetchRes } from 'src/types/storage.types';
 
 @Injectable()
 export class GarageService {
@@ -105,7 +105,7 @@ export class GarageService {
     }
   }
 
-  async fetchFileByKey(key: string) {
+  async fetchFileByKey(key: string): Promise< keyFileFetchRes > {
     try {
 
       this.logger.warn(`Attempting to fetch file from bucket:${this.bucket} with key:${key}`)
@@ -116,12 +116,19 @@ export class GarageService {
         })
       )
 
-      console.log(`This is the file fetcheddd`, file)
-      console.log(`This is the file fetcheddd`, file)
+      if (!file) throw new Error(`No file with key:${key} was found`)
+      if (!file.Body) throw new Error(`No file body with key:${key} was found`)
+      if (!file.ContentType) throw new Error(`No file content with key:${key} was found`)
+      if (!file.ContentLength) throw new Error(`No file content length with key:${key} was found`)
+      if (!file.LastModified) throw new Error(`No file LastModified with key:${key} was found`)
+
+      this.logger.info(`Successfully fetched file with key:${key} for s3.`)
+
       return {
         stream: file.Body as Readable,
         contentType: file.ContentType,
-        contentLength:file.ContentLength
+        contentLength: file.ContentLength,
+        lastModified:file.LastModified
       }
 
     } catch (error) {
