@@ -84,12 +84,18 @@ export class GarageService {
       const files = response.Contents.map(
         function (file) {
 
+          if (!file.Key) throw new Error(`No file  key was found`)
+          if (!file.LastModified) throw new Error(`No file LastModified was found`)
+          if (!file.ETag) throw new Error(`No file ETag was found`)
+          if (!file.Size) throw new Error(`No file Size was found`)
+          if (!file.StorageClass) throw new Error(`No file StorageClass was found`)
+
           const fileData: listFilesRes = {
-            key: file.Key!,
-            lastModified: file.LastModified!,
-            etag: file.ETag!,
-            size: file.Size!,
-            storageClass:file.StorageClass!
+            key: file.Key,
+            lastModified: file.LastModified,
+            etag: file.ETag,
+            size: file.Size,
+            storageClass:file.StorageClass
           }
           return fileData
 
