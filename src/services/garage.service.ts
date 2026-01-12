@@ -67,6 +67,7 @@ export class GarageService {
   async listFiles() {
     try {
 
+      this.logger.info(`Beginnig listing of files from s3 ....`)
       const response = await this.s3.send(
         new ListObjectsV2Command({
           Bucket: this.bucket
