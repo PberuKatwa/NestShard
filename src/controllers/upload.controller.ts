@@ -4,7 +4,9 @@ import {
   UploadedFile,
   UseInterceptors,
   Inject,
-  Res
+  Res,
+  Get,
+  Param
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GarageService } from '../services/garage.service';
@@ -17,7 +19,7 @@ export class UploadController {
   constructor(
     private readonly garageService: GarageService,
     @Inject(APP_LOGGER) private readonly logger:AppLogger
-    
+
   ) {}
 
   @Post()
