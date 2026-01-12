@@ -7,10 +7,9 @@ import type { AppLogger } from "src/logger/winston.logger";
 @Controller('files')
 export class FilesController{
 
-  private readonly garageService: GarageService;
-  @Inject(APP_LOGGER) private readonly logger: AppLogger;
-
   constructor(
+    private readonly garageService: GarageService,
+    @Inject(APP_LOGGER) private readonly logger: AppLogger
   ) {}
 
   @Get()

@@ -3,7 +3,7 @@ import { FilesController } from "./files.controller";
 import { GarageModule } from "../garage.module";
 
 @Module({
-  providers: [GarageModule],
+  imports: [GarageModule],
   controllers:[FilesController]
 })
 
