@@ -67,7 +67,11 @@ export class GarageService {
   async listFiles() {
     try {
 
-
+      const response = await this.s3.send(
+        new ListObjectsV2Command({
+          Bucket: this.bucket
+        })
+      )
 
     } catch (error) {
       throw error;
