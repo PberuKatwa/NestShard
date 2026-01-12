@@ -19,6 +19,12 @@ export class FilesController{
   async uploadFiles(@UploadedFile() file: Express.Multer.File, @Res() res: Response) {
     try {
 
+      if(!file){
+        return res.status(404).json({
+          success:false,
+          message:'Please provide a file'
+        })
+      }
       const uploadResponse = await this.garageService.uploadFile(file)
 
     } catch (error) {
