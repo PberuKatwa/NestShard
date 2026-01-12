@@ -105,7 +105,18 @@ export class GarageService {
     }
   }
 
-  fetchFileByKey(key: string) {
+  async fetchFileByKey(key: string) {
+    try {
 
+      const file = await this.s3.send(
+        new GetObjectCommand({
+          Bucket: this.bucket,
+          Key:key
+        })
+      )
+
+    } catch (error) {
+      throw error;
+    }
   }
 }
