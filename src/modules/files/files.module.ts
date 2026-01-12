@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
-import { GarageService } from "src/services/garage.service";
 import { FilesController } from "./files.controller";
+import { GarageModule } from "../garage.module";
 
 @Module({
-  providers: [GarageService],
+  providers: [GarageModule],
   controllers:[FilesController]
 })
 
