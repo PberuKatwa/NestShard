@@ -12,6 +12,7 @@ import path from 'path';
 import { S3_CLIENT } from '../storage/garage.storage';
 import { APP_LOGGER } from 'src/logger/logger.provider';
 import type { AppLogger } from '../logger/winston.logger';
+import type { listFilesRes } from 'src/types/storage.types';
 
 @Injectable()
 export class GarageService {
@@ -78,13 +79,16 @@ export class GarageService {
 
       const files = response.Contents.map(
         function (file) {
-          return {
-            key: file.Key,
-            lastModified: file.LastModified,
-            etag: file.ETag,
-            size: file.Size,
-            storageClass:file.StorageClass
+
+          const fileData: listFilesRes = {
+            key: file.Key!,
+            lastModified: file.LastModified!,
+            etag: file.ETag!,
+            size: file.Size!,
+            storageClass:file.StorageClass!
           }
+          return fileData
+
         }
       )
 
