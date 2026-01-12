@@ -15,6 +15,7 @@ import type { AppLogger } from '../logger/winston.logger';
 
 @Injectable()
 export class GarageService {
+  private readonly bucket: string;
 
   constructor(
     @Inject(S3_CLIENT) private readonly s3: S3Client,
@@ -22,7 +23,11 @@ export class GarageService {
 
     @Inject(APP_LOGGER) private readonly logger:AppLogger
 
-  ) {}
+  ) {
+    const bucket = this.configService.get<string>('garageBucket');
+    if (!bucket) throw new Error(`No s3 bucket was found`);
+    this.bucket = bucket
+  }
 
   async uploadFile(file: Express.Multer.File) {
 
@@ -57,5 +62,9 @@ export class GarageService {
     }catch(error:any){
       throw error;
     }
-}
+  }
+
+  async listFiles() {
+
+  }
 }
