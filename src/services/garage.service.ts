@@ -88,7 +88,7 @@ export class GarageService {
         }
       )
 
-      this.logger.info(`Files of length:${files.length} were found in bucket:${this.bucket}`)
+      this.logger.info(`Successfully fetched ${files.length} files from bucket:${this.bucket}`)
 
       return files
 
