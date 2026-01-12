@@ -83,6 +83,10 @@ export class FilesController{
 
       const file = await this.garageService.fetchFileByKey(key);
 
+      res.setHeader('Content-Type', file.contentType || 'application/octet-stream');
+      res.setHeader('Content-Length', file.contentLength);
+      res.setHeader('Content-Disposition', `inline; filename="${key}"`);
+      file.stream.pipe(res);
 
     } catch (error) {
 
@@ -94,16 +98,6 @@ export class FilesController{
 
       return res.status(500).json(response)
     }
-    const file = await this.garageService.fetchFileByKey(key);
-
-    res.setHeader('Content-Type', file.contentType || 'application/octet-stream');
-    if(!file.contentLength) throw new Error(`No Content`)
-    res.setHeader('Content-Length', file.contentLength);
-
-    // inline = display in browser (PDF/image)
-    res.setHeader('Content-Disposition', `inline; filename="${key}"`);
-
-    file.stream.pipe(res);
   }
 
 
