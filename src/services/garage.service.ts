@@ -34,7 +34,7 @@ export class GarageService {
 
     try{
 
-      this.logger.info(`Beginning upload of file from garage service`)
+      this.logger.info(`Beginnning upload of file from garage service`)
 
       const timestamp = Date.now();
       const ext = path.extname(file.originalname)
