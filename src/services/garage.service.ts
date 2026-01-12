@@ -6,6 +6,7 @@ import {
   ListObjectsV2Command
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Readable } from 'stream';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
 import path from 'path';
@@ -30,7 +31,11 @@ export class GarageService {
     this.bucket = bucket
   }
 
-  async uploadFile(file: Express.Multer.File) {
+  async uploadFile(file: Express.Multer.File): Promise<{
+    key: string;
+    size: number;
+    mimeType: string;
+  }> {
 
     try{
 
@@ -64,7 +69,7 @@ export class GarageService {
     }
   }
 
-  async listFiles() {
+  async listFiles():Promise< Array<listFilesRes> > {
     try {
 
       this.logger.info(`Attempting to list files from s3.`)
@@ -98,5 +103,9 @@ export class GarageService {
     } catch (error) {
       throw error;
     }
+  }
+
+  fetchFileByKey(key: string) {
+
   }
 }
