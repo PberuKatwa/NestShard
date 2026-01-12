@@ -74,8 +74,6 @@ export class GarageService {
         })
       )
 
-      console.log("filessss", response)
-
       if (!response.Contents || response.Contents.length === 0) throw new Error(`No files found in the bucket:${this.bucket}.`)
 
       const files = response.Contents.map(
@@ -93,7 +91,6 @@ export class GarageService {
       this.logger.info(`Files of length:${files.length} were found in bucket:${this.bucket}`)
 
       return files
-
 
     } catch (error) {
       throw error;
