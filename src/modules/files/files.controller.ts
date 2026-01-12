@@ -44,7 +44,8 @@ export class FilesController{
         message:error.message
       }
 
-      return res.status(500).json(response)    }
+      return res.status(500).json(response)
+    }
 
   }
 
