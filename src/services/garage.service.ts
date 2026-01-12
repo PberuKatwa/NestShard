@@ -108,12 +108,21 @@ export class GarageService {
   async fetchFileByKey(key: string) {
     try {
 
+      this.logger.warn(`Attempting to fetch file from bucket:${this.bucket} with key:${key}`)
       const file = await this.s3.send(
         new GetObjectCommand({
           Bucket: this.bucket,
           Key:key
         })
       )
+
+      console.log(`This is the file fetcheddd`, file)
+      console.log(`This is the file fetcheddd`, file)
+      return {
+        stream: file.Body as Readable,
+        contentType: file.ContentType,
+        contentLength:file.ContentLength
+      }
 
     } catch (error) {
       throw error;
