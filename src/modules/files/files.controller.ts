@@ -25,7 +25,16 @@ export class FilesController{
           message:'Please provide a file'
         })
       }
+
       const uploadResponse = await this.garageService.uploadFile(file)
+
+      const response: ApiResponse = {
+        success:true,
+        message:`File with key:${uploadResponse.key} successfully uploaded`,
+        data:uploadResponse
+      }
+
+      return res.status(200).json(response)
 
     } catch (error) {
       this.logger.error(`Error in uploading file`, error)
