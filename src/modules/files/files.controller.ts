@@ -133,17 +133,6 @@ export class FilesController{
 
       return res.status(500).json(response)
     }
-    // Use a library like 'busboy' to get the stream without buffering to RAM
-
-    return new Promise((resolve, reject) => {
-      busboy.on('file', (name, fileStream, info) => {
-        const { filename, mimeType } = info;
-        this.garageService.uploadInManualChunks(fileStream, filename, mimeType)
-          .then(resolve)
-          .catch(reject);
-      });
-      req.pipe(busboy);
-    });
   }
 
 
