@@ -14,6 +14,72 @@ export class FilesController{
     @Inject(APP_LOGGER) private readonly logger: AppLogger
   ) {}
 
+  @Post('upload2')
+  async handleUpload(@Req() req: Request) {
+    const fileSize = parseInt(req.headers['content-length'] || '0');
+    const busboy = require('busboy')({ headers: req.headers });
+
+    return new Promise((resolve, reject) => {
+
+      busboy.on('file', async (name, fileStream, info) => {
+        try {
+
+          const { filename, mimeType } = info;
+
+          if (fileSize > 100 * 1024 * 1024) {
+
+            const key = await this.garageService.uploadMultiPart(fileStream, filename, mimeType);
+
+            const response: ApiResponse = {
+              success: true,
+              message: `Successfully uploaded large file with key:${key}.`,
+              data: {
+                key: key,
+                fileSize:fileSize
+              }
+            }
+            resolve(response);
+
+          } else {
+
+            const chunks: Buffer[] = [];
+
+            for await (const chunk of fileStream) {
+              chunks.push(chunk);
+            }
+
+            const mockFile = {
+              buffer: Buffer.concat(chunks),
+              originalname: filename,
+              mimetype: mimeType,
+              size: fileSize
+            } as Express.Multer.File;
+
+            const { key } = await this.garageService.uploadFile(mockFile);
+
+            const response: ApiResponse = {
+              success: true,
+              message: `Successfully uploaded large file with key:${key}.`,
+              data: {
+                key: key,
+                fileSize:fileSize
+              }
+            }
+
+            resolve(response);
+
+          }
+        } catch (err) {
+          reject(err);
+        }
+      });
+
+      busboy.on('error', (err) => reject(err));
+
+      req.pipe(busboy);
+    });
+  }
+
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFiles(@UploadedFile() file: Express.Multer.File, @Res() res: Response) {
