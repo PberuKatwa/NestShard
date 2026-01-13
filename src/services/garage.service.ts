@@ -163,10 +163,10 @@ export class GarageService {
   ): Promise<string> {
 
       const key = this.createFileName(fileName);
-      let uploadId: string | undefined;
+      // let uploadId: string | undefined;
 
-      try {
-        // 1. Initiation
+    try {
+
         const multipartUpdate = await this.s3.send(
           new CreateMultipartUploadCommand({
             Bucket: this.bucket,
@@ -174,8 +174,9 @@ export class GarageService {
             ContentType: mimeType,
           })
         );
+
         if(!multipartUpdate.UploadId) throw new Error(`No multipart upload id was found.`)
-        uploadId = multipartUpdate.UploadId;
+        const uploadId = multipartUpdate.UploadId;
 
         const partETags: { PartNumber: number; ETag: string }[] = [];
         let partNumber = 1;
@@ -229,7 +230,9 @@ export class GarageService {
       }
     }
 
-    private async uploadPart(key: string, uploadId: string, body: Buffer, partNumber: number): Promise<string> {
+  private async uploadPart(key: string, uploadId: string, body: Buffer, partNumber: number): Promise<string> {
+    try {
+
       const result = await this.s3.send(
         new UploadPartCommand({
           Bucket: this.bucket,
@@ -240,5 +243,9 @@ export class GarageService {
         })
       );
       return result.ETag!;
+
+    } catch (error) {
+      throw error;
+    }
     }
 }
