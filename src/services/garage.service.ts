@@ -156,7 +156,7 @@ export class GarageService {
 
   }
 
-  async uploadInManualChunks(
+  async uploadLargeFiles(
       fileStream: Readable,
       fileName: string,
       mimeType: string
