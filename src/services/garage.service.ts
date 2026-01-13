@@ -156,7 +156,7 @@ export class GarageService {
 
   }
 
-  async uploadLargeFiles(
+  async uploadMultiPart(
       fileStream: Readable,
       fileName: string,
       mimeType: string
@@ -182,8 +182,7 @@ export class GarageService {
         let partNumber = 1;
         let currentBuffer = Buffer.alloc(0);
 
-        // S3 requires parts to be at least 5MB (except the last part)
-        const MIN_PART_SIZE = 10 * 1024 * 1024; // 10MB Chunks
+        const MIN_PART_SIZE = 10 * 1024 * 1024;
 
         // 2. Process the stream in chunks
         for await (const chunk of fileStream) {

@@ -109,7 +109,7 @@ export class FilesController{
         function (resolve, reject) {
           busboy.on('file', function (name, fileStream, info) {
             const { filename, mimeType } = info;
-            this.garageService.uploadLargeFiles(fileStream, filename, mimeType)
+            this.garageService.uploadMultiPart(fileStream, filename, mimeType)
               .then(resolve)
               .catch(reject);
           });
