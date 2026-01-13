@@ -105,9 +105,9 @@ export class FilesController{
     try {
       const busboy = require('busboy')({ headers: req.headers });
 
-      new Promise(
-        function (resolve, reject) {
-          busboy.on('file', function (name, fileStream, info) {
+      await new Promise(
+        (resolve, reject) =>{
+          busboy.on('file',(name, fileStream, info)=> {
             const { filename, mimeType } = info;
             this.garageService.uploadMultiPart(fileStream, filename, mimeType)
               .then(resolve)
