@@ -182,7 +182,7 @@ export class GarageService {
         let partNumber = 1;
         let currentBuffer = Buffer.alloc(0);
 
-        const MIN_PART_SIZE = 10 * 1024 * 1024;
+        const MIN_PART_SIZE = 15 * 1024 * 1024;
 
         // 2. Process the stream in chunks
         for await (const chunk of fileStream) {
