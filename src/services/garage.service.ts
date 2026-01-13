@@ -163,7 +163,7 @@ export class GarageService {
   ): Promise<string> {
 
       const key = this.createFileName(fileName);
-      // let uploadId: string | undefined;
+      let uploadId: string | undefined;
 
     try {
 
@@ -176,7 +176,7 @@ export class GarageService {
         );
 
         if(!multipartUpdate.UploadId) throw new Error(`No multipart upload id was found.`)
-        const uploadId = multipartUpdate.UploadId;
+        uploadId = multipartUpdate.UploadId;
 
         const partETags: { PartNumber: number; ETag: string }[] = [];
         let partNumber = 1;
