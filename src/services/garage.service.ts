@@ -3,12 +3,16 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
-  ListObjectsV2Command
+  ListObjectsV2Command,
+  CreateMultipartUploadCommand,
+  CompleteMultipartUploadCommand,
+  AbortMultipartUploadCommand,
+  UploadPartCommand
 } from '@aws-sdk/client-s3';
+import { randomBytes, randomUUID } from 'crypto';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 import { ConfigService } from '@nestjs/config';
-import { randomUUID } from 'crypto';
 import path from 'path';
 import { S3_CLIENT } from '../storage/garage.storage';
 import { APP_LOGGER } from 'src/logger/logger.provider';
@@ -141,4 +145,100 @@ export class GarageService {
       throw error;
     }
   }
+
+  private createFileName(fileName: string): string {
+
+    const timestamp = Date.now();
+    const ext = path.extname(fileName);
+    const uuid =  randomBytes(7).toString('base64').replace(/[+/=]/g, '').substring(0, 10);
+    const key = `${uuid}-${timestamp}${ext}`;
+    return key;
+
+  }
+
+  async uploadInManualChunks(
+      fileStream: Readable,
+      fileName: string,
+      mimeType: string
+  ): Promise<string> {
+
+      const key = this.createFileName(fileName);
+      let uploadId: string | undefined;
+
+      try {
+        // 1. Initiation
+        const multipartUpdate = await this.s3.send(
+          new CreateMultipartUploadCommand({
+            Bucket: this.bucket,
+            Key: key,
+            ContentType: mimeType,
+          })
+        );
+        if(!multipartUpdate.UploadId) throw new Error(`No multipart upload id was found.`)
+        uploadId = multipartUpdate.UploadId;
+
+        const partETags: { PartNumber: number; ETag: string }[] = [];
+        let partNumber = 1;
+        let currentBuffer = Buffer.alloc(0);
+
+        // S3 requires parts to be at least 5MB (except the last part)
+        const MIN_PART_SIZE = 10 * 1024 * 1024; // 10MB Chunks
+
+        // 2. Process the stream in chunks
+        for await (const chunk of fileStream) {
+          currentBuffer = Buffer.concat([currentBuffer, chunk]);
+
+          // Once our local shard reaches the threshold, upload it
+          if (currentBuffer.length >= MIN_PART_SIZE) {
+            const eTag = await this.uploadPart(key, uploadId, currentBuffer, partNumber);
+            partETags.push({ PartNumber: partNumber, ETag: eTag });
+
+            this.logger.info(`Uploaded Part ${partNumber} for ${key}`);
+
+            partNumber++;
+            currentBuffer = Buffer.alloc(0); // Clear memory
+          }
+        }
+
+        // Upload the final remaining shard
+        if (currentBuffer.length > 0) {
+          const eTag = await this.uploadPart(key, uploadId, currentBuffer, partNumber);
+          partETags.push({ PartNumber: partNumber, ETag: eTag });
+        }
+
+        // 3. Completion
+        await this.s3.send(
+          new CompleteMultipartUploadCommand({
+            Bucket: this.bucket,
+            Key: key,
+            UploadId: uploadId,
+            MultipartUpload: { Parts: partETags },
+          })
+        );
+
+        return key;
+
+      } catch (error) {
+        this.logger.error(`Manual upload failed: ${error.message}`);
+        if (uploadId) {
+          await this.s3.send(new AbortMultipartUploadCommand({
+            Bucket: this.bucket, Key: key, UploadId: uploadId
+          }));
+        }
+        throw error;
+      }
+    }
+
+    private async uploadPart(key: string, uploadId: string, body: Buffer, partNumber: number): Promise<string> {
+      const result = await this.s3.send(
+        new UploadPartCommand({
+          Bucket: this.bucket,
+          Key: key,
+          UploadId: uploadId,
+          PartNumber: partNumber,
+          Body: body,
+        })
+      );
+      return result.ETag!;
+    }
 }

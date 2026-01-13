@@ -1,4 +1,5 @@
 import { Get, Controller, Res, Req, Inject, Post, UploadedFile, UseInterceptors, Param } from "@nestjs/common";
+import busboy from "busboy";
 import { GarageService } from "src/services/garage.service";
 import type { Response, Request } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
@@ -98,6 +99,33 @@ export class FilesController{
 
       return res.status(500).json(response)
     }
+  }
+
+  @Post('upload/stream')
+  async upload(@Req() req: Request, @Res() res:Response) {
+    try {
+
+    } catch (error) {
+      this.logger.error(`Error in fetching files by key`, error)
+      const response: ApiResponse<Array<any> > = {
+        success: false,
+        message:error.message
+      }
+
+      return res.status(500).json(response)
+    }
+    // Use a library like 'busboy' to get the stream without buffering to RAM
+    const busboy = require('busboy')({ headers: req.headers });
+
+    return new Promise((resolve, reject) => {
+      busboy.on('file', (name, fileStream, info) => {
+        const { filename, mimeType } = info;
+        this.garageService.uploadInManualChunks(fileStream, filename, mimeType)
+          .then(resolve)
+          .catch(reject);
+      });
+      req.pipe(busboy);
+    });
   }
 
 
