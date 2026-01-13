@@ -166,7 +166,7 @@ export class GarageService {
       let uploadId: string | undefined;
 
     try {
-
+        this.logger.warn(`Attempting upload of file:${key} using multipart download`)
         const multipartUpdate = await this.s3.send(
           new CreateMultipartUploadCommand({
             Bucket: this.bucket,
@@ -188,7 +188,6 @@ export class GarageService {
         for await (const chunk of fileStream) {
           currentBuffer = Buffer.concat([currentBuffer, chunk]);
 
-          // Once our local shard reaches the threshold, upload it
           if (currentBuffer.length >= MIN_PART_SIZE) {
             const eTag = await this.uploadPart(key, uploadId, currentBuffer, partNumber);
             partETags.push({ PartNumber: partNumber, ETag: eTag });
@@ -200,13 +199,11 @@ export class GarageService {
           }
         }
 
-        // Upload the final remaining shard
         if (currentBuffer.length > 0) {
           const eTag = await this.uploadPart(key, uploadId, currentBuffer, partNumber);
           partETags.push({ PartNumber: partNumber, ETag: eTag });
         }
 
-        // 3. Completion
         await this.s3.send(
           new CompleteMultipartUploadCommand({
             Bucket: this.bucket,
@@ -215,6 +212,8 @@ export class GarageService {
             MultipartUpload: { Parts: partETags },
           })
         );
+
+        this.logger.info(`Successfully uploaded file:${key} to S3`)
 
         return key;
 
@@ -241,6 +240,7 @@ export class GarageService {
           Body: body,
         })
       );
+
       return result.ETag!;
 
     } catch (error) {
