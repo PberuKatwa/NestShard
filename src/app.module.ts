@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { config } from './config';
 import { AppLoggerModule } from './logger/logger.module';
-import { GarageModule } from './modules/garage.module';
+import { GarageModule } from './modules/garage/garage.module';
 import { FilesModule } from './modules/files/files.module';
 
 @Module({
