@@ -1,98 +1,163 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Nest Shard - Large File Storage API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A high-performance NestJS-based file storage service optimized for uploading and managing extremely large files through intelligent sharding and multipart uploads. Integrates with Garage (S3-compatible object storage) for distributed file management.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Project Overview
 
-## Description
+Nest Shard is designed to handle massive file uploads efficiently by breaking them into manageable chunks (shards) and uploading them in parallel using S3 multipart upload protocol. The service automatically detects file size and routes large files (>100MB) through optimized multipart streaming, while smaller files use standard upload paths. Built with NestJS and AWS SDK v3 for Garage compatibility.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Architecture
 
-## Project setup
+### Entry Point
+- **[src/main.ts](src/main.ts)** - Application bootstrap that initializes the NestJS application and starts the server on the configured port (default: 3636)
 
-```bash
-$ npm install
+### Configuration
+- **[src/config.ts](src/config.ts)** - Environment configuration loader that validates and exports required environment variables:
+  - `PORT` - Server port
+  - `GARAGE_ENDPOINT` - S3-compatible storage endpoint
+  - `GARAGE_REGION` - Storage region
+  - `GARAGE_ACCESS_KEY` - Access credentials
+  - `GARAGE_SECRET_KEY` - Secret credentials
+  - `GARAGE_BUCKET` - Target storage bucket
+
+### Core Module
+- **[src/app.module.ts](src/app.module.ts)** - Main application module that imports and configures:
+  - ConfigModule for environment variables
+  - AppLoggerModule for logging
+  - GarageModule for S3 storage operations
+  - FilesModule for file upload/download endpoints
+
+## Modules
+
+### Garage Module
+Handles all S3/Garage storage operations with optimized sharding and multipart upload logic.
+
+**Files:**
+- **[src/modules/garage/garage.module.ts](src/modules/garage/garage.module.ts)** - Module definition that provides GarageService and S3 client
+- **[src/modules/garage/garage.service.ts](src/modules/garage/garage.service.ts)** - Core service with methods:
+  - `uploadFile()` - Upload single file to storage
+  - `uploadMultiPart()` - Stream-based multipart upload that shards large files into 15MB chunks for parallel processing
+  - `listFiles()` - List all files in the bucket
+  - `fetchFileByKey()` - Retrieve file by key and return as stream
+  - `uploadPart()` - Internal method for uploading individual shards
+- **[src/modules/garage/garage.storage.ts](src/modules/garage/garage.storage.ts)** - S3Client provider configuration that initializes AWS SDK with Garage credentials
+
+### Files Module
+Exposes HTTP endpoints for large file operations with automatic sharding.
+
+**Files:**
+- **[src/modules/files/files.module.ts](src/modules/files/files.module.ts)** - Module definition that imports GarageModule and registers FilesController
+- **[src/modules/files/files.controller.ts](src/modules/files/files.controller.ts)** - REST controller with endpoints:
+  - `POST /files/upload` - Upload file with automatic sharding (files >100MB use multipart, smaller files use standard upload)
+  - `POST /files/upload/stream` - Stream-based multipart upload with sharding for maximum efficiency
+  - `GET /files` - List all files in bucket
+  - `GET /files/:key` - Download file by key
+
+## API Endpoints
+
+### Upload File
+```
+POST /files/upload
+Content-Type: multipart/form-data
+
+Response:
+{
+  "success": true,
+  "message": "Successfully uploaded large file with key:...",
+  "data": {
+    "key": "uuid_timestamp.ext",
+    "fileSize": 1024000
+  }
+}
 ```
 
-## Compile and run the project
+### Stream Upload
+```
+POST /files/upload/stream
+Content-Type: multipart/form-data
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+Response:
+{
+  "success": true,
+  "message": "Successfully uploaded large files"
+}
 ```
 
-## Run tests
+### List Files
+```
+GET /files
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+Response:
+{
+  "success": true,
+  "message": "Successfully fetched files of length:5",
+  "data": [
+    {
+      "key": "uuid_timestamp.ext",
+      "lastModified": "2024-01-14T...",
+      "etag": "...",
+      "size": 1024000,
+      "storageClass": "STANDARD"
+    }
+  ]
+}
 ```
 
-## Deployment
+### Download File
+```
+GET /files/:key
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+Response: File stream with appropriate Content-Type header
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Environment Setup
 
-## Resources
+Create a `.env` file with the following variables:
 
-Check out a few resources that may come in handy when working with NestJS:
+```env
+PORT=3636
+GARAGE_ENDPOINT=https://garage.example.com
+GARAGE_REGION=us-east-1
+GARAGE_ACCESS_KEY=your_access_key
+GARAGE_SECRET_KEY=your_secret_key
+GARAGE_BUCKET=your_bucket_name
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Installation & Running
 
-## Support
+```bash
+# Install dependencies
+npm install
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Development
+npm run start:dev
 
-## Stay in touch
+# Production build
+npm run build
+npm run start:prod
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Testing
+npm test
+npm run test:watch
+npm run test:cov
+```
 
-## License
+## Key Features
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Intelligent Sharding** - Automatically splits large files into 15MB chunks (shards) for efficient parallel processing
+- **Multipart Upload** - Leverages S3 multipart upload protocol for reliable large file transfers with automatic retry and cleanup
+- **Adaptive Routing** - Files >100MB use streaming multipart upload; smaller files use standard upload for optimal performance
+- **Stream Processing** - Memory-efficient handling through stream-based processing, enabling uploads of files larger than available RAM
+- **Garage Integration** - Compatible with S3-like storage backends for distributed storage
+- **Comprehensive Logging** - Winston-based logging for debugging and monitoring upload progress
+- **Error Handling** - Graceful error handling with automatic multipart upload cleanup on failure
+- **File Metadata** - Tracks file size, MIME type, ETag, and modification timestamps
+
+## Dependencies
+
+- `@nestjs/core` - NestJS framework
+- `@nestjs/config` - Configuration management
+- `@nestjs/platform-express` - Express integration
+- `@aws-sdk/client-s3` - AWS S3 SDK for Garage operations
+- `busboy` - Multipart form data parser
+- `winston` - Logging library
