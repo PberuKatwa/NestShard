@@ -14,7 +14,7 @@ export class FilesController{
     @Inject(APP_LOGGER) private readonly logger: AppLogger
   ) {}
 
-  @Post('upload2')
+  @Post('upload')
   async handleUpload(@Req() req: Request) {
     const fileSize = parseInt(req.headers['content-length'] || '0');
     const busboy = require('busboy')({ headers: req.headers });
@@ -78,41 +78,6 @@ export class FilesController{
 
       req.pipe(busboy);
     });
-  }
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadFiles(@UploadedFile() file: Express.Multer.File, @Res() res: Response) {
-    try {
-
-      if(!file){
-        return res.status(404).json({
-          success:false,
-          message:'Please provide a file'
-        })
-      }
-
-      const uploadResponse = await this.garageService.uploadFile(file)
-
-      const response: ApiResponse = {
-        success:true,
-        message:`File with key:${uploadResponse.key} successfully uploaded`,
-        data:uploadResponse
-      }
-
-      return res.status(200).json(response)
-
-    } catch (error) {
-      this.logger.error(`Error in uploading file`, error)
-
-      const response: ApiResponse<Array<any> > = {
-        success: false,
-        message:error.message
-      }
-
-      return res.status(500).json(response)
-    }
-
   }
 
   @Get()
