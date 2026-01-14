@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { FilesController } from "./files.controller";
-import { GarageModule } from "../garage.module";
+import { GarageModule } from "../garage/garage.module";
 
 @Module({
   imports: [GarageModule],
