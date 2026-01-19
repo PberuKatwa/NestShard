@@ -43,8 +43,11 @@ export class UsersModel{
   async createUser( firstName:string, lastName:string, email:string, password:string ) {
     try {
 
+      this.logger.warn(`Attempting to create user with name:${firstName} with email:${email}.`)
       const query = `
         INSERT INTO users ( first_name, last_name, email, password )
+        VALUES( $1, $2, $3, $4 )
+        RETURNING id, first_name, last_name, email;
       `
 
     } catch (error) {
