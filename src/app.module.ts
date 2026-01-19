@@ -7,7 +7,7 @@ import { FilesModule } from './modules/files/files.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ load:[config], isGlobal:true }),
+    ConfigModule.forRoot({ load:[s3Config,postgresConfig, globalConfig], isGlobal:true }),
     AppLoggerModule,
     GarageModule,
     FilesModule
