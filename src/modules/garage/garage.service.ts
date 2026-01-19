@@ -72,7 +72,7 @@ export class GarageService {
   async listFiles():Promise< Array<listFilesRes> > {
     try {
 
-      this.logger.info(`Attempting to list files from s3.`)
+      this.logger.info(`Atttempting to list files from s3.`)
       const response = await this.s3.send(
         new ListObjectsV2Command({
           Bucket: this.bucket
