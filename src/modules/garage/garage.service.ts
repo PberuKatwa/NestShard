@@ -29,7 +29,7 @@ export class GarageService {
     @Inject(APP_LOGGER) private readonly logger:AppLogger
 
   ) {
-    const bucket = this.configService.get<string>('garageBucket');
+    const bucket = this.configService.get<string>('s3Bucket');
     if (!bucket) throw new Error(`No s3 bucket was found`);
     this.bucket = bucket
   }
