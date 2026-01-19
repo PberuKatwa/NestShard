@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { s3Config,postgresConfig,globalConfig } from './config';
+import { s3Config,postgresEnv,globalConfig } from './config';
 import { AppLoggerModule } from './logger/logger.module';
 import { GarageModule } from './modules/garage/garage.module';
 import { FilesModule } from './modules/files/files.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ load:[s3Config,postgresConfig, globalConfig], isGlobal:true }),
+    ConfigModule.forRoot({ load:[s3Config,postgresEnv, globalConfig], isGlobal:true }),
     AppLoggerModule,
     GarageModule,
     FilesModule

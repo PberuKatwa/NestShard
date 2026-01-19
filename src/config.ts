@@ -4,7 +4,7 @@ import {
   EnvConfig,
   S3Config,
   GlobalEnvironment,
-  PostgresConfig
+  PostgresEnv
 } from "./types/env.types"
 
 const getGlobalEnvironment: GlobalEnvironmentChecker = function (): string {
@@ -44,7 +44,7 @@ export const s3Config = (): S3Config => ({
   s3Bucket: getEnv(getGlobalEnvironment, "S3_BUCKET")
 });
 
-export const postgresConfig = (): PostgresConfig => ({
+export const postgresEnv = (): PostgresEnv => ({
   pgHost: getEnv(getGlobalEnvironment, "PG_HOST"),
   pgPort: getEnv(getGlobalEnvironment, "PG_PORT"),
   pgUser: getEnv(getGlobalEnvironment, "PG_USER"),
