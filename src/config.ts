@@ -45,6 +45,11 @@ export const postgresConfig = {
   pgDatabase: getEnv(getGlobalEnvironment, "PG_DATABASE"),
 }
 
+export const globalConfig = {
+  environment:getGlobalEnvironment(),
+  port: getEnv(getGlobalEnvironment,"PORT")
+}
+
 export const config:EnvConfig = {
   environment:getGlobalEnvironment(),
   port: getEnv(getGlobalEnvironment,"PORT"),
