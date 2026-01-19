@@ -10,7 +10,8 @@ export class PostgresConfig {
   private static pool: Pool | null = null;
 
   constructor(
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    @Inject(APP_LOGGER) private readonly logger: AppLogger
   ) { }
 
   async connect(): Promise<Pool> {
@@ -20,7 +21,7 @@ export class PostgresConfig {
         return PostgresConfig.pool;
       }
 
-      logger.info(`Connecting to PostgreSQL: ${this.env.pgHost}:${this.env.pgPort}`);
+      this.logger.info(`Connecting to PostgreSQL: ${this.configService.get<string>('pgHost')}:${this.configService.get<string>('pgPort')}`);
 
       const poolConfig: PoolConfig = {
         user: this.env.pgUser,
@@ -37,7 +38,7 @@ export class PostgresConfig {
       client.release();
 
       PostgresConfig.pool = pool;
-      logger.info(`PostgreSQL successfully connected`);
+      this.logger.info(`PostgreSQL successfully connected`);
       return PostgresConfig.pool;
     } catch (error) {
       throw error;
