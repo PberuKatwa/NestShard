@@ -29,7 +29,7 @@ const getEnv:GetEnv = function (
   }
 }
 
-export const envConfig:EnvConfig = {
+export const config:EnvConfig = {
   environment:getGlobalEnvironment(),
   port: getEnv(getGlobalEnvironment,"PORT"),
   pgHost: getEnv(getGlobalEnvironment,"PG_HOST"),
@@ -37,15 +37,10 @@ export const envConfig:EnvConfig = {
   pgUser: getEnv(getGlobalEnvironment,"PG_USER"),
   pgPassword: getEnv(getGlobalEnvironment,"PG_PASSWORD"),
   pgDatabase: getEnv(getGlobalEnvironment, "PG_DATABASE"),
-  s3Endpoint: getEnv(getGlobalEnvironment,"GARAGE_ENDPOINT"),
-  s3Region:getEnv(getGlobalEnvironment,"GARAGE_REGION"),
-  s3AccessKey:getEnv(getGlobalEnvironment,"GARAGE_ACCESS_KEY"),
-  s3SecretKey:getEnv(getGlobalEnvironment,"GARAGE_SECRET_KEY"),
-  s3Bucket:getEnv(getGlobalEnvironment,"GARAGE_BUCKET")
+  s3Endpoint: getEnv(getGlobalEnvironment,"S3_ENDPOINT"),
+  s3Region:getEnv(getGlobalEnvironment,"S3_REGION"),
+  s3AccessKey:getEnv(getGlobalEnvironment,"S3_ACCESS_KEY"),
+  s3SecretKey:getEnv(getGlobalEnvironment,"S3_SECRET_KEY"),
+  s3Bucket:getEnv(getGlobalEnvironment,"S3_BUCKET")
 
 }
-
-
-
-
-export default config
