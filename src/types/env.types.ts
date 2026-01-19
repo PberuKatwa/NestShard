@@ -8,12 +8,22 @@ export interface EnvConfig{
   pgDatabase: string
 }
 
-export interface s3Config{
+export interface
+
+export interface S3Config{
   s3Endpoint: string,
   s3Region:string,
   s3AccessKey:string,
   s3SecretKey:string,
   s3Bucket:string
+}
+
+export interface PostgresConfig{
+  pgHost: string,
+  pgPort: string,
+  pgUser: string,
+  pgPassword: string,
+  pgDatabase: string
 }
 
 export type SuffixChecker = (value:string,suffix:string) => boolean;
