@@ -16,6 +16,12 @@ export class UsersModel{
 
       this.logger.warn(`Attempting to create users table`)
 
+      const query = `
+        CREATE TABLE IF NOT EXISTS users(
+
+        );
+      `
+
     } catch (error) {
       throw error;
     }
