@@ -11,4 +11,14 @@ export class UsersModel{
     private readonly pgConfig:PostgresConfig
   ) { }
 
+  async createTable():Promise<string> {
+    try {
+
+      this.logger.warn(`Attempting to create users table`)
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
