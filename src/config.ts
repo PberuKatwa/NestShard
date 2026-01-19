@@ -1,4 +1,8 @@
-import { GlobalEnvironmentChecker, GetEnv, EnvConfig } from "./types/env.types"
+import {
+  GlobalEnvironmentChecker,
+  GetEnv,
+  EnvConfig
+} from "./types/env.types"
 
 const getGlobalEnvironment: GlobalEnvironmentChecker = function (): string {
   try {
