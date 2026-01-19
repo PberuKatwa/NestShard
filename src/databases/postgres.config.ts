@@ -1,12 +1,15 @@
+import { Inject, Injectable } from "@nestjs/common";
 import { Pool, PoolConfig } from "pg";
-import { logger } from "../utils/logger.js";
-import { PostgresConfig } from "../types/env.types.js";
+import { APP_LOGGER } from 'src/logger/logger.provider';
+import type { AppLogger } from '../logger/winston.logger';
+import type { PostgresEnv } from "../types/env.types.js";
 
+@Injectable()
 export class PostgresConfig {
 
   private static pool: Pool | null = null;
 
-  constructor(private readonly env: EnvConfig) {}
+  constructor(private readonly env: PostgresEnv) {}
 
   async connect(): Promise<Pool> {
     try {
