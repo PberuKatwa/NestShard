@@ -37,6 +37,14 @@ export const s3Config = {
   s3Bucket:getEnv(getGlobalEnvironment,"S3_BUCKET")
 }
 
+export const postgresConfig = {
+  pgHost: getEnv(getGlobalEnvironment,"PG_HOST"),
+  pgPort: getEnv(getGlobalEnvironment,"PG_PORT"),
+  pgUser: getEnv(getGlobalEnvironment,"PG_USER"),
+  pgPassword: getEnv(getGlobalEnvironment,"PG_PASSWORD"),
+  pgDatabase: getEnv(getGlobalEnvironment, "PG_DATABASE"),
+}
+
 export const config:EnvConfig = {
   environment:getGlobalEnvironment(),
   port: getEnv(getGlobalEnvironment,"PORT"),
