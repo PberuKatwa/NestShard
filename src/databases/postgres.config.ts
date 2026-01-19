@@ -7,7 +7,7 @@ import { ConfigService } from "@nestjs/config";
 @Injectable()
 export class PostgresConfig {
 
-  private static pool: Pool | null = null;
+  public pool: Pool | null = null;
 
   constructor(
     private readonly configService: ConfigService,
@@ -17,8 +17,8 @@ export class PostgresConfig {
   async connect(): Promise<Pool> {
     try {
 
-      if (PostgresConfig.pool) {
-        return PostgresConfig.pool;
+      if (this.pool) {
+        return this.pool;
       }
 
       this.logger.info(`Connecting to PostgreSQL: ${this.configService.get<string>('pgHost')}:${this.configService.get<string>('pgPort')}`);
@@ -37,20 +37,21 @@ export class PostgresConfig {
       await client.query("SELECT 1");
       client.release();
 
-      PostgresConfig.pool = pool;
+      this.pool = pool;
       this.logger.info(`PostgreSQL successfully connected`);
-      return PostgresConfig.pool;
+      return this.pool;
     } catch (error) {
       throw error;
     }
   }
 
 
-  static getPool(): Pool {
-    if (!PostgresConfig.pool) {
+  getPool(): Pool {
+    if (!this.pool) {
       throw new Error("Postgres pool has not been initialized. Call connect() first.");
     }
-    return PostgresConfig.pool;
+    return this.pool;
   }
+
 
 }
