@@ -8,11 +8,11 @@ export const s3CLientProvider:Provider = {
     provide:S3_CLIENT,
     useFactory: function (configService:ConfigService){
         return new S3Client({
-            endpoint:configService.get<string>('garageEndpoint'),
-            region:configService.get<string>('garageRegion'),
+            endpoint:configService.get<string>('s3Endpoint'),
+            region:configService.get<string>('s3Region'),
             credentials:{
-                accessKeyId:configService.get<string>('garageAccessKey'),
-                secretAccessKey:configService.get<string>('garageSecretKey')
+                accessKeyId:configService.get<string>('s3AccessKey'),
+                secretAccessKey:configService.get<string>('s3SecretKey')
             },
             forcePathStyle:true
         } as S3ClientConfig)
