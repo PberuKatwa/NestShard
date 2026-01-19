@@ -4,6 +4,7 @@ import { PostgresConfig } from "./postgres.config";
 
 @Module({
   imports: [AppLoggerModule],
+  providers:[PostgresConfig],
   exports:[PostgresConfig]
 })
 
