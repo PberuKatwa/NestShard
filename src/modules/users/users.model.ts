@@ -12,7 +12,7 @@ export class UsersModel{
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
     private readonly pgConfig: PostgresConfig
   ) {
-    this.pool = this.pgConfig.getPool()
+    // this.pool = this.pgConfig.getPool()
   }
 
   async createTable():Promise<string> {
@@ -31,7 +31,7 @@ export class UsersModel{
           updated_at TIMESTAMPTZ
         );
       `
-
+      const pool = this.pgConfig.getPool()
       await this.pool?.query(query)
       this.logger.info(`Successfully created users table`)
 
