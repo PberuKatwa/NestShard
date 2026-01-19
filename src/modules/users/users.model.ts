@@ -6,11 +6,11 @@ import type { AppLogger } from "src/logger/winston.logger";
 
 @Injectable()
 export class UsersModel{
-  private readonly pool: Pool | null;
 
   constructor(
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
-    private readonly pgConfig:PostgresConfig
+    private readonly pgConfig: PostgresConfig,
+    private readonly pool: Pool
   ) {
     this.pool = PostgresConfig.getPool()
   }
@@ -32,7 +32,7 @@ export class UsersModel{
         );
       `
 
-      await this.pgConfig.connect
+      await this.pool(query)
 
     } catch (error) {
       throw error;
