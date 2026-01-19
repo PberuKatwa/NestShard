@@ -40,15 +40,24 @@ export class UsersModel{
     }
   }
 
-  async createUser( firstName:string, lastName:string, email:string, password:string ) {
+  async createUser( firstName:string, lastName:string, email:string, password:string ):Promise<any> {
     try {
 
       this.logger.warn(`Attempting to create user with name:${firstName} with email:${email}.`)
+
       const query = `
         INSERT INTO users ( first_name, last_name, email, password )
         VALUES( $1, $2, $3, $4 )
         RETURNING id, first_name, last_name, email;
       `
+
+      const pgPool = this.pgConfig.getPool();
+      const result = await pgPool.query(query, [firstName, lastName, email, password]);
+      const user = result.rows[0]
+
+      this.logger.info(`Successfully created user`)
+
+      return user
 
     } catch (error) {
       throw error;
