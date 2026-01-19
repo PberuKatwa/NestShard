@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, OnModuleInit } from "@nestjs/common";
 import { UsersModel } from "./users.model";
 
 @Module({
@@ -6,4 +6,11 @@ import { UsersModel } from "./users.model";
   exports:[ UsersModel ]
 })
 
-export class UserModule {}
+export class UserModule implements OnModuleInit {
+
+  constructor( private readonly users:UsersModel ){}
+
+  async onModuleInit() {
+    await this.users.createTable()
+  }
+}
