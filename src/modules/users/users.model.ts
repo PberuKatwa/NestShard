@@ -40,4 +40,12 @@ export class UsersModel{
     }
   }
 
+  async createUser() {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
