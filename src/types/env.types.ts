@@ -8,7 +8,10 @@ export interface EnvConfig{
   pgDatabase: string
 }
 
-export interface
+export interface globalEnv{
+  environment:string,
+  port: string,
+}
 
 export interface S3Config{
   s3Endpoint: string,
