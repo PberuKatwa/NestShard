@@ -1,4 +1,6 @@
-const getGlobalEnvironment:GlobalEnvironmentChecker = function ():string {
+import { GlobalEnvironmentChecker, GetEnv, EnvConfig } from "./types/env.types"
+
+const getGlobalEnvironment: GlobalEnvironmentChecker = function (): string {
   try {
 
     const env = process.env.ENVIRONMENT
@@ -9,12 +11,7 @@ const getGlobalEnvironment:GlobalEnvironmentChecker = function ():string {
   }
 }
 
-const hasSuffix: SuffixChecker = function (value: string, suffix: string): boolean {
-  const pattern = new RegExp(`_${suffix}$`);
-  return pattern.test(value);
-}
-
-const getEnv = function (
+const getEnv:GetEnv = function (
   globalEnvCallback: GlobalEnvironmentChecker,
   key: string
 ): string {
@@ -39,16 +36,16 @@ export const envConfig:EnvConfig = {
   pgPort: getEnv(getGlobalEnvironment,"PG_PORT"),
   pgUser: getEnv(getGlobalEnvironment,"PG_USER"),
   pgPassword: getEnv(getGlobalEnvironment,"PG_PASSWORD"),
-  pgDatabase: getEnv(getGlobalEnvironment,"PG_DATABASE"),
+  pgDatabase: getEnv(getGlobalEnvironment, "PG_DATABASE"),
+  s3Endpoint: getEnv("GARAGE_ENDPOINT"),
+  s3Region:getEnv("GARAGE_REGION"),
+  s3AccessKey:getEnv("GARAGE_ACCESS_KEY"),
+  s3SecretKey:getEnv("GARAGE_SECRET_KEY"),
+  s3Bucket:getEnv("GARAGE_BUCKET")
 
 }
 
-        port:getEnv("PORT"),
-garageEndpoint: getEnv("GARAGE_ENDPOINT"),
-garageRegion:getEnv("GARAGE_REGION"),
-garageAccessKey:getEnv("GARAGE_ACCESS_KEY"),
-garageSecretKey:getEnv("GARAGE_SECRET_KEY"),
-garageBucket:getEnv("GARAGE_BUCKET")
+
 
 
 export default config
