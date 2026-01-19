@@ -40,7 +40,7 @@ export class UsersModel{
     }
   }
 
-  async createUser() {
+  async createUser( firstName:string, lastName:string, email:string, password:string ) {
     try {
 
     } catch (error) {
