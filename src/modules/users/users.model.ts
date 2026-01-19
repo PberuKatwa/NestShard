@@ -6,6 +6,9 @@ import type { AppLogger } from "src/logger/winston.logger";
 @Injectable()
 export class UsersModel{
 
-  constructor ( @Inject(APP_LOGGER) private readonly logger:AppLogger){}
+  constructor(
+    @Inject(APP_LOGGER) private readonly logger: AppLogger,
+    private readonly pgConfig:PostgresConfig
+  ) { }
 
 }
