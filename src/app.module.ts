@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { config } from './config';
+import { s3Config,postgresConfig,globalConfig } from './config';
 import { AppLoggerModule } from './logger/logger.module';
 import { GarageModule } from './modules/garage/garage.module';
 import { FilesModule } from './modules/files/files.module';
