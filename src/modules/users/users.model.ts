@@ -10,10 +10,9 @@ export class UsersModel{
 
   constructor(
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
-    private readonly pgConfig: PostgresConfig,
-    pool:Pool
+    private readonly pgConfig: PostgresConfig
   ) {
-    this.pool = PostgresConfig.getPool()
+    this.pool = this.pgConfig.getPool()
   }
 
   async createTable():Promise<string> {
@@ -34,6 +33,9 @@ export class UsersModel{
       `
 
       await this.pool?.query(query)
+      this.logger.info(`Successfully created users table`)
+
+      return "users"
 
     } catch (error) {
       throw error;
