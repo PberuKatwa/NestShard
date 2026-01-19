@@ -1,12 +1,13 @@
-import { Module, OnModuleInit } from "@nestjs/common";
+import { Global, Module, OnModuleInit } from "@nestjs/common";
 import { UsersModel } from "./users.model";
 
+// @Global()
 @Module({
   providers: [ UsersModel ],
   exports:[ UsersModel ]
 })
 
-export class UserModule implements OnModuleInit {
+export class UsersModule implements OnModuleInit {
 
   constructor( private readonly users:UsersModel ){}
 
