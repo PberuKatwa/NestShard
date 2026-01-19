@@ -43,6 +43,10 @@ export class UsersModel{
   async createUser( firstName:string, lastName:string, email:string, password:string ) {
     try {
 
+      const query = `
+        INSERT INTO users ( first_name, last_name, email, password )
+      `
+
     } catch (error) {
       throw error;
     }
