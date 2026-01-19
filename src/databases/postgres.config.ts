@@ -24,11 +24,11 @@ export class PostgresConfig {
       this.logger.info(`Connecting to PostgreSQL: ${this.configService.get<string>('pgHost')}:${this.configService.get<string>('pgPort')}`);
 
       const poolConfig: PoolConfig = {
-        user: this.env.pgUser,
-        host: this.env.pgHost,
-        database: this.env.pgDatabase,
-        password: this.env.pgPassword,
-        port: Number(this.env.pgPort),
+        user: this.configService.get<string>('pgUser'),
+        host: this.configService.get<string>('pgHost'),
+        database: this.configService.get<string>('pgDatabase'),
+        password: this.configService.get<string>('pgPassword'),
+        port: Number(this.configService.get<string>('pgPort') ),
       };
 
       const pool = new Pool(poolConfig);
