@@ -37,11 +37,11 @@ export const envConfig:EnvConfig = {
   pgUser: getEnv(getGlobalEnvironment,"PG_USER"),
   pgPassword: getEnv(getGlobalEnvironment,"PG_PASSWORD"),
   pgDatabase: getEnv(getGlobalEnvironment, "PG_DATABASE"),
-  s3Endpoint: getEnv("GARAGE_ENDPOINT"),
-  s3Region:getEnv("GARAGE_REGION"),
-  s3AccessKey:getEnv("GARAGE_ACCESS_KEY"),
-  s3SecretKey:getEnv("GARAGE_SECRET_KEY"),
-  s3Bucket:getEnv("GARAGE_BUCKET")
+  s3Endpoint: getEnv(getGlobalEnvironment,"GARAGE_ENDPOINT"),
+  s3Region:getEnv(getGlobalEnvironment,"GARAGE_REGION"),
+  s3AccessKey:getEnv(getGlobalEnvironment,"GARAGE_ACCESS_KEY"),
+  s3SecretKey:getEnv(getGlobalEnvironment,"GARAGE_SECRET_KEY"),
+  s3Bucket:getEnv(getGlobalEnvironment,"GARAGE_BUCKET")
 
 }
 
