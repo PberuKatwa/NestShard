@@ -1,4 +1,4 @@
-export interface globalEnv{
+export interface GlobalEnvironment{
   environment:string,
   port: string,
 }
@@ -19,7 +19,7 @@ export interface PostgresConfig{
   pgDatabase: string
 }
 
-export type EnvConfig = PostgresConfig | S3Config | globalEnv
+export type EnvConfig = PostgresConfig | S3Config | GlobalEnvironment
 
 export type SuffixChecker = (value:string,suffix:string) => boolean;
 export type GlobalEnvironmentChecker = () => string;

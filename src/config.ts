@@ -1,7 +1,10 @@
 import {
   GlobalEnvironmentChecker,
   GetEnv,
-  EnvConfig
+  EnvConfig,
+  S3Config,
+  GlobalEnvironment,
+  PostgresConfig
 } from "./types/env.types"
 
 const getGlobalEnvironment: GlobalEnvironmentChecker = function (): string {
@@ -33,7 +36,7 @@ const getEnv:GetEnv = function (
   }
 }
 
-export const s3Config = {
+export const s3Config:S3Config = {
   s3Endpoint: getEnv(getGlobalEnvironment,"S3_ENDPOINT"),
   s3Region:getEnv(getGlobalEnvironment,"S3_REGION"),
   s3AccessKey:getEnv(getGlobalEnvironment,"S3_ACCESS_KEY"),
@@ -41,7 +44,7 @@ export const s3Config = {
   s3Bucket:getEnv(getGlobalEnvironment,"S3_BUCKET")
 }
 
-export const postgresConfig = {
+export const postgresConfig:PostgresConfig = {
   pgHost: getEnv(getGlobalEnvironment,"PG_HOST"),
   pgPort: getEnv(getGlobalEnvironment,"PG_PORT"),
   pgUser: getEnv(getGlobalEnvironment,"PG_USER"),
@@ -49,7 +52,7 @@ export const postgresConfig = {
   pgDatabase: getEnv(getGlobalEnvironment, "PG_DATABASE"),
 }
 
-export const globalConfig = {
+export const globalConfig:GlobalEnvironment = {
   environment:getGlobalEnvironment(),
   port: getEnv(getGlobalEnvironment,"PORT")
 }
