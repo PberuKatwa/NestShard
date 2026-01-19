@@ -1,13 +1,3 @@
-export interface EnvConfig{
-  environment:string,
-  port: string,
-  pgHost: string,
-  pgPort: string,
-  pgUser: string,
-  pgPassword: string,
-  pgDatabase: string
-}
-
 export interface globalEnv{
   environment:string,
   port: string,
@@ -28,6 +18,8 @@ export interface PostgresConfig{
   pgPassword: string,
   pgDatabase: string
 }
+
+export type EnvConfig = PostgresConfig | S3Config | globalEnv
 
 export type SuffixChecker = (value:string,suffix:string) => boolean;
 export type GlobalEnvironmentChecker = () => string;
