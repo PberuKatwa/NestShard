@@ -1,0 +1,13 @@
+{
+  "databaseUrl": {
+    "env": "PG_DATABASE_URL_DEVELOPMENT"
+  },
+  "migrationsTable": "pgmigrations",
+  "dir": "migrations",
+  "direction": "up",
+  "count": 1,
+  "checkOrder": true,
+  "verbose": true,
+  "createSchema": true,
+  "createMigrationsSchema": false
+}

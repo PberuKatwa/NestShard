@@ -25,6 +25,7 @@ export class UsersModel{
           last_name TEXT NOT NULL,
           email TEXT NOT NULL,
           password VARCHAR NOT NULL,
+          access_token TEXT,
           created_at TIMESTAMPTZ,
           updated_at TIMESTAMPTZ
         );
