@@ -1,22 +1,23 @@
 export interface GlobalEnvironment{
-  environment:string,
-  port: string,
+  environment: string;
+  port: string;
+  jwtSecret: string;
 }
 
 export interface S3Config{
-  s3Endpoint: string,
-  s3Region:string,
-  s3AccessKey:string,
-  s3SecretKey:string,
-  s3Bucket:string
+  s3Endpoint: string;
+  s3Region:string;
+  s3AccessKey:string;
+  s3SecretKey:string;
+  s3Bucket: string;
 }
 
 export interface PostgresEnv{
-  pgHost: string,
-  pgPort: string,
-  pgUser: string,
-  pgPassword: string,
-  pgDatabase: string
+  pgHost: string;
+  pgPort: string;
+  pgUser: string;
+  pgPassword: string;
+  pgDatabase: string;
 }
 
 export type EnvConfig = PostgresEnv | S3Config | GlobalEnvironment
