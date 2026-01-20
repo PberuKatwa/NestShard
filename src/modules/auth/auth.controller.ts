@@ -1,9 +1,10 @@
-import { Controller, Inject, Post, Req, Res } from "@nestjs/common";
+import { Body, Controller, Inject, Post, Req, Res } from "@nestjs/common";
 import type { Request, Response } from "express";
 import type { AppLogger } from "src/logger/winston.logger";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import { UsersModel } from "../users/users.model";
 import type { ApiResponse } from "src/types/api.types";
+import { RegisterUserDto } from "./dto/register-user.dto";
 
 @Controller('auth')
 export class AuthController{
@@ -14,10 +15,12 @@ export class AuthController{
   ) { }
 
   @Post('register')
-  async createUser( @Req() req:Request, @Res() res:Response ):Promise<Response> {
+  async createUser(
+    @Body() createUserDto: RegisterUserDto
+  ): Promise<ApiResponse> {
     try {
 
-      const { firstName, lastName, email, password } = req.body;
+      const { firstName, lastName, email, password } = createUserDto;
 
       const user = await this.user.createUser(firstName, lastName, email, password)
 
@@ -27,7 +30,7 @@ export class AuthController{
         data:user
       }
 
-      return res.status(200).json(response)
+      return response
 
     } catch (error) {
 
@@ -38,7 +41,7 @@ export class AuthController{
         message: `${error.message}`,
       }
 
-      return res.status(500).json(response)
+      return response;
 
     }
   }
