@@ -55,7 +55,8 @@ export class AuthController{
 
       const response: ApiResponse = {
         success: true,
-        message:`Successfully logged in user ${email}`
+        message: `Successfully logged in user ${email}`,
+        data:result
       }
 
       return response

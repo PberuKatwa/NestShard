@@ -86,10 +86,13 @@ export class UsersModel{
     }
   }
 
-  async validateUserPassword( email:string, password:string ):Promise<boolean> {
+  async validateUserPassword(email: string, password: string): Promise<{
+    email: string,
+    accessToken:string
+  }> {
     try {
 
-      const query = `SELECT email, first_name, password FROM users WHERE email =$1;`;
+      const query = `SELECT id, email, first_name, password FROM users WHERE email =$1;`;
 
       const pgPool = this.pgConfig.getPool()
       const result = await pgPool.query(query, [email])
@@ -106,9 +109,14 @@ export class UsersModel{
 
       const token = this.jwtService.sign(payload)
 
-      console.log("tokennn", token)
+      const updateResult = await pgPool.query(
+        `UPDATE users SET access_token=$1 WHERE id=$2 RETURNING email, access_token; `,
+        [ token, user.id ]
+      )
 
-      return true
+      const updatedUser = updateResult.rows[0]
+
+      return updatedUser;
 
     } catch (error) {
       throw error;
