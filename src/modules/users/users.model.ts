@@ -3,6 +3,7 @@ import { Pool } from "pg";
 import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersModel{
@@ -62,6 +63,8 @@ export class UsersModel{
 
       this.logger.warn(`Atttempting to create user with name:${firstName} with email:${email}.`)
 
+      const hashedPassword = await bcrypt.hash(password, 10)
+
       const query = `
         INSERT INTO users ( first_name, last_name, email, password )
         VALUES( $1, $2, $3, $4 )
@@ -69,7 +72,7 @@ export class UsersModel{
       `
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [firstName, lastName, email.toLowerCase(), password]);
+      const result = await pgPool.query(query, [firstName, lastName, email.toLowerCase(), hashedPassword ]);
       const user = result.rows[0]
 
       this.logger.info(`Successfully created user`)
