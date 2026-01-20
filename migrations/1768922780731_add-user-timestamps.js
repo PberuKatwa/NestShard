@@ -1,62 +1,44 @@
-/**
- * @type {import('node-pg-migrate').ColumnDefinitions | undefined}
- */
-export const shorthands = undefined;
+export const up = (pgm) => {
+  // 1. First, set the DEFAULT for future rows
+  pgm.alterColumn('users', 'created_at', {
+    default: pgm.func('CURRENT_TIMESTAMP'),
+  });
+  pgm.alterColumn('users', 'updated_at', {
+    default: pgm.func('CURRENT_TIMESTAMP'),
+  });
 
-/**
- * @param pgm {import('node-pg-migrate').MigrationBuilder}
- * @param run {() => void | undefined}
- * @returns {Promise<void> | void}
- */
- export const up = (pgm) => {
-   // First add the columns if they don't exist
-   pgm.addColumn('users', {
-     created_at: {
-       type: 'TIMESTAMPTZ',
-       notNull: true,
-       default: pgm.func('CURRENT_TIMESTAMP'),
-     },
-   });
+  // 2. BACKFILL: Update existing rows that have NULL values
+  // This satisfies the "NOT NULL" requirement coming next
+  pgm.sql(`UPDATE "users" SET "created_at" = NOW() WHERE "created_at" IS NULL;`);
+  pgm.sql(`UPDATE "users" SET "updated_at" = NOW() WHERE "updated_at" IS NULL;`);
 
-   pgm.addColumn('users', {
-     updated_at: {
-       type: 'TIMESTAMPTZ',
-       notNull: true,
-       default: pgm.func('CURRENT_TIMESTAMP'),
-     },
-   });
+  // 3. Now apply the NOT NULL constraint safely
+  pgm.alterColumn('users', 'created_at', { notNull: true });
+  pgm.alterColumn('users', 'updated_at', { notNull: true });
 
-   // Create function to update updated_at
-   pgm.sql(`
-     CREATE OR REPLACE FUNCTION update_updated_at_column()
-     RETURNS TRIGGER AS $$
-     BEGIN
-       NEW.updated_at = CURRENT_TIMESTAMP;
-       RETURN NEW;
-     END;
-     $$ language 'plpgsql';
-   `);
+  // 4. Create or Update the Function
+  pgm.sql(`
+    CREATE OR REPLACE FUNCTION update_updated_at_column()
+    RETURNS TRIGGER AS $$
+    BEGIN
+      NEW.updated_at = CURRENT_TIMESTAMP;
+      RETURN NEW;
+    END;
+    $$ language 'plpgsql';
+  `);
 
-   // Create trigger
-   pgm.sql(`
-     CREATE TRIGGER update_users_updated_at
-     BEFORE UPDATE ON users
-     FOR EACH ROW
-     EXECUTE FUNCTION update_updated_at_column();
-   `);
- };
+  // 5. Setup the Trigger
+  pgm.sql(`DROP TRIGGER IF EXISTS update_users_updated_at ON users;`);
+  pgm.sql(`
+    CREATE TRIGGER update_users_updated_at
+    BEFORE UPDATE ON users
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+  `);
+};
 
-/**
- * @param pgm {import('node-pg-migrate').MigrationBuilder}
- * @param run {() => void | undefined}
- * @returns {Promise<void> | void}
- */
- export const down = (pgm) => {
-   // Drop trigger first
-   pgm.sql(`DROP TRIGGER IF EXISTS update_users_updated_at ON users;`);
-   pgm.sql(`DROP FUNCTION IF EXISTS update_updated_at_column;`);
-
-   // Then drop columns
-   pgm.dropColumn('users', 'updated_at');
-   pgm.dropColumn('users', 'created_at');
- };
+export const down = (pgm) => {
+  pgm.sql(`DROP TRIGGER IF EXISTS update_users_updated_at ON users;`);
+  pgm.alterColumn('users', 'created_at', { notNull: false, default: null });
+  pgm.alterColumn('users', 'updated_at', { notNull: false, default: null });
+};
