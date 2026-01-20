@@ -15,13 +15,15 @@ import Joi from 'joi';
       {
         load: [s3Config, postgresEnv, globalConfig],
         isGlobal: true,
-        validationSchema: Joi.object({
-          jwtSecret: Joi.string().required(),
-        }),
-        validationOptions: {
-          allowUnknown: true,
-          abortEarly: true,
-        },
+
+        // validationSchema: Joi.object({
+        //   jwtSecret: Joi.string().required(),
+        // }),
+        // validationOptions: {
+        //   allowUnknown: true,
+        //   abortEarly: true,
+        // },
+
       }),
     AppLoggerModule,
     GarageModule,

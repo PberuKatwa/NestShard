@@ -55,5 +55,5 @@ export const postgresEnv = (): PostgresEnv => ({
 export const globalConfig = (): GlobalEnvironment => ({
   environment: getGlobalEnvironment(),
   port: getEnv(getGlobalEnvironment, "PORT"),
-  jwtSecret:getEnv(getGlobalEnvironment, "JWT_SECRET")
+  jwtSecret:getEnv(getGlobalEnvironment,"JWT_SECRET")
 });
