@@ -23,7 +23,7 @@ export class UsersModel{
           id SERIAL PRIMARY KEY,
           first_name TEXT NOT NULL,
           last_name TEXT NOT NULL,
-          email TEXT NOT NULL,
+          email TEXT NOT NULL UNIQUE,
           password VARCHAR NOT NULL,
           access_token TEXT,
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
