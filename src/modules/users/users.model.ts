@@ -84,6 +84,15 @@ export class UsersModel{
   async validateUserPassword( email:string, password:string ) {
     try {
 
+      const query = `SELECT email, password FROM users WHERE email =$1;`;
+
+      const pgPool = this.pgConfig.getPool()
+      const result = await pgPool.query(query, [email])
+
+      console.log("resulllt", result)
+
+
+
     } catch (error) {
       throw error;
     }
