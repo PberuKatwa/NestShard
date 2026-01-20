@@ -4,6 +4,7 @@ import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class UsersModel{
@@ -11,7 +12,8 @@ export class UsersModel{
 
   constructor(
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
-    private readonly pgConfig: PostgresConfig
+    private readonly pgConfig: PostgresConfig,
+    private readonly jwtService:JwtService
   ) { }
 
   async createTable():Promise<string> {
@@ -87,7 +89,7 @@ export class UsersModel{
   async validateUserPassword( email:string, password:string ):Promise<boolean> {
     try {
 
-      const query = `SELECT email, password FROM users WHERE email =$1;`;
+      const query = `SELECT email, first_name, password FROM users WHERE email =$1;`;
 
       const pgPool = this.pgConfig.getPool()
       const result = await pgPool.query(query, [email])
@@ -96,6 +98,15 @@ export class UsersModel{
       if (!user) throw new Error(`Invalid email or password`)
       const isMatch = await bcrypt.compare(password, user.password)
       if (!isMatch) throw new Error(`Invalid password`);
+
+      const payload = {
+        username: user.first_name,
+        email:email
+      }
+
+      const token = this.jwtService.sign(payload)
+
+      console.log("tokennn", token)
 
       return true
 
