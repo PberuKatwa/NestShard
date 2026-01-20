@@ -69,7 +69,7 @@ export class UsersModel{
       `
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [firstName, lastName, email, password]);
+      const result = await pgPool.query(query, [firstName, lastName, email.toLowerCase(), password]);
       const user = result.rows[0]
 
       this.logger.info(`Successfully created user`)
