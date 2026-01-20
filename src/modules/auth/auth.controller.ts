@@ -34,7 +34,7 @@ export class AuthController{
       this.logger.error(`Error in creating user`, error)
 
       const response: ApiResponse = {
-        success: true,
+        success: false,
         message: `${error.message}`,
       }
 

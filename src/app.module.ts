@@ -6,6 +6,7 @@ import { GarageModule } from './modules/garage/garage.module';
 import { FilesModule } from './modules/files/files.module';
 import { PostgresModule } from './databases/postgres.module';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { UsersModule } from './modules/users/users.module';
     GarageModule,
     FilesModule,
     PostgresModule,
-    UsersModule
+    UsersModule,
+    AuthModule
   ]
 })
 export class AppModule {}
