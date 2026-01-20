@@ -81,4 +81,12 @@ export class UsersModel{
     }
   }
 
+  async validateUserPassword( email:string, password:string ) {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
