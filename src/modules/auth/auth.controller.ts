@@ -46,10 +46,19 @@ export class AuthController{
     }
   }
 
-  @Get('login')
-  async loginUser(@Body() user: LoginUserDto) {
-
+  @Post('login')
+  async loginUser(@Body() userDto: LoginUserDto):Promise<ApiResponse> {
     try {
+      const { email, password } = userDto;
+
+      const result = await this.user.validateUserPassword( email, password)
+
+      const response: ApiResponse = {
+        success: true,
+        message:`Successfully logged in user ${email}`
+      }
+
+      return response
 
     } catch (error) {
       this.logger.error(`Error in loggin in user`, error)

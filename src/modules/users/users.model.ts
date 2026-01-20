@@ -81,17 +81,19 @@ export class UsersModel{
     }
   }
 
-  async validateUserPassword( email:string, password:string ) {
+  async validateUserPassword( email:string, password:string ):Promise<boolean> {
     try {
 
       const query = `SELECT email, password FROM users WHERE email =$1;`;
 
       const pgPool = this.pgConfig.getPool()
       const result = await pgPool.query(query, [email])
+      const user = result.rows[0];
 
-      console.log("resulllt", result)
+      if(!user) throw new Error(`Invalid email or password`)
+      if (user.password !== password) throw new Error(`Invalid password`);
 
-
+      return true
 
     } catch (error) {
       throw error;
