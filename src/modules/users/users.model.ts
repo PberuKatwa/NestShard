@@ -93,8 +93,9 @@ export class UsersModel{
       const result = await pgPool.query(query, [email])
       const user = result.rows[0];
 
-      if(!user) throw new Error(`Invalid email or password`)
-      if (user.password !== password) throw new Error(`Invalid password`);
+      if (!user) throw new Error(`Invalid email or password`)
+      const isMatch = await bcrypt.compare(password, user.password)
+      if (!isMatch) throw new Error(`Invalid password`);
 
       return true
 
