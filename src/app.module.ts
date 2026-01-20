@@ -7,10 +7,22 @@ import { FilesModule } from './modules/files/files.module';
 import { PostgresModule } from './databases/postgres.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import Joi from 'joi';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ load:[s3Config,postgresEnv, globalConfig], isGlobal:true }),
+    ConfigModule.forRoot(
+      {
+        load: [s3Config, postgresEnv, globalConfig],
+        isGlobal: true,
+        validationSchema: Joi.object({
+          jwtSecret: Joi.string().required(),
+        }),
+        validationOptions: {
+          allowUnknown: true,
+          abortEarly: true,
+        },
+      }),
     AppLoggerModule,
     GarageModule,
     FilesModule,
