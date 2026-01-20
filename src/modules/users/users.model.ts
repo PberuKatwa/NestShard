@@ -26,8 +26,8 @@ export class UsersModel{
           email TEXT NOT NULL,
           password VARCHAR NOT NULL,
           access_token TEXT,
-          created_at TIMESTAMPTZ,
-          updated_at TIMESTAMPTZ
+          created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
         );
       `
       const pgPool = this.pgConfig.getPool();
