@@ -9,13 +9,15 @@ import {
 import { AuthService } from "../auth.service";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
+import { UsersModel } from "src/modules/users/users.model";
 
 @Injectable()
 export class AuthGuard implements CanActivate{
 
   constructor(
     private readonly authService: AuthService,
-    @Inject(APP_LOGGER) private readonly logger:AppLogger
+    @Inject(APP_LOGGER) private readonly logger: AppLogger,
+    private readonly users:UsersModel
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -29,7 +31,9 @@ export class AuthGuard implements CanActivate{
       }
 
       const token = authorization.replace(/bearer/gim, '').trim();
+      // const decoded = this.authService.validateToken(token)
       const decoded = this.authService.validateToken(token)
+
       console.log('decoded ....', decoded)
       return true
 

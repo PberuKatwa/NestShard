@@ -5,6 +5,8 @@ import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
+import type { DecodedUser } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
@@ -13,7 +15,8 @@ export class UsersModel{
   constructor(
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
     private readonly pgConfig: PostgresConfig,
-    private readonly jwtService:JwtService
+    private readonly jwtService: JwtService,
+    private readonly configService:ConfigService
   ) { }
 
   async createTable():Promise<string> {
@@ -104,7 +107,7 @@ export class UsersModel{
 
       const payload = {
         userId:user.id,
-        username: user.first_name,
+        userName: user.first_name,
         email:email
       }
 
@@ -124,8 +127,14 @@ export class UsersModel{
     }
   }
 
-  async validateToken(token: string) {
+  async validateToken(token: string): Promise<DecodedUser> {
     try {
+
+      const decoded:DecodedUser = this.jwtService.verify(token, {
+        secret:this.configService.get<string>('jwtSecret')
+      })
+
+      return decoded;
 
     } catch (error) {
       throw error;
