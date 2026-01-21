@@ -3,9 +3,18 @@ import { DecodedUser } from "src/types/users.types";
 
 export const CurrentUser = createParamDecorator(
   function (data: string, ctx: ExecutionContext) {
-    const request = ctx.switchToHttp().getRequest();
-    const user = request.user;
+    try {
 
-    return data ? user?.[data] : user;
+      const request = ctx.switchToHttp().getRequest();
+      const user:DecodedUser = request.user;
+
+      if (!user) {
+        throw new Error(`No user was found`)
+      }
+
+      return data ? user?.[data] : user;
+    } catch (error) {
+      throw error;
+    }
   },
 )

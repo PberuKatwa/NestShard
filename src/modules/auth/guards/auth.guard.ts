@@ -34,7 +34,6 @@ export class AuthGuard implements CanActivate{
       const decoded = await this.users.validateToken(token);
       request['user'] = decoded;
 
-      console.log('decoded', decoded)
       return true
 
     } catch (error) {
