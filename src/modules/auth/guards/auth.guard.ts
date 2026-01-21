@@ -31,10 +31,9 @@ export class AuthGuard implements CanActivate{
       }
 
       const token = authorization.replace(/bearer/gim, '').trim();
-      // const decoded = this.authService.validateToken(token)
-      const decoded = this.authService.validateToken(token)
+      const decoded = await this.users.validateToken(token)
 
-      console.log('decoded ....', decoded)
+      console.log('decoded', decoded)
       return true
 
     } catch (error) {
