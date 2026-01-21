@@ -1,8 +1,22 @@
-import { CanActivate, Injectable, ExecutionContext, UnauthorizedException } from "@nestjs/common";
-import { Observable } from "rxjs";
+import {
+  CanActivate,
+  Injectable,
+  ExecutionContext,
+  UnauthorizedException,
+  ForbiddenException,
+  Inject
+} from "@nestjs/common";
+import { AuthService } from "../auth.service";
+import { APP_LOGGER } from "src/logger/logger.provider";
+import type { AppLogger } from "src/logger/winston.logger";
 
 @Injectable()
 export class AuthGuard implements CanActivate{
+
+  constructor(
+    private readonly authService: AuthService,
+    @Inject(APP_LOGGER) private readonly logger:AppLogger
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
 
@@ -15,11 +29,13 @@ export class AuthGuard implements CanActivate{
       }
 
       const token = authorization.replace(/bearer/gim, '').trim();
-
+      const decoded = this.authService.validateToken(token)
+      console.log('decoded ....', decoded)
       return true
 
     } catch (error) {
-      throw error;
+      this.logger.error("error in validating token", error)
+      throw new ForbiddenException('Session is unauthorization, please login again')
     }
 
   }

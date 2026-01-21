@@ -13,9 +13,7 @@ export class AuthService {
   validateToken(token: string) {
     return this.jwtService.verify(
       token,
-      {
-        secret:this.configSevice.get<string>('jwtSecret')!
-      }
+      { secret:this.configSevice.get<string>('jwtSecret')! }
     )
   }
 
