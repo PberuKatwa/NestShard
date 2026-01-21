@@ -103,6 +103,7 @@ export class UsersModel{
       if (!isMatch) throw new Error(`Invalid password`);
 
       const payload = {
+        userId:user.id,
         username: user.first_name,
         email:email
       }
@@ -117,6 +118,14 @@ export class UsersModel{
       const updatedUser = updateResult.rows[0]
 
       return updatedUser;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async validateToken(token: string) {
+    try {
 
     } catch (error) {
       throw error;

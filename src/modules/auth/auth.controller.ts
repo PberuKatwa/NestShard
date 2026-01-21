@@ -79,7 +79,7 @@ export class AuthController{
     try {
 
       const response: ApiResponse = {
-        success: false,
+        success: true,
         message:"Successfully obtained user profile"
       }
 
