@@ -1,4 +1,22 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
-export class AuthService {}
+export class AuthService {
+
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configSevice:ConfigService
+  ) { }
+
+  validateToken(token: string) {
+    return this.jwtService.verify(
+      token,
+      {
+        secret:this.configSevice.get<string>('jwtSecret')!
+      }
+    )
+  }
+
+}

@@ -4,17 +4,20 @@ import { Observable } from "rxjs";
 @Injectable()
 export class AuthGuard implements CanActivate{
 
-  async canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
 
     try {
       const request = context.switchToHttp().getRequest();
       const authorization:string = request.headers.authorization;
 
       if (!authorization || authorization.trim() === '') {
-
+        throw new UnauthorizedException('No authorization token was provided');
       }
 
-      const token = authorization?.split(' ')[1];
+      const token = authorization.replace(/bearer/gim, '').trim();
+
+      return true
+
     } catch (error) {
       throw error;
     }
