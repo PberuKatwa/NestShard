@@ -7,6 +7,8 @@ import type { ApiResponse } from "src/types/api.types";
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
+import { CurrentUser } from "../users/decorators/user.decorator";
+import { DecodedUser } from "src/types/users.types";
 
 @Controller('auth')
 export class AuthController{
@@ -75,7 +77,7 @@ export class AuthController{
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  async getProfile(): Promise<ApiResponse> {
+  async getProfile( @CurrentUser() currentUser:any ): Promise<ApiResponse> {
     try {
 
       const response: ApiResponse = {
