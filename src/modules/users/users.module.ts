@@ -19,11 +19,4 @@ import { ConfigService } from "@nestjs/config";
   exports:[ UsersModel ]
 })
 
-export class UsersModule implements OnModuleInit {
-
-  constructor( private readonly users:UsersModel ){}
-
-  async onModuleInit() {
-    await this.users.createTable()
-  }
-}
+export class UsersModule {}
