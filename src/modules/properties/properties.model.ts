@@ -39,10 +39,15 @@ export class PropertiesModel {
           image_url VARCHAR NOT NULL,
           location TEXT NOT NULL,
           description TEXT NOT NULL,
-          status property_status DEFAULT 'PENDING',
+          status property_status DEFAULT 'ACTIVE',
           created_by INTEGER,
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+          FOREIGN KEY (created_by)
+            REFERENCES users(id)
+            ON DELETE SET NULL
+          );
 
           -- Add trigger for automatic updated_at
           CREATE OR REPLACE FUNCTION update_updated_at_column()
