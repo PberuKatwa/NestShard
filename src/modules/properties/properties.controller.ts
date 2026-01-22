@@ -38,7 +38,7 @@ export class PropertyController{
   ) {
     try {
 
-
+      const { name, price, isRental, imageUrl, location, description } = body;
 
     } catch (error) {
       this.logger.error(`Error in creating property`, error)
