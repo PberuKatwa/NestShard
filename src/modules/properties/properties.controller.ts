@@ -48,6 +48,14 @@ export class PropertyController{
       const { key } = await this.garage.uploadFile(file);
       const property = await this.properties.createProperty(name, price, isRental, key, location, description, user.id)
 
+      const response: ApiResponse = {
+        success: true,
+        message: "Successfully created property",
+        data:property
+      }
+
+      return response
+
 
     } catch (error) {
       this.logger.error(`Error in creating property`, error)
