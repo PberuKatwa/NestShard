@@ -29,7 +29,7 @@ export class PropertiesModel {
 
       const query = `
 
-        CREATE TYPE status AS ENUM('ACTIVE','TRASH','PENDING');
+        CREATE TYPE property_status AS ENUM('ACTIVE','TRASH','PENDING');
 
         CREATE TABLE IF NOT EXISTS properties (
           id PRIMARY SERIAL KEY,
@@ -39,7 +39,25 @@ export class PropertiesModel {
           image_url VARCHAR NOT NULL,
           location TEXT NOT NULL,
           description TEXT NOT NULL,
-          status
+          status property_status DEFAULT 'PENDING',
+          created_by INTEGER,
+          created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+
+          -- Add trigger for automatic updated_at
+          CREATE OR REPLACE FUNCTION update_updated_at_column()
+          RETURNS TRIGGER AS $$
+          BEGIN
+            NEW.updated_at = CURRENT_TIMESTAMP;
+            RETURN NEW;
+          END;
+          $$ language 'plpgsql';
+
+          DROP TRIGGER IF EXISTS update_users_updated_at ON users;
+          CREATE TRIGGER update_users_updated_at
+          BEFORE UPDATE ON users
+          FOR EACH ROW
+          EXECUTE FUNCTION update_updated_at_column();
         );
       `;
 
