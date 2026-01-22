@@ -18,6 +18,15 @@ export class PropertiesModel {
   async createTable( name:string, price:number, imageUrl:string, location:string, description:string, size:string ) {
     try {
 
+      this.logger.warn(`Attempting to create properties table with name:${name}`)
+
+      const query = `
+        CREATE TABLE IF NOT EXISTS properties (
+          id PRIMARY SERIAL KEY,
+          name TEXT NOT NULL,
+        );
+      `;
+
     } catch (error) {
       throw error;
     }
