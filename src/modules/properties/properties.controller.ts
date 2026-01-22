@@ -12,6 +12,7 @@ import type { ApiResponse } from "src/types/api.types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { PropertiesModel } from "./properties.model";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { GarageService } from "../garage/garage.service";
 
 
 @Controller('properties')
@@ -19,7 +20,8 @@ export class PropertyController{
 
   constructor(
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
-    private readonly properties:PropertiesModel
+    private readonly properties: PropertiesModel,
+    private readonly garage: GarageService
   ) { }
 
   @Post('')
@@ -39,6 +41,11 @@ export class PropertyController{
     try {
 
       const { name, price, isRental, imageUrl, location, description } = body;
+
+      const { key } = await this.garage.uploadFile(file);
+
+      const property = await this.properties.createProperty(name, price, isRental, imageUrl, location, description)
+
 
     } catch (error) {
       this.logger.error(`Error in creating property`, error)
