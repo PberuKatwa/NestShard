@@ -68,4 +68,20 @@ export class PropertiesModel {
     }
   }
 
+  async createProperty(
+    name: string,
+    price: number,
+    isRental: boolean,
+    imageUrl: string,
+    location: string,
+    description: string,
+    userId:number
+  ) {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
