@@ -79,6 +79,15 @@ export class PropertiesModel {
   ) {
     try {
 
+      this.logger.warn(`Attempting to create property`)
+
+      const query = `
+        INSERT INTO properties ( name, price, is_rental, image_url, location, description, created_by )
+        VALUES ( $1, $2, $3, $4, $5, $6, $7 ),
+        RETURNING id, name, image_url, description;
+      `;
+
+
     } catch (error) {
       throw error;
     }
