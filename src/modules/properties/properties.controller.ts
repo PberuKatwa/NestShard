@@ -46,7 +46,7 @@ export class PropertyController{
       const { name, price, isRental, location, description } = body;
 
       const { key } = await this.garage.uploadFile(file);
-      const property = await this.properties.createProperty(name, price, isRental, key, location, description, user.id)
+      const property = await this.properties.createProperty(name, price, isRental, key, location, description, user.userId)
 
       const response: ApiResponse = {
         success: true,
