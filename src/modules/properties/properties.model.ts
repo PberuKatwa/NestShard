@@ -18,10 +18,9 @@ export class PropertiesModel {
     try {
 
       this.logger.warn(`Attempting to create properties table.`)
+      // CREATE TYPE property_status AS ENUM('ACTIVE','TRASH','PENDING');
 
       const query = `
-
-        CREATE TYPE property_status AS ENUM('ACTIVE','TRASH','PENDING');
 
         CREATE TABLE IF NOT EXISTS properties(
           id SERIAL PRIMARY KEY,

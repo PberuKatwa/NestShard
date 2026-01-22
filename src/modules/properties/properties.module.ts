@@ -4,7 +4,7 @@ import { GarageService } from "../garage/garage.service";
 import { GarageModule } from "../garage/garage.module";
 
 @Module({
-  imports: [GarageService,GarageModule],
+  imports: [GarageModule],
   providers: [PropertiesModel],
   exports:[PropertiesModel]
 })
