@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
-import { UsersModel } from "../users/users.model";
 import { PropertiesModel } from "./properties.model";
+import { GarageService } from "../garage/garage.service";
+import { GarageModule } from "../garage/garage.module";
 
 @Module({
-  imports: [],
+  imports: [GarageService,GarageModule],
   providers: [PropertiesModel],
   exports:[PropertiesModel]
 })
