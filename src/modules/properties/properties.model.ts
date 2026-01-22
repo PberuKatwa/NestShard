@@ -87,6 +87,14 @@ export class PropertiesModel {
         RETURNING id, name, image_url, description;
       `;
 
+      const pgPool = this.pgConfig.getPool();
+      const result = await pgPool.query(query, [name, price, isRental, imageUrl, location, description, userId]);
+      const property = result.rows[0];
+
+      this.logger.info(`Successfully created property`);
+
+      return property;
+
 
     } catch (error) {
       throw error;
