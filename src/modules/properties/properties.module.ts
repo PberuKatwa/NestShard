@@ -3,7 +3,7 @@ import { UsersModel } from "../users/users.model";
 import { PropertiesModel } from "./properties.model";
 
 @Module({
-  imports: [UsersModel],
+  imports: [],
   providers: [PropertiesModel],
   exports:[PropertiesModel]
 })

@@ -12,17 +12,9 @@ export class PropertiesModel {
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
     private readonly pgConfig:PostgresConfig
   ) {
-    this.pool = this.pgConfig.getPool()
   };
 
-  async createTable(
-    name: string,
-    price: number,
-    imageUrl: string,
-    location: string,
-    description: string,
-    size: string
-  ) {
+  async createTable() {
     try {
 
       this.logger.warn(`Attempting to create properties table.`)
@@ -31,8 +23,8 @@ export class PropertiesModel {
 
         CREATE TYPE property_status AS ENUM('ACTIVE','TRASH','PENDING');
 
-        CREATE TABLE IF NOT EXISTS properties (
-          id PRIMARY SERIAL KEY,
+        CREATE TABLE IF NOT EXISTS properties(
+          id SERIAL PRIMARY KEY,
           name TEXT NOT NULL,
           price BIGINT NOT NULL,
           is_rental BOOLEAN DEFAULT TRUE,
@@ -47,26 +39,27 @@ export class PropertiesModel {
           FOREIGN KEY (created_by)
             REFERENCES users(id)
             ON DELETE SET NULL
-          );
-
-          -- Add trigger for automatic updated_at
-          CREATE OR REPLACE FUNCTION update_updated_at_column()
-          RETURNS TRIGGER AS $$
-          BEGIN
-            NEW.updated_at = CURRENT_TIMESTAMP;
-            RETURN NEW;
-          END;
-          $$ language 'plpgsql';
-
-          DROP TRIGGER IF EXISTS update_users_updated_at ON users;
-          CREATE TRIGGER update_users_updated_at
-          BEFORE UPDATE ON users
-          FOR EACH ROW
-          EXECUTE FUNCTION update_updated_at_column();
         );
+
+        -- Add trigger for automatic updated_at
+        CREATE OR REPLACE FUNCTION update_updated_at_column()
+        RETURNS TRIGGER AS $$
+        BEGIN
+          NEW.updated_at = CURRENT_TIMESTAMP;
+          RETURN NEW;
+        END;
+        $$ language 'plpgsql';
+
+        DROP TRIGGER IF EXISTS update_users_updated_at ON users;
+        CREATE TRIGGER update_users_updated_at
+        BEFORE UPDATE ON users
+        FOR EACH ROW
+        EXECUTE FUNCTION update_updated_at_column();
+
       `;
 
-      await this.pool.query(query)
+      const pgPool = this.pgConfig.getPool();
+      await pgPool.query(query)
       this.logger.info(`Successfully created properties table.`)
       return 'properties'
 
