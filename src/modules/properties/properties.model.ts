@@ -16,7 +16,11 @@ export class PropertiesModel {
   };
 
   async createTable( name:string, price:number, imageUrl:string, location:string, description:string, size:string ) {
+    try {
 
+    } catch (error) {
+      throw error;
+    }
   }
 
 }
