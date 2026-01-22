@@ -50,7 +50,7 @@ export class PropertyController{
 
       const response: ApiResponse = {
         success: true,
-        message: "Successfully created property",
+        message: "Successfully created property ",
         data:property
       }
 
