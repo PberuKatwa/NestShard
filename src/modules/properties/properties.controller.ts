@@ -25,6 +25,7 @@ export class PropertyController{
   ) { }
 
   @Post('')
+  @UseGuards(AuthGuard)
   @UseInterceptors( FileInterceptor('image') )
   async createProperty(
     @Body() body:any,
