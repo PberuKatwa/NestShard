@@ -12,7 +12,11 @@ export class PropertiesModel {
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
     private readonly pgConfig:PostgresConfig
   ) {
-    this.pool =
+    this.pool = this.pgConfig.getPool()
   };
+
+  async createTable( name:string, price:number, imageUrl:string, location:string, description:string, size:string ) {
+
+  }
 
 }
