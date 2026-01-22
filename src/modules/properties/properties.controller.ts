@@ -13,6 +13,7 @@ import { AuthGuard } from "../auth/guards/auth.guard";
 import { PropertiesModel } from "./properties.model";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { GarageService } from "../garage/garage.service";
+import { CurrentUser } from "../users/decorators/user.decorator";
 
 
 @Controller('properties')
@@ -28,6 +29,7 @@ export class PropertyController{
   @UseGuards(AuthGuard)
   @UseInterceptors( FileInterceptor('image') )
   async createProperty(
+    @CurrentUser() user:any,
     @Body() body:any,
     @UploadedFile(
         new ParseFilePipe({
@@ -41,11 +43,10 @@ export class PropertyController{
   ) {
     try {
 
-      const { name, price, isRental, imageUrl, location, description } = body;
+      const { name, price, isRental, location, description } = body;
 
       const { key } = await this.garage.uploadFile(file);
-
-      const property = await this.properties.createProperty(name, price, isRental, imageUrl, location, description)
+      const property = await this.properties.createProperty(name, price, isRental, key, location, description, user.id)
 
 
     } catch (error) {
