@@ -66,6 +66,10 @@ export class PropertiesModel {
         );
       `;
 
+      await this.pool.query(query)
+      this.logger.info(`Successfully created properties table.`)
+      return 'properties'
+
     } catch (error) {
       throw error;
     }
