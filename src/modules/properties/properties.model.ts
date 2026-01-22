@@ -15,15 +15,31 @@ export class PropertiesModel {
     this.pool = this.pgConfig.getPool()
   };
 
-  async createTable( name:string, price:number, imageUrl:string, location:string, description:string, size:string ) {
+  async createTable(
+    name: string,
+    price: number,
+    imageUrl: string,
+    location: string,
+    description: string,
+    size: string
+  ) {
     try {
 
-      this.logger.warn(`Attempting to create properties table with name:${name}`)
+      this.logger.warn(`Attempting to create properties table.`)
 
       const query = `
+
+        CREATE TYPE status AS ENUM('ACTIVE','TRASH','PENDING');
+
         CREATE TABLE IF NOT EXISTS properties (
           id PRIMARY SERIAL KEY,
           name TEXT NOT NULL,
+          price BIGINT NOT NULL,
+          is_rental BOOLEAN DEFAULT TRUE,
+          image_url VARCHAR NOT NULL,
+          location TEXT NOT NULL,
+          description TEXT NOT NULL,
+          status
         );
       `;
 
