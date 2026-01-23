@@ -109,8 +109,8 @@ export class PropertiesModel {
       const result = await pgPool.query(query);
       const properties = result.rows;
 
-      console.log("properties", properties)
-
+      this.logger.info(`Successfully fetched properties`)
+      return properties;
 
     } catch (error) {
       throw error;
