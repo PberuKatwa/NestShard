@@ -14,6 +14,7 @@ import { PropertiesModel } from "./properties.model";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { GarageService } from "../garage/garage.service";
 import { CurrentUser } from "../users/decorators/user.decorator";
+import { property } from "src/types/properties.types";
 
 
 @Controller('properties')
@@ -77,6 +78,14 @@ export class PropertyController{
 
       const properties = await this.properties.getAllProperties();
 
+      const propertiesMap = properties.map(
+        async (property: property) => {
+          return {
+            ...property,
+            url:await this.garage.getSignedFileURl()
+          }
+        }
+      )
 
       const response: ApiResponse = {
         success: true,
