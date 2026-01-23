@@ -100,4 +100,12 @@ export class PropertiesModel {
     }
   }
 
+  async getAllProperties() {
+    try {
+
+    } catch (error) {
+
+    }
+  }
+
 }
