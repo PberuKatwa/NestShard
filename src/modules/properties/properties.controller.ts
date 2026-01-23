@@ -75,6 +75,14 @@ export class PropertyController{
   async getAllProperty( @Res() res:Response):Promise<ApiResponse> {
     try {
 
+      const properties = await this.properties.getAllProperties();
+      const response: ApiResponse = {
+        success: false,
+        message: "Successfully fetched properties",
+        data:properties
+      }
+      return res.status(200).json(response)
+
     } catch (error) {
 
       this.logger.error(`Error in getting all properties from database`, error)
