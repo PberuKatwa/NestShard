@@ -91,7 +91,7 @@ export class PropertyController{
 
       const response: ApiResponse = {
         success: true,
-        message: "Successfully fetched properties",
+        message: "Successsfully fetched properties",
         data: {
           properties:propertiesMap,
           pagination: {
