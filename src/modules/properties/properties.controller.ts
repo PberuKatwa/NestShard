@@ -70,4 +70,10 @@ export class PropertyController{
     }
   }
 
+  @Get('')
+  @UseGuards(AuthGuard)
+  async getAllProperty() {
+
+  }
+
 }
