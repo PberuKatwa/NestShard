@@ -72,10 +72,11 @@ export class PropertyController{
 
   @Get('')
   @UseGuards(AuthGuard)
-  async getAllProperty( @Res() res:Response):Promise<ApiResponse> {
+  async getAllProperty( @Res() res:Response):Promise<Response> {
     try {
 
       const properties = await this.properties.getAllProperties();
+
       const response: ApiResponse = {
         success: false,
         message: "Successfully fetched properties",
@@ -90,7 +91,7 @@ export class PropertyController{
         success: false,
         message:`${error}`
       }
-      res.status(500).json(response)
+      return res.status(500).json(response)
 
     }
   }
