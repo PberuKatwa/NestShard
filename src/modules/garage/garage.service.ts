@@ -122,7 +122,9 @@ export class GarageService {
         Key:key
       })
 
-      const signedURl = await getSignedUrl(this.s3,s3Response,{expiresIn:36000})
+      const signedURl = await getSignedUrl(this.s3, s3Response, { expiresIn: 36000 })
+
+      return signedURl;
 
     } catch (error) {
       throw error;
