@@ -109,7 +109,7 @@ export class PropertiesModel {
       const query = ` SELECT name,price,is_rental,image_url,location,description FROM properties; `;
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query);
-      const properties = result.rows;
+      const properties:Array<property> = result.rows;
 
       this.logger.info(`Successfully fetched properties`)
       return properties;
