@@ -76,7 +76,7 @@ export class PropertyController{
   async getAllProperty( @Res() res:Response):Promise<Response> {
     try {
 
-      const properties = await this.properties.getAllProperties();
+      const { properties, totalCount, currentPage, totalPages } = await this.properties.getAllProperties();
 
       const propertiesMap = await Promise.all(
         properties.map(
@@ -92,7 +92,14 @@ export class PropertyController{
       const response: ApiResponse = {
         success: true,
         message: "Successfully fetched properties",
-        data:propertiesMap
+        data: {
+          properties:propertiesMap,
+          pagination: {
+            totalCount,
+            currentPage,
+            totalPages
+          }
+        }
       }
       return res.status(200).json(response)
 
