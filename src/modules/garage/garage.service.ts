@@ -112,7 +112,11 @@ export class GarageService {
   }
 
   async getSignedFileURl(key: string) {
+    try {
 
+    } catch (error) {
+      throw error;
+    }
   }
 
   async fetchFileByKey(key: string): Promise< keyFileFetchRes > {
