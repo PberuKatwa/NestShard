@@ -101,7 +101,7 @@ export class PropertiesModel {
     }
   }
 
-  async getAllProperties():Promise < Array<property> >{
+  async getAllProperties(){
     try {
 
       this.logger.warn(`Trying to fetch all properties from database.`)
@@ -109,18 +109,26 @@ export class PropertiesModel {
       const limit = 2;
       const offset = (page - 1) * limit;
 
-      const query = ` SELECT id,name,price,is_rental,image_url,location,description
+      const dataQuery = ` SELECT id,name,price,is_rental,image_url,location,description
         FROM properties
         ORDER BY id ASC
         LIMIT $1 OFFSET $2;
       `;
+      const countQuery = `SELECT COUNT(*) FROM properties;`;
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query,[limit,offset]);
-      const properties:Array<property> = result.rows;
+      const [dataResult, countResult] = await Promise.all([
+        pgPool.query(dataQuery, [limit, offset]),
+        pgPool.query(countQuery)
+      ]);
 
       this.logger.info(`Successfullly fetched properties`)
-      return properties;
+      return {
+        properties: dataResult.rows,
+        totalCount: parseInt(countResult.rows[0].count),
+        currentPage: page,
+        totalPages: Math.ceil(parseInt(countResult.rows[0].count) / limit)
+      };
 
     } catch (error) {
       throw error;
