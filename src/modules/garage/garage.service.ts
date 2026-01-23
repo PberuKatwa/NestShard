@@ -124,6 +124,7 @@ export class GarageService {
 
       const signedURl = await getSignedUrl(this.s3, s3Response, { expiresIn: 36000 })
 
+      this.logger.info("Successfully fetched signed url");
       return signedURl;
 
     } catch (error) {
