@@ -103,6 +103,11 @@ export class PropertiesModel {
   async getAllProperties() {
     try {
 
+      this.logger.warn(`Trying to fetch all properties from database.`)
+      const query = ` SELECT name,price,is_rental,image_url,location,description FROM properties; `;
+
+
+
     } catch (error) {
       throw error;
     }
