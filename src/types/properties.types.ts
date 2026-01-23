@@ -1,4 +1,5 @@
 export interface property {
+  id: number;
   name: string;
   price: number;
   is_rental: boolean;

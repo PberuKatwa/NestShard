@@ -77,6 +77,7 @@ export class PropertyController{
 
       const properties = await this.properties.getAllProperties();
 
+
       const response: ApiResponse = {
         success: true,
         message: "Successfully fetched properties",
