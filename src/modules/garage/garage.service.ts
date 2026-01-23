@@ -114,6 +114,9 @@ export class GarageService {
   async getSignedFileURl(key: string) {
     try {
 
+      this.logger.warn(`Attempting to fetch a file by signed url`)
+
+
     } catch (error) {
       throw error;
     }
