@@ -106,7 +106,12 @@ export class PropertiesModel {
 
       this.logger.warn(`Trying to fetch all properties from database.`)
 
-      const query = ` SELECT id,name,price,is_rental,image_url,location,description FROM properties; `;
+      const query = ` SELECT id,name,price,is_rental,image_url,location,description
+        FROM properties
+        ORDER BY id ASC
+        LIMIT $1 OFFSET $2;
+        `;
+
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query);
       const properties:Array<property> = result.rows;
