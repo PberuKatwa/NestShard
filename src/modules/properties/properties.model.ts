@@ -104,7 +104,7 @@ export class PropertiesModel {
     try {
 
     } catch (error) {
-
+      throw error;
     }
   }
 
