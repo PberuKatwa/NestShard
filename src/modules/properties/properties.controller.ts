@@ -76,11 +76,14 @@ export class PropertyController{
     try {
 
     } catch (error) {
+
       this.logger.error(`Error in getting all properties from database`, error)
       const response: ApiResponse = {
         success: false,
         message:`${error}`
       }
+      res.status(500).json(response)
+
     }
   }
 
