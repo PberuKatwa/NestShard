@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Get, Inject, Injectable } from '@nestjs/common';
 import {
   S3Client,
   PutObjectCommand,
@@ -17,6 +17,7 @@ import { S3_CLIENT } from './garage.storage';
 import { APP_LOGGER } from 'src/logger/logger.provider';
 import type { AppLogger } from '../../logger/winston.logger';
 import type { listFilesRes, keyFileFetchRes } from 'src/types/storage.types';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class GarageService {
@@ -52,7 +53,8 @@ export class GarageService {
           Bucket:this.bucket,
           Key:key,
           Body:file.buffer,
-          ContentType:file.mimetype
+          ContentType: file.mimetype,
+          ACL:'public-read'
         })
       )
 
@@ -115,7 +117,12 @@ export class GarageService {
     try {
 
       this.logger.warn(`Attempting to fetch a file by signed url`)
+      const s3Response = new GetObjectCommand({
+        Bucket: this.bucket,
+        Key:key
+      })
 
+      const signedURl = await getSignedUrl(this.s3,s3Response,{expiresIn:36000})
 
     } catch (error) {
       throw error;
