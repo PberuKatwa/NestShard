@@ -78,13 +78,15 @@ export class PropertyController{
 
       const properties = await this.properties.getAllProperties();
 
-      const propertiesMap = properties.map(
-        async (property: property) => {
+      const propertiesMap = await Promise.all(
+        properties.map(
+         async (property: property) => {
           return {
             ...property,
             url:await this.garage.getSignedFileURl(property.image_url)
           }
         }
+      )
       )
 
       const response: ApiResponse = {
