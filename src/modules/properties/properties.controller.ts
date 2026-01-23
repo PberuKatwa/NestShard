@@ -82,7 +82,7 @@ export class PropertyController{
         async (property: property) => {
           return {
             ...property,
-            url:await this.garage.getSignedFileURl()
+            url:await this.garage.getSignedFileURl(property.image_url)
           }
         }
       )
@@ -90,7 +90,7 @@ export class PropertyController{
       const response: ApiResponse = {
         success: true,
         message: "Successfully fetched properties",
-        data:properties
+        data:propertiesMap
       }
       return res.status(200).json(response)
 
