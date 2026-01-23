@@ -72,8 +72,13 @@ export class PropertyController{
 
   @Get('')
   @UseGuards(AuthGuard)
-  async getAllProperty() {
+  async getAllProperty( @Res() res:Response):Promise<ApiResponse> {
+    try {
 
+    } catch (error) {
+      this.logger.error(`Error in getting all properties from database`, error)
+      const response
+    }
   }
 
 }

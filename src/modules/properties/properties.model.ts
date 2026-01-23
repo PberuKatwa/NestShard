@@ -105,7 +105,11 @@ export class PropertiesModel {
 
       this.logger.warn(`Trying to fetch all properties from database.`)
       const query = ` SELECT name,price,is_rental,image_url,location,description FROM properties; `;
+      const pgPool = this.pgConfig.getPool();
+      const result = await pgPool.query(query);
+      const properties = result.rows;
 
+      console.log("properties", properties)
 
 
     } catch (error) {
