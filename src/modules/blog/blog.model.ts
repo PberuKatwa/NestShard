@@ -59,9 +59,17 @@ export class BlogModel{
     }
   }
 
-  async createBlog( title:string, author_id:number, content:string) {
+  async createBlog( title:string, authorId:number, content:string) {
     try {
       this.logger.warn(`Attempting to create blog post`)
+
+      const query = `
+        INSERT INTO blogs (title,author_id,content)
+        VALUES($1,$2,$3)
+        RETURNING id,title,author_id,content;
+      `
+
+
     } catch (error) {
       throw error;
     }
