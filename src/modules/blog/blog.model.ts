@@ -25,8 +25,8 @@ export class BlogModel{
           slug VARCHAR(240),
           content TEXT NOT NULL,
           status property_status DEFAULT 'ACTIVE',
-          created_at TIMESTAMPTZ NOT NULL,
-          updated_at TIMESTAMPTZ NOT NULL,
+          created_at TIMESTAMPTZ,
+          updated_at TIMESTAMPTZ,
 
           FOREIGN KEY(author_id)
             REFERENCES users(id)
@@ -70,7 +70,7 @@ export class BlogModel{
       `
 
       const pool = this.pgConfig.getPool();
-      const result = await pool.query(query);
+      const result = await pool.query(query,[title,authorId,content]);
       const blog = result.rows[0];
 
       return blog;
