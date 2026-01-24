@@ -22,7 +22,14 @@ export class PropertiesModel {
 
       const query = `
 
-        CREATE TYPE property_status IF NOT EXISTS  AS ENUM('ACTIVE','TRASH','PENDING');
+        DO $$
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'property_status') THEN
+                CREATE TYPE property_status AS ENUM ('ACTIVE', 'TRASH', 'PENDING');
+            END IF;
+        END
+        $$;
+
 
         CREATE TABLE IF NOT EXISTS properties(
           id SERIAL PRIMARY KEY,
