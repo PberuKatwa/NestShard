@@ -22,7 +22,7 @@ export class BlogController{
     @CurrentUser() user:any,
     @Req() req: Request,
     @Res() res: Response
-  ): Promise<ApiResponse> {
+  ): Promise<Response> {
     try {
 
       const { title, content } = req.body;
@@ -34,6 +34,8 @@ export class BlogController{
         message: `Successfully created post`,
         data:blog
       }
+
+      return res.status(200).json(response)
 
     } catch (error) {
 
