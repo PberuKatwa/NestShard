@@ -23,6 +23,7 @@ export class BlogModel{
           title VARCHAR(240) NOT NULL,
           author_id INTEGER NOT NULL,
           slug VARCHAR(240),
+          content TEXT NOT NULL,
           status property_status DEFAULT 'ACTIVE',
           created_at TIMESTAMPTZ NOT NULL,
           updated_at TIMESTAMPTZ NOT NULL,
@@ -52,6 +53,14 @@ export class BlogModel{
       this.logger.info(`Successfully created blogs table.`)
 
       return "blogs"
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createBlog() {
+    try {
 
     } catch (error) {
       throw error;
