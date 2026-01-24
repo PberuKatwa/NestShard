@@ -1,4 +1,4 @@
-import { Controller, Inject, Post } from "@nestjs/common";
+import { Controller, Inject, Post, Req, Res } from "@nestjs/common";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 
@@ -11,8 +11,12 @@ export class BlogController{
   ) { }
 
   @Post('')
-  async createPost() {
+  async createPost( @Req() req:Request, @Res() res:Response ) {
+    try {
 
+    } catch (error) {
+      this.logger.error(``)
+    }
   }
 
 }
