@@ -16,6 +16,7 @@ export class BlogModel{
 
   async createTable() {
     try {
+
       this.logger.warn(`Attempting to create blogs table`);
       const query = `
 
@@ -50,6 +51,10 @@ export class BlogModel{
       `
 
       await this.pgPool.query(query)
+      this.logger.info(`Successfully created blogs table.`)
+
+      return "blogs"
+
     } catch (error) {
       throw error;
     }
