@@ -3,7 +3,7 @@ import { UsersModel } from "./users.model";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 
-// @Global()
+@Global()
 @Module({
   imports: [
     JwtModule.registerAsync({
