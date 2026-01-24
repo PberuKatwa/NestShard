@@ -8,6 +8,7 @@ import { PostgresModule } from './databases/postgres.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PropertiesModule } from './modules/properties/properties.module';
+import { BlogModule } from './modules/blog/blog.module';
 import Joi from 'joi';
 
 @Module({
@@ -32,7 +33,8 @@ import Joi from 'joi';
     PostgresModule,
     UsersModule,
     AuthModule,
-    PropertiesModule
+    PropertiesModule,
+    BlogModule
   ]
 })
 export class AppModule {}
