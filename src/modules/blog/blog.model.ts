@@ -59,9 +59,9 @@ export class BlogModel{
     }
   }
 
-  async createBlog() {
+  async createBlog( title:string, author_id:number, content:string) {
     try {
-
+      this.logger.warn(`Attempting to create blog post`)
     } catch (error) {
       throw error;
     }
