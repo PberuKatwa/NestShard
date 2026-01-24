@@ -18,14 +18,14 @@ export class BlogModel{
       this.logger.warn(`Attempting to create blogs table`);
       const query = `
 
-        CREATE TABLE blogs IF NOT EXISTS(
+        CREATE TABLE IF NOT EXISTS blogs (
           id SERIAL PRIMARY KEY,
           title VARCHAR(240) NOT NULL,
           author_id INTEGER NOT NULL,
           slug VARCHAR(240),
           status property_status DEFAULT 'ACTIVE',
-          created_at TIMESTAMPZ NOT NULL,
-          updated_at TIMESTAMPZ NOT NULL
+          created_at TIMESTAMPTZ NOT NULL,
+          updated_at TIMESTAMPTZ NOT NULL,
 
           FOREIGN KEY(author_id)
             REFERENCES users(id)
