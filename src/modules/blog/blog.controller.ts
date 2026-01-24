@@ -1,4 +1,4 @@
-import { Controller, Inject } from "@nestjs/common";
+import { Controller, Inject, Post } from "@nestjs/common";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 
@@ -8,6 +8,11 @@ export class BlogController{
   constructor(
     @Inject(APP_LOGGER) private readonly logger:AppLogger
 
-  ) {}
+  ) { }
+
+  @Post('')
+  async createPost() {
+
+  }
 
 }
