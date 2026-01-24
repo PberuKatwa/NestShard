@@ -26,9 +26,10 @@ export class PostgresModule implements OnModuleInit {
 
   async onModuleInit() {
 
-    await this.postgresConfig.connect()
+    const pgPool = await this.postgresConfig.connect()
     await this.users.createTable()
     await this.properties.createTable()
+    await this.blog.createTable(pgPool)
   }
 
 }

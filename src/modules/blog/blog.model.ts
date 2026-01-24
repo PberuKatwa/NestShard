@@ -1,18 +1,16 @@
 import { Injectable,Inject } from "@nestjs/common";
 import { Pool } from "pg";
+import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 
 @Injectable()
 export class BlogModel{
 
-  private readonly pgPool:Pool;
   constructor(
     @Inject(APP_LOGGER) private readonly logger:AppLogger,
-    pgPool:Pool
-  ) {
-    this.pgPool = pgPool;
-  }
+    private readonly pgConfig:PostgresConfig
+  ) {}
 
   async createTable() {
     try {
@@ -50,7 +48,7 @@ export class BlogModel{
         EXECUTE FUNCTION update_updated_at_column();
       `
 
-      await this.pgPool.query(query)
+      await this.pgConfig.getPool().query(query)
       this.logger.info(`Successfully created blogs table.`)
 
       return "blogs"
