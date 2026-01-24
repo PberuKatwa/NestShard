@@ -27,6 +27,13 @@ export class BlogController{
 
       const { title, content } = req.body;
 
+      const blog = await this.blog.createBlog(title, user.userId, content);
+
+      const response:ApiResponse = {
+        success: true,
+        message: `Successfully created post`,
+        data:blog
+      }
 
     } catch (error) {
 
