@@ -56,7 +56,6 @@ export class BlogModel{
     } catch (error) {
       throw error;
     }
-
   }
 
 }
