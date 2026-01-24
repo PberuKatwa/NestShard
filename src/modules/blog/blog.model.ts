@@ -69,6 +69,11 @@ export class BlogModel{
         RETURNING id,title,author_id,content;
       `
 
+      const pool = this.pgConfig.getPool();
+      const result = await pool.query(query);
+      const blog = result.rows[0];
+
+      return blog;
 
     } catch (error) {
       throw error;
