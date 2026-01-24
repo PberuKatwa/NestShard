@@ -36,7 +36,6 @@ export class BlogController{
       }
 
       return res.status(200).json(response)
-
     } catch (error) {
 
       this.logger.error(`error in creating blog post`, error)
@@ -46,7 +45,7 @@ export class BlogController{
         message:`${error}`
       }
 
-      return response;
+      return res.status(500).json(response);
 
     }
   }
