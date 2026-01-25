@@ -113,6 +113,15 @@ export class BlogController{
     try {
 
       const { id, title, content } = req.body;
+      const blog = await this.blog.updateBlog(id, title, content);
+
+      const response: ApiResponse = {
+        success: true,
+        message: `Successfully updated blog`,
+        data:blog
+      }
+
+      return res.status(200).json(blog)
 
     } catch (error) {
 
