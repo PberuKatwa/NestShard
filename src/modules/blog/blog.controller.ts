@@ -97,7 +97,7 @@ export class BlogController{
 
     } catch (error) {
 
-      this.logger.error(`error in fetching blog posts`, error)
+      this.logger.error(`error in fetching blog post`, error)
       const response: ApiResponse = {
         success: false,
         message:`${error}`
@@ -109,12 +109,14 @@ export class BlogController{
 
   @Post('update')
   @UseGuards(AuthGuard)
-  async updateBlog() {
+  async updateBlog( @Req() req:Request, @Req() res:Response ):Promise<Response> {
     try {
+
+      const { id, title, content } = req.body;
 
     } catch (error) {
 
-      this.logger.error(`error in fetching blog posts`, error)
+      this.logger.error(`error in updating blog post`, error)
       const response: ApiResponse = {
         success: false,
         message:`${error}`
