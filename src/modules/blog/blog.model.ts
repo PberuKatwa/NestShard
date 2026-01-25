@@ -84,6 +84,9 @@ export class BlogModel{
 
       this.logger.warn(`Attempting to fetch all blogs`);
 
+      const page = pageInput ? pageInput : 1;
+      const limit = limitInput ? limitInput : 10;
+
       const dataQuery = `
       SELECT id, title, author_id,content
       FROM blogs
@@ -91,7 +94,7 @@ export class BlogModel{
       LIMIT $1 OFFSET $2;
       `;
 
-      const countQuery = ``;
+      const countQuery = `SELECT COUNT (*) FROM blogs;`;
 
     } catch (error) {
       throw error;
