@@ -149,7 +149,10 @@ export class PropertiesModel {
       this.logger.warn(`Attempting to fetch blog with id:${id}`)
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(`SELECT id,title,author_id,content FROM properties WHERE id=$1;`, [id])
+      const result = await pgPool.query(`
+        SELECT id,name,price,is_rental,image_url,location,description
+        FROM properties
+        WHERE id=$1;`, [id])
       const property = result.rows[0];
 
       return property;
