@@ -79,7 +79,7 @@ export class BlogModel{
     }
   }
 
-  async getAllBolgs( page:number, limit:number ) {
+  async getAllBolgs( pageInput:number, limitInput:number ) {
     try {
 
       this.logger.warn(`Attempting to fetch all blogs`);
