@@ -1,10 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PostgresConfig } from "./postgres.config";
+import { APP_LOGGER } from "src/logger/logger.provider";
+import type { AppLogger } from "src/logger/winston.logger";
 
 @Injectable()
 export class PostgresGlobals{
 
-  constructor(private readonly pgConfig: PostgresConfig) { };
+  constructor(
+    private readonly pgConfig: PostgresConfig,
+    @Inject(APP_LOGGER) private readonly logger: AppLogger
+  ) { };
 
   async initializeTypes() {
     try {
@@ -13,7 +18,7 @@ export class PostgresGlobals{
         DO $$
         BEGIN
             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'row_status') THEN
-                CREATE TYPE property_status AS ENUM ('active', 'trash', 'pending' );
+                CREATE TYPE row_status AS ENUM ('active', 'trash', 'pending' );
             END IF;
         END
         $$;
@@ -21,11 +26,16 @@ export class PostgresGlobals{
         DO $$
         BEGIN
             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
-                CREATE TYPE property_status AS ENUM ('super_admin', 'admin', 'ordinary' );
+                CREATE TYPE user_role AS ENUM ('super_admin', 'admin', 'basic', 'demo' );
             END IF;
         END
         $$;
       `;
+
+      const pgPool = this.pgConfig.getPool();
+      const result = pgPool.query(query);
+
+      return result;
 
     } catch(error) {
       throw error;
