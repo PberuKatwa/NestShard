@@ -61,6 +61,12 @@ export class PostgresGlobals{
         $$ LANGUAGE plpgsql;
       `;
 
+      const pgPool = this.pgConfig.getPool();
+      const result = pgPool.query(query);
+
+      this.logger.info(`Successfully created global trigger`);
+      return result;
+
     } catch (error) {
       throw error;
     }
