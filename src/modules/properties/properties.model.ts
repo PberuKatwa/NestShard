@@ -143,4 +143,20 @@ export class PropertiesModel {
     }
   }
 
+  async getProperty(id: number) {
+    try {
+
+      this.logger.warn(`Attempting to fetch blog with id:${id}`)
+
+      const pgPool = this.pgConfig.getPool();
+      const result = await pgPool.query(`SELECT id,title,author_id,content FROM properties WHERE id=$1;`, [id])
+      const property = result.rows[0];
+
+      return property;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
