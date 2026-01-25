@@ -109,13 +109,13 @@ export class PropertiesModel {
     }
   }
 
-  async getAllProperties(){
+  async getAllProperties( pageInput:number, limitInput:number ){
     try {
 
       this.logger.warn(`Trying to fetch all properties from database.`)
-      const page = 1;
-      const limit = 2;
-      const offset = (page - 1) * limit;
+      const page = pageInput ? pageInput : 1;
+      const limit = limitInput ? limitInput : 10;
+      const offset = (page -1) * limit
 
       const dataQuery = ` SELECT id,name,price,is_rental,image_url,location,description
         FROM properties

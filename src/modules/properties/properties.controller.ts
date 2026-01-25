@@ -71,11 +71,12 @@ export class PropertyController{
     }
   }
 
-  @Get('')
+  @Get(':page/:limit')
   @UseGuards(AuthGuard)
-  async getAllProperty( @Res() res:Response):Promise<Response> {
+  async getAllProperty(@Req() req:Request, @Res() res:Response):Promise<Response> {
     try {
 
+      const { page, limit } = req.params;
       const { properties, totalCount, currentPage, totalPages } = await this.properties.getAllProperties();
 
       const propertiesMap = await Promise.all(
