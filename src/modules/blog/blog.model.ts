@@ -93,10 +93,13 @@ export class BlogModel{
       ORDER BY created_at ASC
       LIMIT $1 OFFSET $2;
       `;
-
       const countQuery = `SELECT COUNT (*) FROM blogs;`;
 
       const pgPool = this.pgConfig.getPool()
+      const [dataResult, paginationResult] = await Promise.all([
+        pgPool.query(dataQuery, [page, limit]),
+        pgPool.query(countQuery)
+      ])
 
     } catch (error) {
       throw error;
