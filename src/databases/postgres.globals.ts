@@ -35,8 +35,7 @@ export class PostgresGlobals{
       `;
 
       const pgPool = this.pgConfig.getPool();
-      const result = pgPool.query(query);
-
+      const result = await pgPool.query(query);
       this.logger.info(`Successfully created global types`);
       return result;
 
@@ -62,7 +61,7 @@ export class PostgresGlobals{
       `;
 
       const pgPool = this.pgConfig.getPool();
-      const result = pgPool.query(query);
+      const result = await pgPool.query(query);
 
       this.logger.info(`Successfully created global trigger`);
       return result;

@@ -33,7 +33,7 @@ export class PropertiesModel {
           status row_status DEFAULT 'active,
           created_by INTEGER,
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 
           FOREIGN KEY (created_by)
             REFERENCES users(id)
