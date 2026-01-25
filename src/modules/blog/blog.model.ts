@@ -101,6 +101,17 @@ export class BlogModel{
         pgPool.query(countQuery)
       ])
 
+      const totalCount = parseInt(paginationResult.rows[0].count)
+
+      this.logger.info(`Successfully fetched ${paginationResult.rows[0].count} blogs`)
+
+      return {
+        blogs: dataResult.rows,
+        totalCount: totalCount,
+        currentPage: page,
+        totalPages:Math.ceil(totalCount/limit)
+      }
+
     } catch (error) {
       throw error;
     }
