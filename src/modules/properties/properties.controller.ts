@@ -118,8 +118,20 @@ export class PropertyController{
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  async getProperty() {
+  async getProperty( @Req() req:Request, @Res() res:Response ) {
     try {
+
+      const { id } = req.params;
+
+      const property = await this.properties.getProperty(parseInt(id));
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Successfully fetched property",
+        data:property
+      }
+
+      return res.status(200).json(response);
 
     } catch (error) {
 
