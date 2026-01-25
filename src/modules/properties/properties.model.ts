@@ -22,15 +22,6 @@ export class PropertiesModel {
 
       const query = `
 
-        DO $$
-        BEGIN
-            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'property_status') THEN
-                CREATE TYPE property_status AS ENUM ('ACTIVE', 'TRASH', 'PENDING');
-            END IF;
-        END
-        $$;
-
-
         CREATE TABLE IF NOT EXISTS properties(
           id SERIAL PRIMARY KEY,
           name TEXT NOT NULL,
@@ -39,7 +30,7 @@ export class PropertiesModel {
           image_url VARCHAR NOT NULL,
           location TEXT NOT NULL,
           description TEXT NOT NULL,
-          status property_status DEFAULT 'ACTIVE',
+          status row_status DEFAULT 'active,
           created_by INTEGER,
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -49,20 +40,10 @@ export class PropertiesModel {
             ON DELETE SET NULL
         );
 
-        -- Add trigger for automatic updated_at
-        CREATE OR REPLACE FUNCTION update_updated_at_column()
-        RETURNS TRIGGER AS $$
-        BEGIN
-          NEW.updated_at = CURRENT_TIMESTAMP;
-          RETURN NEW;
-        END;
-        $$ language 'plpgsql';
-
-        DROP TRIGGER IF EXISTS update_users_updated_at ON users;
-        CREATE TRIGGER update_users_updated_at
-        BEFORE UPDATE ON users
+        CREATE TRIGGER update_properties_timestamp
+        BEFORE UPDATE ON properties
         FOR EACH ROW
-        EXECUTE FUNCTION update_updated_at_column();
+        EXECUTE FUNCTION set_timestamp('updated_at');
 
       `;
 
