@@ -82,10 +82,11 @@ export class BlogModel{
   async getAllBlogs( pageInput:number, limitInput:number ) {
     try {
 
-      this.logger.warn(`Attempting to fetch all blogs`);
+      this.logger.warn(`Attempting to fetch blogs from page:${pageInput} and limit:${limitInput}`);
 
       const page = pageInput ? pageInput : 1;
       const limit = limitInput ? limitInput : 10;
+      const offset = (page -1) * limit
 
       const dataQuery = `
       SELECT id, title, author_id,content
@@ -97,7 +98,7 @@ export class BlogModel{
 
       const pgPool = this.pgConfig.getPool()
       const [dataResult, paginationResult] = await Promise.all([
-        pgPool.query(dataQuery, [page, limit]),
+        pgPool.query(dataQuery, [limit, offset]),
         pgPool.query(countQuery)
       ])
 
