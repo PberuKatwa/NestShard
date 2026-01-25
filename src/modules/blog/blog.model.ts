@@ -33,20 +33,11 @@ export class BlogModel{
             ON DELETE SET NULL
         );
 
-        -- Add trigger for automatic updated_at
-        CREATE OR REPLACE FUNCTION update_updated_at_column()
-        RETURNS TRIGGER AS $$
-        BEGIN
-          NEW.updated_at = CURRENT_TIMESTAMP;
-          RETURN NEW;
-        END;
-        $$ language 'plpgsql';
-
-        DROP TRIGGER IF EXISTS update_users_updated_at ON users;
-        CREATE TRIGGER update_users_updated_at
-        BEFORE UPDATE ON users
+        CREATE TRIGGER update_blog_timestamp
+        BEFORE UPDATE ON blogs
         FOR EACH ROW
-        EXECUTE FUNCTION update_updated_at_column();
+        EXECUTE FUNCTION set_timestamp('updated_at');
+
       `
 
       await this.pgConfig.getPool().query(query)
