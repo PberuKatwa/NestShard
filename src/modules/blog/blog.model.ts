@@ -79,4 +79,8 @@ export class BlogModel{
     }
   }
 
+  async getAllBolgs( page:number, limit:number ) {
+
+  }
+
 }
