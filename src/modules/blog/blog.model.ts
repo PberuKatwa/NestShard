@@ -120,6 +120,9 @@ export class BlogModel{
   async getBlog(blogId: number) {
     try {
 
+      this.logger.warn(`Attempting to fetch blog with id:${blogId}`)
+
+
     } catch (error) {
       throw error;
     }
