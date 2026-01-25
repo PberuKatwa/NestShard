@@ -109,7 +109,7 @@ export class BlogController{
 
   @Post('update')
   @UseGuards(AuthGuard)
-  async updateBlog( @Req() req:Request, @Req() res:Response ):Promise<Response> {
+  async updateBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
     try {
 
       const { id, title, content } = req.body;
@@ -121,7 +121,7 @@ export class BlogController{
         data:blog
       }
 
-      return res.status(200).json(blog)
+      return res.status(200).json(response)
 
     } catch (error) {
 
