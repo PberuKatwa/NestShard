@@ -55,6 +55,17 @@ export class BlogController{
   async getAllBlogs(@Req() req:Request, @Res() res:Response):Promise<Response> {
     try {
 
+      const { page, limit } = req.params;
+
+      const blogResult = await this.blog.getAllBlogs(parseInt(page), parseInt(limit))
+
+      const response: ApiResponse = {
+        success: true,
+        message: `Successfully fetched ${blogResult.totalCount} blogs`,
+        data:blogResult
+      }
+
+      return res.status(200).json(blogResult);
     } catch (error) {
 
       this.logger.error(`error in fetching blog posts`, error)
