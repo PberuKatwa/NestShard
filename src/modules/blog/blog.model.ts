@@ -117,4 +117,12 @@ export class BlogModel{
     }
   }
 
+  async getBlog(blogId: number) {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
