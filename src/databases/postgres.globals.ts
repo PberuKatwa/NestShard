@@ -45,4 +45,12 @@ export class PostgresGlobals{
     }
   }
 
+  async createTimestampTrigger() {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
