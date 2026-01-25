@@ -50,7 +50,7 @@ export class BlogController{
     }
   }
 
-  @Get('blogs/:page/:limit')
+  @Get('all/:page/:limit')
   @UseGuards(AuthGuard)
   async getAllBlogs(@Req() req:Request, @Res() res:Response):Promise<Response> {
     try {
