@@ -32,6 +32,8 @@ export class UsersModel{
           email TEXT NOT NULL UNIQUE,
           password VARCHAR NOT NULL,
           access_token TEXT,
+          status row_status DEFAULT 'active',
+          role user_role DEFAULT 'demo',
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
         );
