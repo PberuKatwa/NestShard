@@ -122,6 +122,11 @@ export class BlogModel{
 
       this.logger.warn(`Attempting to fetch blog with id:${blogId}`)
 
+      const pgPool = this.pgConfig.getPool();
+      const result = await pgPool.query(`SELECT id,title,author_id,content FROM blogs WHERE id=$1;`, [blogId])
+      const blog = result.rows[0];
+
+      return blog;
 
     } catch (error) {
       throw error;
