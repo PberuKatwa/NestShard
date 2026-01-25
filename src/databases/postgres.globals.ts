@@ -14,6 +14,8 @@ export class PostgresGlobals{
   async initializeTypes() {
     try {
 
+      this.logger.warn(`Attempting to initialized postgres global types`);
+
       const query = `
         DO $$
         BEGIN
@@ -34,6 +36,8 @@ export class PostgresGlobals{
 
       const pgPool = this.pgConfig.getPool();
       const result = pgPool.query(query);
+
+      this.logger.info(`Successfully created global types`)
 
       return result;
 
