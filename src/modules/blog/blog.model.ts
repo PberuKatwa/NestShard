@@ -138,9 +138,11 @@ export class BlogModel{
       this.logger.warn(`Attempting to update blog`)
 
       const pgPool = this.pgConfig.getPool();
-      const query = `
-        UPDATE blogs SET title
-      `;
+      const query = ` UPDATE blogs SET title=$1, content=$2 WHERE id=$3 RETURNING id,title,content; `;
+      const result = await pgPool.query(query, [title, content, blogId]);
+      const blog = result.rows[0];
+
+      return blog;
 
     } catch (error) {
       throw error;
