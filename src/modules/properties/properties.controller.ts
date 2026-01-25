@@ -124,11 +124,15 @@ export class PropertyController{
       const { id } = req.params;
 
       const property = await this.properties.getProperty(parseInt(id));
+      const imageUrl = await this.garage.getSignedFileURl(property.image_url)
 
       const response: ApiResponse = {
         success: true,
         message: "Successfully fetched property",
-        data:property
+        data: {
+          property: property,
+          imageUrll:imageUrl
+        }
       }
 
       return res.status(200).json(response);
