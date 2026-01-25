@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Controller, Inject, Post, Req, Res, UseGuards, Get } from "@nestjs/common";
 import type { Request,Response } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
@@ -49,5 +49,22 @@ export class BlogController{
 
     }
   }
+
+  @Get(':page/:limit')
+  @UseGuards(AuthGuard)
+  async getAllBlogs(@Req() req:Request, @Res() res:Response):Promise<Response> {
+    try {
+
+    } catch (error) {
+      this.logger.error(`error in fetching blog posts`, error)
+
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+
+      return res.status(500).json(response);    }
+  }
+
 
 }
