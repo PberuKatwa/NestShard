@@ -133,4 +133,12 @@ export class BlogModel{
     }
   }
 
+  async updateBlog(blogId: number) {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
