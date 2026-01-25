@@ -48,6 +48,19 @@ export class PostgresGlobals{
   async createTimestampTrigger() {
     try {
 
+      this.logger.warn(`Attempting to create timestamp trigger`)
+
+      const query = `
+        CREATE OR REPLACE FUNCTION set_timestamp()
+        RETURNS TRIGGER AS $$
+        BEGIN
+          -- TG_ARGV[0] allows you to pass the column name when creating the trigger
+          NEW := jsonb_set(to_jsonb(NEW), array[TG_ARGV[0]], to_jsonb(CURRENT_TIMESTAMP));
+          RETURN NEW;
+        END;
+        $$ LANGUAGE plpgsql;
+      `;
+
     } catch (error) {
       throw error;
     }
