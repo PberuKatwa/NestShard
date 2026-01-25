@@ -71,7 +71,7 @@ export class PropertyController{
     }
   }
 
-  @Get(':page/:limit')
+  @Get('all/:page/:limit')
   @UseGuards(AuthGuard)
   async getAllProperty(@Req() req:Request, @Res() res:Response):Promise<Response> {
     try {
@@ -113,6 +113,22 @@ export class PropertyController{
       }
       return res.status(500).json(response)
 
+    }
+  }
+
+  @Get(':id')
+  @UseGuards(AuthGuard)
+  async getProperty() {
+    try {
+
+    } catch (error) {
+
+      this.logger.error(`Error in getting all properties from database`, error)
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+      return res.status(500).json(response)
     }
   }
 
