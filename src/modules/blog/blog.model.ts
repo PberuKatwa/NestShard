@@ -84,6 +84,15 @@ export class BlogModel{
 
       this.logger.warn(`Attempting to fetch all blogs`);
 
+      const dataQuery = `
+      SELECT id, title, author_id,content
+      FROM blogs
+      ORDER BY created_at ASC
+      LIMIT $1 OFFSET $2;
+      `;
+
+      const countQuery = ``;
+
     } catch (error) {
       throw error;
     }
