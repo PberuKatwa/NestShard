@@ -56,14 +56,15 @@ export class BlogController{
     try {
 
     } catch (error) {
-      this.logger.error(`error in fetching blog posts`, error)
 
+      this.logger.error(`error in fetching blog posts`, error)
       const response: ApiResponse = {
         success: false,
         message:`${error}`
       }
+      return res.status(500).json(response);
 
-      return res.status(500).json(response);    }
+    }
   }
 
 
