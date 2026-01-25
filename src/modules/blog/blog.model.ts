@@ -25,14 +25,15 @@ export class BlogModel{
           slug VARCHAR(240),
           content TEXT NOT NULL,
           status row_status DEFAULT 'active',
-          created_at TIMESTAMPTZ CURRENT_TIMESTAMP,
-          updated_at TIMESTAMPTZ CURRENT_TIMESTAMP,
+          created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
           FOREIGN KEY(author_id)
             REFERENCES users(id)
             ON DELETE SET NULL
         );
 
+        DROP TRIGGER IF EXISTS update_blog_timestamp ON blogs;
         CREATE TRIGGER update_blog_timestamp
         BEFORE UPDATE ON blogs
         FOR EACH ROW

@@ -30,15 +30,17 @@ export class PropertiesModel {
           image_url VARCHAR NOT NULL,
           location TEXT NOT NULL,
           description TEXT NOT NULL,
-          status row_status DEFAULT 'active,
+          status row_status DEFAULT 'active',
           created_by INTEGER,
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
           FOREIGN KEY (created_by)
             REFERENCES users(id)
             ON DELETE SET NULL
         );
+
+        DROP TRIGGER IF EXISTS update_properties_timestamp ON properties;
 
         CREATE TRIGGER update_properties_timestamp
         BEFORE UPDATE ON properties

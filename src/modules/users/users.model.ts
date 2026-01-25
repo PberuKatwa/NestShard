@@ -38,6 +38,8 @@ export class UsersModel{
           updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
         );
 
+        DROP TRIGGER IF EXISTS update_users_timestamp ON users;
+
         CREATE TRIGGER update_users_timestamp
         BEFORE UPDATE ON users
         FOR EACH ROW
