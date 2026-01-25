@@ -96,6 +96,8 @@ export class BlogModel{
 
       const countQuery = `SELECT COUNT (*) FROM blogs;`;
 
+      const pgPool = this.pgConfig.getPool()
+
     } catch (error) {
       throw error;
     }
