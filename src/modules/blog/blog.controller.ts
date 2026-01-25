@@ -78,5 +78,22 @@ export class BlogController{
     }
   }
 
+  @Get(':id')
+  @UseGuards(AuthGuard)
+  async getBlog( @Req() req:Request, @Res() res:Response ) {
+    try {
+
+    } catch (error) {
+
+      this.logger.error(`error in fetching blog posts`, error)
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+      return res.status(500).json(response);
+
+    }
+  }
+
 
 }
