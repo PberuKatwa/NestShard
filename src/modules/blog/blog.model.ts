@@ -133,8 +133,14 @@ export class BlogModel{
     }
   }
 
-  async updateBlog(blogId: number) {
+  async updateBlog(blogId: number, title:string, content:string) {
     try {
+      this.logger.warn(`Attempting to update blog`)
+
+      const pgPool = this.pgConfig.getPool();
+      const query = `
+        UPDATE blogs SET title
+      `;
 
     } catch (error) {
       throw error;
