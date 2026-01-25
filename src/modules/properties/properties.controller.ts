@@ -77,7 +77,7 @@ export class PropertyController{
     try {
 
       const { page, limit } = req.params;
-      const { properties, totalCount, currentPage, totalPages } = await this.properties.getAllProperties();
+      const { properties, totalCount, currentPage, totalPages } = await this.properties.getAllProperties(parseInt(page), parseInt(limit));
 
       const propertiesMap = await Promise.all(
         properties.map(
