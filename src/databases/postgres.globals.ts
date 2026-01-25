@@ -10,7 +10,7 @@ export class PostgresGlobals{
     try {
 
     } catch(error) {
-
+      throw error;
     }
   }
 
