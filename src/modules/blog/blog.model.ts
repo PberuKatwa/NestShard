@@ -37,7 +37,7 @@ export class BlogModel{
         CREATE TRIGGER update_blog_timestamp
         BEFORE UPDATE ON blogs
         FOR EACH ROW
-        EXECUTE FUNCTION set_timestamp('updated_at');
+        EXECUTE FUNCTION update_any_timestamp('updated_at');
 
       `
 

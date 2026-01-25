@@ -36,6 +36,7 @@ export class PostgresGlobals{
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query);
+
       this.logger.info(`Successfully created global types`);
       return result;
 
@@ -53,9 +54,12 @@ export class PostgresGlobals{
         CREATE OR REPLACE FUNCTION set_timestamp()
         RETURNS TRIGGER AS $$
         BEGIN
-          -- TG_ARGV[0] allows you to pass the column name when creating the trigger
-          NEW := jsonb_set(to_jsonb(NEW), array[TG_ARGV[0]], to_jsonb(CURRENT_TIMESTAMP));
-          RETURN NEW;
+            -- This uses EXECUTE to dynamically set the column name passed in TG_ARGV[0]
+            EXECUTE format('SELECT ($1).%I', TG_ARGV[0]) USING NEW INTO NEW; -- This is complex
+
+            -- EASIER WAY: If you only ever use 'updated_at', use this specific function:
+            NEW.updated_at = CURRENT_TIMESTAMP;
+            RETURN NEW;
         END;
         $$ LANGUAGE plpgsql;
       `;

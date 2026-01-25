@@ -43,7 +43,7 @@ export class UsersModel{
         CREATE TRIGGER update_users_timestamp
         BEFORE UPDATE ON users
         FOR EACH ROW
-        EXECUTE FUNCTION set_timestamp('updated_at');
+        EXECUTE FUNCTION update_any_timestamp('updated_at');
 
       `;
 
