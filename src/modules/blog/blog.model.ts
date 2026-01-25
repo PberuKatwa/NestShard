@@ -24,9 +24,9 @@ export class BlogModel{
           author_id INTEGER NOT NULL,
           slug VARCHAR(240),
           content TEXT NOT NULL,
-          status property_status DEFAULT 'ACTIVE',
-          created_at TIMESTAMPTZ,
-          updated_at TIMESTAMPTZ,
+          status row_status DEFAULT 'active',
+          created_at TIMESTAMPTZ CURRENT_TIMESTAMP,
+          updated_at TIMESTAMPTZ CURRENT_TIMESTAMP,
 
           FOREIGN KEY(author_id)
             REFERENCES users(id)
