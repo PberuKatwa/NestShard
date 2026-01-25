@@ -54,12 +54,8 @@ export class PostgresGlobals{
         CREATE OR REPLACE FUNCTION set_timestamp()
         RETURNS TRIGGER AS $$
         BEGIN
-            -- This uses EXECUTE to dynamically set the column name passed in TG_ARGV[0]
-            EXECUTE format('SELECT ($1).%I', TG_ARGV[0]) USING NEW INTO NEW; -- This is complex
-
-            -- EASIER WAY: If you only ever use 'updated_at', use this specific function:
-            NEW.updated_at = CURRENT_TIMESTAMP;
-            RETURN NEW;
+          NEW.updated_at = CURRENT_TIMESTAMP;
+          RETURN NEW;
         END;
         $$ LANGUAGE plpgsql;
       `;

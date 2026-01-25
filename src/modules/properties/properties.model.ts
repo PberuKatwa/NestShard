@@ -45,7 +45,7 @@ export class PropertiesModel {
         CREATE TRIGGER update_properties_timestamp
         BEFORE UPDATE ON properties
         FOR EACH ROW
-        EXECUTE FUNCTION update_any_timestamp('updated_at');
+        EXECUTE FUNCTION update_any_timestamp();
 
       `;
 
