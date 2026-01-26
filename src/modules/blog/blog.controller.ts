@@ -135,6 +135,7 @@ export class BlogController{
   }
 
   @Post('trash/:id')
+  @UseGuards(AuthGuard)
   async trashBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
     try {
 
