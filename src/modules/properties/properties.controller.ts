@@ -148,7 +148,7 @@ export class PropertyController{
     }
   }
 
-  @Post('trash')
+  @Post('trash/:id')
   @UseGuards(AuthGuard)
   async trashProperty(@Req() req:Request, @Res() res:Response) {
     try {
