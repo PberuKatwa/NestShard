@@ -189,7 +189,7 @@ export class PropertyController{
         }),
       )
     file: Express.Multer.File,
-    res:Response
+    @Res() res:Response
   ) {
     try {
 
