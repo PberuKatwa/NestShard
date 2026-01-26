@@ -148,4 +148,32 @@ export class PropertyController{
     }
   }
 
+  @Post('trash')
+  @UseGuards(AuthGuard)
+  async trashProperty(@Req() req:Request, @Res() res:Response) {
+    try {
+
+      const { id } = req.params;
+
+      const property = await this.properties.trashProperty(parseInt(id))
+
+      const response: ApiResponse = {
+        success: true,
+        message: 'Successfully trashed property',
+        data:property
+      }
+
+      return res.status(200).json(response)
+    } catch (error) {
+
+      this.logger.error(`error in trashing property`, error)
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+      return res.status(500).json(response);
+    }
+
+  }
+
 }
