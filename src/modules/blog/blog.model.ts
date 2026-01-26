@@ -153,7 +153,6 @@ export class BlogModel{
       const blog = result.rows[0];
 
       return blog
-
     } catch (error) {
       throw error;
     }
