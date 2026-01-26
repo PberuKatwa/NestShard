@@ -119,7 +119,8 @@ export class BlogModel{
       const result = await pgPool.query(`
         SELECT id,title,author_id,content
         FROM blogs WHERE id=$1 AND status!= 'trash' ;`,
-        [blogId])
+        [blogId]
+      )
       const blog = result.rows[0];
 
       if (!blog || blog === undefined) throw new Error(`No blog was found`);
