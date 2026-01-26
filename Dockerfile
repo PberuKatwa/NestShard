@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN nest build
+RUN npm run build
 RUN npm prune --production
 
 # PRODUCTION
