@@ -193,6 +193,18 @@ export class PropertyController{
   ) {
     try {
 
+      const { id, name, price, description } = body;
+      const { key } = await this.garage.uploadFile(file);
+      const property = await this.properties.updateProperty(id, name, price, description, key )
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Successfully updated property ",
+        data:property
+      }
+
+      return response
+
     } catch (error) {
       this.logger.error(`error in updating property`, error)
       const response: ApiResponse = {
