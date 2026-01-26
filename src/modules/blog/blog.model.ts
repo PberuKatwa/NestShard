@@ -66,6 +66,8 @@ export class BlogModel{
       const result = await pool.query(query,[title,authorId,content]);
       const blog = result.rows[0];
 
+      this.logger.info(`Successfully created blog`)
+
       return blog;
     } catch (error) {
       throw error;
@@ -130,6 +132,8 @@ export class BlogModel{
 
       if (!blog || blog === undefined) throw new Error(`No blog was found`);
 
+      this.logger.info(`Successfully fetched individual blog`)
+
       return blog;
 
     } catch (error) {
@@ -145,6 +149,7 @@ export class BlogModel{
       const query = ` UPDATE blogs SET title=$1, content=$2 WHERE id=$3 RETURNING id,title,content,image_url ; `;
       const result = await pgPool.query(query, [title, content, blogId]);
       const blog = result.rows[0];
+      this.logger.info(`Successfully updated blogs`)
 
       return blog;
 
