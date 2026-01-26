@@ -166,8 +166,10 @@ export class PropertiesModel {
     }
   }
 
-  async updateProperty() {
+  async updateProperty( id:number, name:string, price:number, imageUrl:string ) {
     try {
+
+      this.logger.warn(`Attempting to update property`);
 
     } catch (error) {
       throw error;
