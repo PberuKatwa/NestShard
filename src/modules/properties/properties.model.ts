@@ -145,4 +145,12 @@ export class PropertiesModel {
     }
   }
 
+  async trashProperty() {
+    try {
+
+    } catch (error) {
+
+    }
+  }
+
 }
