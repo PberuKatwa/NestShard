@@ -166,4 +166,12 @@ export class PropertiesModel {
     }
   }
 
+  async updateProperty() {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
