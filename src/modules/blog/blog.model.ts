@@ -151,6 +151,7 @@ export class BlogModel{
       const query = ` UPDATE blogs SET status=$1 WHERE id=$2 RETURNING id,title,content;  `;
       const result = await pool.query(query, ['trash', id]);
       const blog = result.rows[0];
+      this.logger.info(`Successfully trashed blog`)
 
       return blog
     } catch (error) {

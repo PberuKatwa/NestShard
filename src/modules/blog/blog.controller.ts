@@ -134,5 +134,20 @@ export class BlogController{
     }
   }
 
+  @Post('trash')
+  async trashBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
+    try {
+
+    } catch (error) {
+
+      this.logger.error(`error in trashing post`, error)
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+      return res.status(500).json(response);
+    }
+  }
+
 
 }
