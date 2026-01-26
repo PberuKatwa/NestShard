@@ -116,8 +116,10 @@ export class BlogModel{
       this.logger.warn(`Attempting to fetch blog with id:${blogId}`)
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(`SELECT id,title,author_id,content FROM blogs WHERE id=$1;`, [blogId])
+      const result = await pgPool.query(`SELECT id,title,author_id,content FROM blogs WHERE id=$1 AND status!= 'trash' ;`, [blogId])
       const blog = result.rows[0];
+
+      if (!blog || blog === undefined) throw new Error(`No blog was found`);
 
       return blog;
 
@@ -148,7 +150,7 @@ export class BlogModel{
 
       this.logger.warn(`Attempting to trash blog with id:${id}`)
       const pool = this.pgConfig.getPool();
-      const query = ` UPDATE blogs SET status=$1 WHERE id=$2 RETURNING id,title,content;  `;
+      const query = ` UPDATE blogs SET status=$1 WHERE id=$2 RETURNING id,title,content,status;  `;
       const result = await pool.query(query, ['trash', id]);
       const blog = result.rows[0];
       this.logger.info(`Successfully trashed blog`)
