@@ -59,7 +59,7 @@ export class BlogModel{
       const query = `
         INSERT INTO blogs (title,author_id,content)
         VALUES($1,$2,$3)
-        RETURNING id,title,author_id,content;
+        RETURNING id,title,author_id,content,image_url;
       `
 
       const pool = this.pgConfig.getPool();
@@ -82,7 +82,7 @@ export class BlogModel{
       const offset = (page -1) * limit
 
       const dataQuery = `
-      SELECT id, title, author_id,content
+      SELECT id, title, author_id,content,image_url
       FROM blogs
       WHERE status!= 'trash'
       ORDER BY created_at ASC
@@ -122,7 +122,7 @@ export class BlogModel{
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(`
-        SELECT id,title,author_id,content
+        SELECT id,title,author_id,content,image_url
         FROM blogs WHERE id=$1 AND status!= 'trash' ;`,
         [blogId]
       );
@@ -142,7 +142,7 @@ export class BlogModel{
       this.logger.warn(`Attempting to update blog`)
 
       const pgPool = this.pgConfig.getPool();
-      const query = ` UPDATE blogs SET title=$1, content=$2 WHERE id=$3 RETURNING id,title,content; `;
+      const query = ` UPDATE blogs SET title=$1, content=$2 WHERE id=$3 RETURNING id,title,content,image_url ; `;
       const result = await pgPool.query(query, [title, content, blogId]);
       const blog = result.rows[0];
 
@@ -159,7 +159,7 @@ export class BlogModel{
 
       this.logger.warn(`Attempting to trash blog with id:${id}`)
       const pool = this.pgConfig.getPool();
-      const query = ` UPDATE blogs SET status=$1 WHERE id=$2 RETURNING id,title,content,status;  `;
+      const query = ` UPDATE blogs SET status=$1 WHERE id=$2 RETURNING id,title,content,status,image_url;  `;
       const result = await pool.query(query, ['trash', id]);
       const blog = result.rows[0];
       this.logger.info(`Successfully trashed blog`)
