@@ -173,7 +173,32 @@ export class PropertyController{
       }
       return res.status(500).json(response);
     }
+  }
 
+  @Post('update')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  async updateProperty(
+    @Body() body:any,
+    @UploadedFile(
+        new ParseFilePipe({
+          validators: [
+            new MaxFileSizeValidator({ maxSize: 5242880 }),
+            new FileTypeValidator({ fileType: '.(png|jpeg|jpg|webp)' }),
+          ],
+        }),
+      )
+    file: Express.Multer.File,
+  ) {
+    try {
+
+    } catch (error) {
+      this.logger.error(`error in trashing property`, error)
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+      return res.status(500).json(response);    }
   }
 
 }
