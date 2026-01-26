@@ -186,7 +186,10 @@ export class PropertiesModel {
         RETURNING id,name,price,is_rental,image_url,location,description;
       `;
 
+      const result = await pool.query(query,[name,price,description,imageUrl,id]);
+      const property = result.rows[0];
 
+      return property;
     } catch (error) {
       throw error;
     }
