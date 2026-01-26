@@ -143,9 +143,9 @@ export class BlogModel{
 
   }
 
-  async trashBlog() {
+  async trashBlog(id:number) {
     try {
-
+      this.logger.warn(`Attempting to trash blog with id:${id}`)
     } catch (error) {
       throw error;
     }
