@@ -7,3 +7,9 @@ COPY . .
 RUN npm run build
 
 # PRODUCTION
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+EXPOSE 8080
+CMD [ "node", "dist/index.js" ]
