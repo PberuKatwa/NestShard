@@ -98,7 +98,7 @@ export class UsersModel{
 
       if (!user) throw new Error(`Invalid email or password`)
       const isMatch = await bcrypt.compare(password, user.password)
-      if (!isMatch) throw new Error(`Invvalid password`);
+      if (!isMatch) throw new Error(`Invalid password`);
 
       const payload = {
         userId:user.id,
