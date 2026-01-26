@@ -140,6 +140,15 @@ export class BlogModel{
     } catch (error) {
       throw error;
     }
+
+  }
+
+  async trashBlog() {
+    try {
+
+    } catch (error) {
+      throw error;
+    }
   }
 
 }
