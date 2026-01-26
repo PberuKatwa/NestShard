@@ -189,11 +189,12 @@ export class PropertyController{
         }),
       )
     file: Express.Multer.File,
+    res:Response
   ) {
     try {
 
     } catch (error) {
-      this.logger.error(`error in trashing property`, error)
+      this.logger.error(`error in updating property`, error)
       const response: ApiResponse = {
         success: false,
         message:`${error}`
