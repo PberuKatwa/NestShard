@@ -203,7 +203,7 @@ export class PropertyController{
         data:property
       }
 
-      return response
+      return res.status(200).json(response)
 
     } catch (error) {
       this.logger.error(`error in updating property`, error)
