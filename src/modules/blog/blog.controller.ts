@@ -138,6 +138,17 @@ export class BlogController{
   async trashBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
     try {
 
+      const { id } = req.params;
+
+      const blog = await this.blog.trashBlog(parseInt(id))
+
+      const response: ApiResponse = {
+        success: true,
+        message: 'Successfully trashed blog',
+        data:blog
+      }
+
+      return res.status(200).json(response)
     } catch (error) {
 
       this.logger.error(`error in trashing post`, error)
