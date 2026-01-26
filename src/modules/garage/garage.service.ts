@@ -43,7 +43,7 @@ export class GarageService {
 
     try{
 
-      this.logger.info(`Beginnning upload of file from garage service`)
+      this.logger.info(`Beginnning upload of file from s3 service`)
       const key = this.createFileName(file.originalname)
 
       this.logger.warn(`Attempting upload of file:${key} and bucket:${this.bucket}`)
