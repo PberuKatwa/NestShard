@@ -148,7 +148,7 @@ export class PropertiesModel {
   async trashProperty(id:number) {
     try {
 
-      this.logger.warn(`Attempting to trash blog with id:${id}`)
+      this.logger.warn(`Attempting to trash property with id:${id}`)
       const pool = this.pgConfig.getPool();
       const query = `
         UPDATE properties
@@ -158,7 +158,7 @@ export class PropertiesModel {
       `;
       const result = await pool.query(query, ['trash', id]);
       const property = result.rows[0];
-      this.logger.info(`Successfully trashed blog`)
+      this.logger.info(`Successfully trashed property`)
 
       return property;
     } catch (error) {
