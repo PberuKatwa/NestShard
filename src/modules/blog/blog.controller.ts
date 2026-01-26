@@ -8,6 +8,7 @@ import { CurrentUser } from "../users/decorators/user.decorator";
 import { BlogModel } from "./blog.model";
 
 @Controller('blogs')
+@UseGuards(AuthGuard)
 export class BlogController{
 
   constructor(
@@ -17,7 +18,6 @@ export class BlogController{
   ) { }
 
   @Post('')
-  @UseGuards(AuthGuard)
   async createPost(
     @CurrentUser() user:any,
     @Req() req: Request,
@@ -51,7 +51,6 @@ export class BlogController{
   }
 
   @Get('all/:page/:limit')
-  @UseGuards(AuthGuard)
   async getAllBlogs(@Req() req:Request, @Res() res:Response):Promise<Response> {
     try {
 
@@ -79,7 +78,6 @@ export class BlogController{
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
   async getBlog( @Req() req:Request, @Res() res:Response ) {
     try {
 
@@ -108,7 +106,6 @@ export class BlogController{
   }
 
   @Post('update')
-  @UseGuards(AuthGuard)
   async updateBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
     try {
 
@@ -135,7 +132,6 @@ export class BlogController{
   }
 
   @Post('trash/:id')
-  @UseGuards(AuthGuard)
   async trashBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
     try {
 
