@@ -145,7 +145,11 @@ export class BlogModel{
 
   async trashBlog(id:number) {
     try {
+
       this.logger.warn(`Attempting to trash blog with id:${id}`)
+      const pool = this.pgConfig.getPool();
+      const query = ` UPDATE blogs SET status='trash' WHERE id=$1 RETURNING id,title,content;  `;
+
     } catch (error) {
       throw error;
     }
