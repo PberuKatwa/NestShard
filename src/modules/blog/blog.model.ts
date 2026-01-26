@@ -116,7 +116,10 @@ export class BlogModel{
       this.logger.warn(`Attempting to fetch blog with id:${blogId}`)
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(`SELECT id,title,author_id,content FROM blogs WHERE id=$1 AND status!= 'trash' ;`, [blogId])
+      const result = await pgPool.query(`
+        SELECT id,title,author_id,content
+        FROM blogs WHERE id=$1 AND status!= 'trash' ;`,
+        [blogId])
       const blog = result.rows[0];
 
       if (!blog || blog === undefined) throw new Error(`No blog was found`);
