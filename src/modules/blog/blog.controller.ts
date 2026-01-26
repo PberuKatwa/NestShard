@@ -134,7 +134,7 @@ export class BlogController{
     }
   }
 
-  @Post('trash')
+  @Post('trash/:id')
   async trashBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
     try {
 
