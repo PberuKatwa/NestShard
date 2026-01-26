@@ -102,10 +102,15 @@ export class PropertiesModel {
 
       const dataQuery = ` SELECT id,name,price,is_rental,image_url,location,description
         FROM properties
+        WHERE status!= 'trash'
         ORDER BY id ASC
         LIMIT $1 OFFSET $2;
       `;
-      const countQuery = `SELECT COUNT(*) FROM properties;`;
+      const countQuery = `
+        SELECT COUNT(*)
+        FROM properties
+        WHERE status!= 'trash';
+      `;
 
       const pgPool = this.pgConfig.getPool();
       const [dataResult, countResult] = await Promise.all([
@@ -135,7 +140,9 @@ export class PropertiesModel {
       const result = await pgPool.query(`
         SELECT id,name,price,is_rental,image_url,location,description
         FROM properties
-        WHERE id=$1;`, [id])
+        WHERE id=$1 AND status!= 'trash' ;
+        `
+        , [id])
       const property = result.rows[0];
 
       return property;
@@ -170,6 +177,13 @@ export class PropertiesModel {
     try {
 
       this.logger.warn(`Attempting to update property`);
+
+      const pool = this.pgConfig.getPool();
+      const query = `
+        UPDATE properties
+        SET name=$1, price=$2, description=$3, image_url=$4
+      `;
+
 
     } catch (error) {
       throw error;
