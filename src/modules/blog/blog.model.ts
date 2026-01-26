@@ -88,8 +88,8 @@ export class BlogModel{
       LIMIT $1 OFFSET $2;
       `;
       const countQuery = `SELECT COUNT (*)
-        WHERE status!= 'trash'
-        FROM blogs;
+        FROM blogs
+        WHERE status!= 'trash';
       `;
 
       const pgPool = this.pgConfig.getPool()
