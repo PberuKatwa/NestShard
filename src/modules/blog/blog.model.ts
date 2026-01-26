@@ -100,7 +100,7 @@ export class BlogModel{
 
       const totalCount = parseInt(paginationResult.rows[0].count)
 
-      this.logger.info(`Successfully fetched ${paginationResult.rows[0].count} blogs`)
+      this.logger.info(`Successfully fetched ${totalCount} blogs`)
 
       return {
         blogs: dataResult.rows,
