@@ -83,10 +83,14 @@ export class BlogModel{
       const dataQuery = `
       SELECT id, title, author_id,content
       FROM blogs
+      WHERE status!= 'trash'
       ORDER BY created_at ASC
       LIMIT $1 OFFSET $2;
       `;
-      const countQuery = `SELECT COUNT (*) FROM blogs;`;
+      const countQuery = `SELECT COUNT (*)
+        WHERE status!= 'trash'
+        FROM blogs;
+      `;
 
       const pgPool = this.pgConfig.getPool()
       const [dataResult, paginationResult] = await Promise.all([
@@ -120,7 +124,7 @@ export class BlogModel{
         SELECT id,title,author_id,content
         FROM blogs WHERE id=$1 AND status!= 'trash' ;`,
         [blogId]
-      )
+      );
       const blog = result.rows[0];
 
       if (!blog || blog === undefined) throw new Error(`No blog was found`);
