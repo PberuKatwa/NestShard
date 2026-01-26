@@ -145,11 +145,24 @@ export class PropertiesModel {
     }
   }
 
-  async trashProperty() {
+  async trashProperty(id:number) {
     try {
 
-    } catch (error) {
+      this.logger.warn(`Attempting to trash blog with id:${id}`)
+      const pool = this.pgConfig.getPool();
+      const query = `
+        UPDATE properties
+        SET status=$1
+        WHERE id=$2
+        RETURNING id,name,price,is_rental,image_url,location,description ;
+      `;
+      const result = await pool.query(query, ['trash', id]);
+      const property = result.rows[0];
+      this.logger.info(`Successfully trashed blog`)
 
+      return property;
+    } catch (error) {
+      throw error;
     }
   }
 
