@@ -4,6 +4,7 @@ import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 import { property } from "src/types/properties.types";
+import type { PropertyPayload } from "src/types/properties.types";
 
 @Injectable()
 export class PropertiesModel {
@@ -59,19 +60,12 @@ export class PropertiesModel {
     }
   }
 
-  async createProperty(
-    name: string,
-    price: number,
-    isRental: boolean,
-    imageUrl: string,
-    location: string,
-    description: string,
-    userId:number
-  ) {
+  async createProperty( payload:PropertyPayload ) {
     try {
 
       this.logger.warn(`Attempting to create property`)
 
+      const { name, price, isRental, imageUrl, location, description, userId } = payload;
       const query = `
         INSERT INTO properties ( name, price, is_rental, image_url, location, description, created_by )
         VALUES ( $1, $2, $3, $4, $5, $6, $7 )

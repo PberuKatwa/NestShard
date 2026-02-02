@@ -14,7 +14,7 @@ import { PropertiesModel } from "./properties.model";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { GarageService } from "../garage/garage.service";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { property } from "src/types/properties.types";
+import { property, PropertyPayload } from "src/types/properties.types";
 
 
 @Controller('properties')
@@ -47,7 +47,10 @@ export class PropertyController{
       const { name, price, isRental, location, description } = body;
 
       const { key } = await this.garage.uploadFile(file);
-      const property = await this.properties.createProperty(name, price, isRental, key, location, description, user.userId)
+      const payload: PropertyPayload = { name, price, isRental, location, description, imageUrl: key, userId: user.userId };
+
+
+      const property = await this.properties.createProperty(payload)
 
       const response: ApiResponse = {
         success: true,
