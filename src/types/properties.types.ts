@@ -1,9 +1,11 @@
-export interface Property < T = string > {
+import type { ApiResponse } from "./api.types";
+
+export interface Property<T = string> {
   id: number;
   name: string;
   price: number;
   isRental: boolean;
-  imageUrl: string;
+  image_url: string;
   location: string;
   description: string;
   signedUrl?:T
@@ -25,3 +27,5 @@ export interface AllProperties {
   currentPage: number;
   totalPages: number;
 }
+
+export interface PropertyResponse extends ApiResponse<AllProperties> { };

@@ -83,12 +83,12 @@ export class PropertyController{
       const allProperties:AllProperties = await this.properties.getAllProperties(parseInt(page), parseInt(limit));
 
       const { properties, totalCount, currentPage, totalPages } = allProperties;
-      const propertiesMap:Property[] = await Promise.all(
+      const propertiesMap = await Promise.all(
         properties.map(
           async (property: Property) => {
           return {
             ...property,
-            signedUrl:await this.garage.getSignedFileURl(property.imageUrl)
+            signedUrl:await this.garage.getSignedFileURl(property.image_url)
           }
         }
       )
