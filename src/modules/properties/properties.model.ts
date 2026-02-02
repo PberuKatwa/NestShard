@@ -3,7 +3,7 @@ import { Pool } from "pg";
 import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
-import type { Property, PropertyPayload } from "src/types/properties.types";
+import type { AllProperties, Property, PropertyPayload } from "src/types/properties.types";
 
 @Injectable()
 export class PropertiesModel {
@@ -85,7 +85,7 @@ export class PropertiesModel {
     }
   }
 
-  async getAllProperties( pageInput:number, limitInput:number ){
+  async getAllProperties( pageInput:number, limitInput:number ):Promise<AllProperties>{
     try {
 
       this.logger.warn(`Trying to fetch all properties from database.`)

@@ -18,3 +18,10 @@ export interface PropertyPayload {
   location: string;
   description: string;
 }
+
+export interface AllProperties {
+  properties: Property[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+}
