@@ -4,11 +4,12 @@ export interface Property<T = string> {
   id: number;
   name: string;
   price: number;
-  isRental: boolean;
+  is_rental: boolean;
   image_url: string;
   location: string;
   description: string;
-  signedUrl?:T
+  signedUrl?: T;
+  status?: T;
 }
 
 export interface PropertyPayload {

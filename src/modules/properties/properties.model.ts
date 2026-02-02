@@ -96,7 +96,7 @@ export class PropertiesModel {
       const dataQuery = ` SELECT id,name,price,is_rental,image_url,location,description
         FROM properties
         WHERE status!= 'trash'
-        ORDER BY id ASC
+        ORDER BY id DESC
         LIMIT $1 OFFSET $2;
       `;
       const countQuery = `
@@ -147,7 +147,7 @@ export class PropertiesModel {
     }
   }
 
-  async trashProperty(id:number) {
+  async trashProperty(id:number):Promise<Property> {
     try {
 
       this.logger.warn(`Attempting to trash property with id:${id}`)
@@ -158,8 +158,9 @@ export class PropertiesModel {
         WHERE id=$2
         RETURNING id,name,price,is_rental,image_url,location,description,status ;
       `;
+
       const result = await pool.query(query, ['trash', id]);
-      const property = result.rows[0];
+      const property:Property = result.rows[0];
       this.logger.info(`Successfully trashed property`)
 
       return property;

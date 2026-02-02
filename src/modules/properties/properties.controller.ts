@@ -155,7 +155,7 @@ export class PropertyController{
 
       const { id } = req.params;
 
-      const property = await this.properties.trashProperty(parseInt(id))
+      const property:Property = await this.properties.trashProperty(parseInt(id))
 
       const response: ApiResponse = {
         success: true,
