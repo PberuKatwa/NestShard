@@ -14,7 +14,7 @@ import { PropertiesModel } from "./properties.model";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { GarageService } from "../garage/garage.service";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { property, PropertyPayload } from "src/types/properties.types";
+import { Property, PropertyPayload } from "src/types/properties.types";
 
 
 @Controller('properties')
@@ -84,10 +84,10 @@ export class PropertyController{
 
       const propertiesMap = await Promise.all(
         properties.map(
-         async (property: property) => {
+         async (property: Property) => {
           return {
             ...property,
-            url:await this.garage.getSignedFileURl(property.image_url)
+            url:await this.garage.getSignedFileURl(property.imageUrl)
           }
         }
       )

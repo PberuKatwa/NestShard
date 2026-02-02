@@ -3,8 +3,7 @@ import { Pool } from "pg";
 import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
-import { property } from "src/types/properties.types";
-import type { PropertyPayload } from "src/types/properties.types";
+import type { Property, PropertyPayload } from "src/types/properties.types";
 
 @Injectable()
 export class PropertiesModel {
@@ -60,7 +59,7 @@ export class PropertiesModel {
     }
   }
 
-  async createProperty( payload:PropertyPayload ) {
+  async createProperty( payload:PropertyPayload ):Promise<Property> {
     try {
 
       this.logger.warn(`Attempting to create property`)
@@ -69,12 +68,12 @@ export class PropertiesModel {
       const query = `
         INSERT INTO properties ( name, price, is_rental, image_url, location, description, created_by )
         VALUES ( $1, $2, $3, $4, $5, $6, $7 )
-        RETURNING id, name, image_url, description;
+        RETURNING id, name, price, is_rental, image_url, location, description;
       `;
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query, [name, price, isRental, imageUrl, location, description, userId]);
-      const property = result.rows[0];
+      const property:Property = result.rows[0];
 
       this.logger.info(`Successfully created property`);
 

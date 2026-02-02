@@ -1,9 +1,9 @@
-export interface property {
+export interface Property {
   id: number;
   name: string;
   price: number;
-  is_rental: boolean;
-  image_url: string;
+  isRental: boolean;
+  imageUrl: string;
   location: string;
   description: string;
 }
