@@ -1,4 +1,4 @@
-export interface Property {
+export interface Property < T = string > {
   id: number;
   name: string;
   price: number;
@@ -6,6 +6,7 @@ export interface Property {
   imageUrl: string;
   location: string;
   description: string;
+  signedUrl?:T
 }
 
 export interface PropertyPayload {
