@@ -114,9 +114,11 @@ export class PropertiesModel {
       this.logger.info(`Successfullly fetched properties`)
       return {
         properties: dataResult.rows,
-        totalCount: parseInt(countResult.rows[0].count),
-        currentPage: page,
-        totalPages: Math.ceil(parseInt(countResult.rows[0].count) / limit)
+        pagination: {
+          totalCount: parseInt(countResult.rows[0].count),
+          currentPage: page,
+          totalPages: Math.ceil(parseInt(countResult.rows[0].count) / limit)
+        },
       };
 
     } catch (error) {

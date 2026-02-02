@@ -82,7 +82,7 @@ export class PropertyController{
       const { page, limit } = req.params;
       const allProperties:AllProperties = await this.properties.getAllProperties(parseInt(page), parseInt(limit));
 
-      const { properties, totalCount, currentPage, totalPages } = allProperties;
+      const { properties, pagination } = allProperties;
       const propertiesMap = await Promise.all(
         properties.map(
           async (property: Property) => {
@@ -99,11 +99,7 @@ export class PropertyController{
         message: "Successsfully fetched properties",
         data: {
           properties:propertiesMap,
-          pagination: {
-            totalCount,
-            currentPage,
-            totalPages
-          }
+          pagination
         }
       }
       return res.status(200).json(response)
