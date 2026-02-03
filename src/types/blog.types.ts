@@ -1,3 +1,5 @@
+import { ApiResponse } from "./api.types";
+
 export interface Blog{
   id: number;
   title: string;
@@ -20,3 +22,5 @@ export interface AllBlogs {
     totalPages: number;
   }
 }
+
+export interface BlogsApiResponse extends ApiResponse<AllBlogs> { };

@@ -31,4 +31,4 @@ export interface AllProperties {
   }
 }
 
-export interface PropertyResponse extends ApiResponse<AllProperties> { };
+export interface PropertyApiResponse extends ApiResponse<AllProperties> { };
