@@ -9,9 +9,9 @@ export interface Blog{
 }
 
 export interface BlogPayload{
-  id?:number;
+  id?:number|null;
   title: string;
-  authorId: number;
+  authorId: number|null;
   content: string;
 }
 
