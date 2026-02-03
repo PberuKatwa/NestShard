@@ -71,7 +71,7 @@ export class BlogController{
         data:blogResult
       }
 
-      return res.status(200).json(blogResult);
+      return res.status(200).json(response);
     } catch (error) {
 
       this.logger.error(`error in fetching blog posts`, error)

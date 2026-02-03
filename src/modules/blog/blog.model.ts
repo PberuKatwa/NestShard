@@ -89,7 +89,7 @@ export class BlogModel{
       SELECT id, title, author_id,content,image_url
       FROM blogs
       WHERE status!= 'trash'
-      ORDER BY created_at ASC
+      ORDER BY created_at DESC
       LIMIT $1 OFFSET $2;
       `;
       const countQuery = `SELECT COUNT (*)

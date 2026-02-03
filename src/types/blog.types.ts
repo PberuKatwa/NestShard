@@ -11,7 +11,7 @@ export interface Blog{
 export interface BlogPayload{
   id?:number|null;
   title: string;
-  authorId: number|null;
+  authorId?: number|null;
   content: string;
 }
 
