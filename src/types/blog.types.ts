@@ -5,3 +5,9 @@ export interface Blog{
   content: string;
   image_url: string;
 }
+
+export interface BlogPayload{
+  title: string;
+  authorId: number;
+  content: string;
+}
