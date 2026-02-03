@@ -3,6 +3,7 @@ import { Pool } from "pg";
 import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
+import { AllBlogs, Blog, BlogPayload } from "src/types/blog.types";
 
 @Injectable()
 export class BlogModel{
@@ -52,10 +53,11 @@ export class BlogModel{
     }
   }
 
-  async createBlog( title:string, authorId:number, content:string) {
+  async createBlog( payload:BlogPayload):Promise<Blog> {
     try {
       this.logger.warn(`Attempting to create blog post`)
 
+      const { title, authorId, content } = payload;
       const query = `
         INSERT INTO blogs (title,author_id,content)
         VALUES($1,$2,$3)
@@ -64,7 +66,7 @@ export class BlogModel{
 
       const pool = this.pgConfig.getPool();
       const result = await pool.query(query,[title,authorId,content]);
-      const blog = result.rows[0];
+      const blog:Blog = result.rows[0];
 
       this.logger.info(`Successfully created blog`)
 
@@ -74,7 +76,7 @@ export class BlogModel{
     }
   }
 
-  async getAllBlogs( pageInput:number, limitInput:number ) {
+  async getAllBlogs( pageInput:number, limitInput:number ):Promise<AllBlogs> {
     try {
 
       this.logger.warn(`Attempting to fetch blogs from page:${pageInput} and limit:${limitInput}`);
@@ -107,9 +109,11 @@ export class BlogModel{
 
       return {
         blogs: dataResult.rows,
-        totalCount: totalCount,
-        currentPage: page,
-        totalPages:Math.ceil(totalCount/limit)
+        pagination: {
+          totalCount: totalCount,
+          currentPage: page,
+          totalPages:Math.ceil(totalCount/limit)
+        }
       }
 
     } catch (error) {
@@ -117,7 +121,7 @@ export class BlogModel{
     }
   }
 
-  async getBlog(blogId: number) {
+  async getBlog(blogId: number):Promise<Blog> {
     try {
 
       this.logger.warn(`Attempting to fetch blog with id:${blogId}`)
@@ -128,7 +132,7 @@ export class BlogModel{
         FROM blogs WHERE id=$1 AND status!= 'trash' ;`,
         [blogId]
       );
-      const blog = result.rows[0];
+      const blog:Blog = result.rows[0];
 
       if (!blog || blog === undefined) throw new Error(`No blog was found`);
 
@@ -141,12 +145,14 @@ export class BlogModel{
     }
   }
 
-  async updateBlog(blogId: number, title:string, content:string) {
+  async updateBlog(blogId: number, title:string, content:string):Promise<Blog> {
     try {
       this.logger.warn(`Attempting to update blog`)
 
       const pgPool = this.pgConfig.getPool();
-      const query = ` UPDATE blogs SET title=$1, content=$2 WHERE id=$3 RETURNING id,title,content,image_url ; `;
+      const query = ` UPDATE blogs SET title=$1, content=$2 WHERE id=$3
+                      RETURNING id,title,author_id,content,image_url ;
+                    `;
       const result = await pgPool.query(query, [title, content, blogId]);
       const blog = result.rows[0];
       this.logger.info(`Successfully updated blogs`)
@@ -159,14 +165,16 @@ export class BlogModel{
 
   }
 
-  async trashBlog(id:number) {
+  async trashBlog(id:number):Promise<Blog> {
     try {
 
       this.logger.warn(`Attempting to trash blog with id:${id}`)
       const pool = this.pgConfig.getPool();
-      const query = ` UPDATE blogs SET status=$1 WHERE id=$2 RETURNING id,title,content,status,image_url;  `;
+      const query = ` UPDATE blogs SET status=$1 WHERE id=$2
+        RETURNING id,title,author_id,content,image_url ;
+        `;
       const result = await pool.query(query, ['trash', id]);
-      const blog = result.rows[0];
+      const blog:Blog = result.rows[0];
       this.logger.info(`Successfully trashed blog`)
 
       return blog

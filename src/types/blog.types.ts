@@ -11,3 +11,12 @@ export interface BlogPayload{
   authorId: number;
   content: string;
 }
+
+export interface AllBlogs {
+  blogs: Blog[];
+  pagination: {
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+  }
+}
