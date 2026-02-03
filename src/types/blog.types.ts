@@ -9,6 +9,7 @@ export interface Blog{
 }
 
 export interface BlogPayload{
+  id?:number;
   title: string;
   authorId: number;
   content: string;
@@ -23,4 +24,5 @@ export interface AllBlogs {
   }
 }
 
-export interface BlogsApiResponse extends ApiResponse<AllBlogs> { };
+export interface AllBlogsApiResponse extends ApiResponse<AllBlogs> { };
+export interface SingleBlogApiResponse extends ApiResponse<Blog> { };

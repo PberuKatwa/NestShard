@@ -6,6 +6,7 @@ import type { ApiResponse } from "src/types/api.types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
 import { BlogModel } from "./blog.model";
+import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse } from "src/types/blog.types";
 
 @Controller('blogs')
 @UseGuards(AuthGuard)
@@ -27,9 +28,15 @@ export class BlogController{
 
       const { title, content } = req.body;
 
-      const blog = await this.blog.createBlog(title, user.userId, content);
+      const payload: BlogPayload = {
+        title,
+        authorId: user.userId,
+        content
+      }
 
-      const response:ApiResponse = {
+      const blog = await this.blog.createBlog(payload);
+
+      const response:SingleBlogApiResponse = {
         success: true,
         message: `Successfully created post`,
         data:blog
@@ -56,11 +63,11 @@ export class BlogController{
 
       const { page, limit } = req.params;
 
-      const blogResult = await this.blog.getAllBlogs(parseInt(page), parseInt(limit))
+      const blogResult:AllBlogs = await this.blog.getAllBlogs(parseInt(page), parseInt(limit))
 
-      const response: ApiResponse = {
+      const response: AllBlogsApiResponse = {
         success: true,
-        message: `Successfully fetched ${blogResult.totalCount} blogs`,
+        message: `Successfully fetched ${blogResult.pagination.totalCount} blogs`,
         data:blogResult
       }
 
@@ -83,9 +90,9 @@ export class BlogController{
 
       const { id } = req.params;
 
-      const blog = await this.blog.getBlog(parseInt(id));
+      const blog:Blog = await this.blog.getBlog(parseInt(id));
 
-      const response: ApiResponse = {
+      const response: SingleBlogApiResponse = {
         success: true,
         message: `Successfully fetched blog`,
         data:blog
@@ -110,9 +117,9 @@ export class BlogController{
     try {
 
       const { id, title, content } = req.body;
-      const blog = await this.blog.updateBlog(id, title, content);
+      const blog:Blog = await this.blog.updateBlog(id, title, content);
 
-      const response: ApiResponse = {
+      const response: SingleBlogApiResponse= {
         success: true,
         message: `Successfully updated blog`,
         data:blog
@@ -137,9 +144,9 @@ export class BlogController{
 
       const { id } = req.params;
 
-      const blog = await this.blog.trashBlog(parseInt(id))
+      const blog:Blog = await this.blog.trashBlog(parseInt(id))
 
-      const response: ApiResponse = {
+      const response: SingleBlogApiResponse = {
         success: true,
         message: 'Successfully trashed blog',
         data:blog
