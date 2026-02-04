@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { DecodedUser } from "src/types/users.types";
+import { DecodedUser, LoginUserResponse } from "src/types/users.types";
 
 @Controller('auth')
 export class AuthController{
@@ -54,9 +54,9 @@ export class AuthController{
     try {
       const { email, password } = userDto;
 
-      const result = await this.user.validateUserPassword( email, password)
+      const result = await this.user.validateUserPassword(email, password);
 
-      const response: ApiResponse = {
+      const response: LoginUserResponse = {
         success: true,
         message: `Successfully logged in user ${email}`,
         data:result
