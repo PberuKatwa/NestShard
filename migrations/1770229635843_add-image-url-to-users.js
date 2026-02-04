@@ -8,11 +8,11 @@ export const shorthands = undefined;
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
- exports.up = (pgm) => {
+ export const up = (pgm) => {
    pgm.addColumn('users', {
      image_url: {
-       type: 'varchar(2048)', // Standard length for long URLs
-       notNull: false         // This makes it nullable
+       type: 'varchar(2048)',
+       notNull: false
      },
    });
  };
@@ -22,6 +22,6 @@ export const shorthands = undefined;
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
- exports.down = (pgm) => {
+ export const down = (pgm) => {
    pgm.dropColumn('users', 'image_url');
  };
