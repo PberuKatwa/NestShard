@@ -6,7 +6,7 @@ import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import type { DecodedUser } from "src/types/users.types";
+import type { DecodedUser, User } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
@@ -59,7 +59,7 @@ export class UsersModel{
     }
   }
 
-  async createUser( firstName:string, lastName:string, email:string, password:string ):Promise<any> {
+  async createUser( firstName:string, lastName:string, email:string, password:string ):Promise<User> {
     try {
 
       this.logger.warn(`Atttempting to create user with name:${firstName} with email:${email}.`)
@@ -69,12 +69,12 @@ export class UsersModel{
       const query = `
         INSERT INTO users ( first_name, last_name, email, password )
         VALUES( $1, $2, $3, $4 )
-        RETURNING id, first_name, last_name, email;
+        RETURNING id, first_name, last_name, email, image_url;
       `
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query, [firstName, lastName, email.toLowerCase(), hashedPassword ]);
-      const user = result.rows[0]
+      const user:User = result.rows[0]
 
       this.logger.info(`Successfully created user`)
 
@@ -85,10 +85,7 @@ export class UsersModel{
     }
   }
 
-  async validateUserPassword(email: string, password: string): Promise<{
-    email: string,
-    accessToken:string
-  }> {
+  async validateUserPassword(email: string, password: string): Promise<User> {
     try {
 
       const query = `SELECT id, email, first_name, password FROM users WHERE email =$1;`;
@@ -110,11 +107,12 @@ export class UsersModel{
       const token = this.jwtService.sign(payload)
 
       const updateResult = await pgPool.query(
-        `UPDATE users SET access_token=$1 WHERE id=$2 RETURNING email, access_token; `,
+        `UPDATE users SET access_token=$1 WHERE id=$2
+        RETURNING id, first_name, last_name, email, image_url, access_token; `,
         [ token, user.id ]
       )
 
-      const updatedUser = updateResult.rows[0]
+      const updatedUser:User = updateResult.rows[0]
 
       return updatedUser;
 
