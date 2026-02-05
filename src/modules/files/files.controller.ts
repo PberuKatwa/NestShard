@@ -69,6 +69,10 @@ export class FilesController{
 
             const { key } = await this.garageService.uploadFile(mockFile);
 
+            const file2 = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
+            console.log("fileeee", file2);
+            console.log("fileeee", file2);
+
             const response: ApiResponse = {
               success: true,
               message: `Successfully uploaded large file with key:${key}.`,

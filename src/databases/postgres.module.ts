@@ -8,11 +8,13 @@ import { PropertiesModel } from "src/modules/properties/properties.model";
 import { BlogModel } from "src/modules/blog/blog.model";
 import { BlogModule } from "src/modules/blog/blog.module";
 import { PostgresGlobals } from "./postgres.globals";
+import { FilesModel } from "src/modules/files/files.model";
+import { FilesModule } from "src/modules/files/files.module";
 
 @Global()
 @Module({
-  imports: [AppLoggerModule, UsersModule, PropertiesModule, BlogModule],
-  providers:[PostgresConfig,PostgresGlobals],
+  imports: [AppLoggerModule, UsersModule, PropertiesModule, BlogModule, FilesModule],
+  providers:[PostgresConfig,PostgresGlobals, FilesModel],
   exports:[PostgresConfig]
 })
 
@@ -23,6 +25,7 @@ export class PostgresModule implements OnModuleInit {
     private readonly users: UsersModel,
     private readonly properties: PropertiesModel,
     private readonly blog: BlogModel,
+    private readonly files:FilesModel,
     private readonly pgGlobals:PostgresGlobals
   ) { };
 
@@ -34,6 +37,7 @@ export class PostgresModule implements OnModuleInit {
     await this.users.createTable()
     await this.properties.createTable()
     await this.blog.createTable()
+    await this.files.createTable()
   }
 
 }
