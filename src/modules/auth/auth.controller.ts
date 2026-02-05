@@ -77,12 +77,16 @@ export class AuthController{
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  async getProfile( @CurrentUser() currentUser:any ): Promise<ApiResponse> {
+  async getProfile( @Req() req:Request, @Res() res:Response,@CurrentUser() currentUser:any ): Promise<ApiResponse> {
     try {
 
-      const response: ApiResponse = {
+      const { id } = req.params;
+      const user = await this.user.fetchUser(parseInt(id));
+
+      const response: UserApiResponse = {
         success: true,
-        message:"Successfully obtained user profile"
+        message: `Successfully fetched user profile`,
+        data:user
       }
 
       return response
