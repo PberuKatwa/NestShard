@@ -61,12 +61,12 @@ export class FilesModel {
         RETURNING id, user_id , file_name,file_url, file_size, mime_type;
       `;
 
-      const { userId, fileName, fileUrl, fileSize, mimeType } = params;
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query, [userId, fileName, fileUrl, fileSize, mimeType]);
+      const file:File = result.rows[0];
 
-      this.logger.info(`File metadata saved successfully with ID: ${result.rows[0].id}`);
-      return result.rows[0];
+      this.logger.info(`File metadata saved successfully with ID.`);
+      return file;
     } catch (error) {
       this.logger.error(`Error saving file metadata: ${error.message}`);
       throw error;
