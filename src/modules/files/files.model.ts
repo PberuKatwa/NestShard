@@ -73,12 +73,10 @@ export class FilesModel {
     }
   }
 
-  async fetchFilesByUserId(userId: number): Promise<AppFile[]> {
+  async fetchFilesByUserId(userId: number): Promise<File[]> {
     try {
       const query = `
-        SELECT id, user_id as "userId", file_name as "fileName",
-               file_url as "fileUrl", file_size as "fileSize",
-               mime_type as "mimeType", status, created_at as "createdAt"
+        SELECT id, user_id, file_name , file_url , file_size, mime_type
         FROM files
         WHERE user_id = $1 AND status = 'active'
         ORDER BY created_at DESC;
