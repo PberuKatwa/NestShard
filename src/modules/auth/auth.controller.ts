@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { DecodedUser, LoginUserResponse } from "src/types/users.types";
+import { DecodedUser, LoginUserResponse, User } from "src/types/users.types";
 
 @Controller('auth')
 export class AuthController{
@@ -95,6 +95,33 @@ export class AuthController{
         message: `${error.message}`,
       }
       throw new HttpException(response, HttpStatus.INTERNAL_SERVER_ERROR)
+
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('update')
+  async updateUser(@Req() req:Request, @Res() res:Response) {
+    try {
+
+      const data: User = req.body;
+
+      const { id, email, first_name, last_name } = data;
+
+      if (image_url === undefined) throw new Error(`Error in undefin`);
+
+      const response = await this.user.updateUser(id, first_name, last_name, email, image_url);
+
+    } catch (error) {
+
+      const response: ApiResponse = {
+        success: true,
+        message:`${error}`
+      }
+
+      this.logger.error(`Error in updating user`, error)
+
+      return res.status(500).json(response)
 
     }
   }

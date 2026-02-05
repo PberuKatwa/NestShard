@@ -6,7 +6,7 @@ export interface User {
   last_name: string;
   email: string;
   access_token?: string;
-  image_url?: string;
+  image_url?: string | null;
   signedUrl?: string;
 }
 
