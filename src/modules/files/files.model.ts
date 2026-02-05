@@ -111,7 +111,7 @@ export class FilesModel {
   async deleteFile(id: number): Promise<boolean> {
     try {
       // Soft delete approach to match your 'row_status' pattern
-      const query = `UPDATE files SET status = 'deleted' WHERE id = $1`;
+      const query = `UPDATE files SET status = 'trash' WHERE id = $1`;
       const pgPool = this.pgConfig.getPool();
       await pgPool.query(query, [id]);
       return true;
