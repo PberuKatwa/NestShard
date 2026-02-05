@@ -163,4 +163,21 @@ export class UsersModel{
     }
   }
 
+  async fetchUser(id: number): Promise<User> {
+    try {
+      this.logger.warn(`Atempting to fetch user`);
+
+      const query = `SELECT id, first_name, last_name, email, image_url FROM users WHERE id=$1`;
+      const pgPool = this.pgConfig.getPool();
+      const result = await pgPool.query(query, [id]);
+      const user: User = result.rows[0];
+
+      return user;
+
+    } catch (error) {
+      throw error;
+    }
+
+  }
+
 }
