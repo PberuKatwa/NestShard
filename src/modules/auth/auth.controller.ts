@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { DecodedUser, LoginUserResponse, User } from "src/types/users.types";
+import { DecodedUser, UserApiResponse, User } from "src/types/users.types";
 
 @Controller('auth')
 export class AuthController{
@@ -56,7 +56,7 @@ export class AuthController{
 
       const result = await this.user.validateUserPassword(email, password);
 
-      const response: LoginUserResponse = {
+      const response: UserApiResponse = {
         success: true,
         message: `Successfully logged in user ${email}`,
         data:result
@@ -107,11 +107,15 @@ export class AuthController{
       const data: User = req.body;
 
       const { id, email, first_name, last_name } = data;
+      const user = await this.user.updateUser(id, first_name, last_name, email);
 
-      if (image_url === undefined) throw new Error(`Error in undefin`);
+      const response: UserApiResponse = {
+        success: true,
+        message: `Successfully updated user`,
+        data:user
+      }
 
-      const response = await this.user.updateUser(id, first_name, last_name, email, image_url);
-
+      return res.status(200).json(response)
     } catch (error) {
 
       const response: ApiResponse = {

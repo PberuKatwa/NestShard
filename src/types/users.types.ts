@@ -18,4 +18,4 @@ export interface DecodedUser {
   exp:number
 }
 
-export interface LoginUserResponse extends ApiResponse<User> { };
+export interface UserApiResponse extends ApiResponse<User> { };

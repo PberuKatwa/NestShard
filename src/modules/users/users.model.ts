@@ -154,7 +154,7 @@ export class UsersModel{
       const result = await pgPool.query(query, [firstName, lastName, email, id]);
       const user: User = result.rows[0];
 
-      this.logger.info(`SUccessfully updated user with id ${id}`);
+      this.logger.info(`Successfully updated user with id ${id}`);
 
       return user;
 
