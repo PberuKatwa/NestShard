@@ -91,6 +91,23 @@ export class FilesModel {
     }
   }
 
+  async getFile(id: number):Promise<File> {
+    try {
+
+      this.logger.warn(`Attempting to get file by id`);
+
+      const query = `SELECT id, user_id, file_name , file_url , file_size, mime_type FROM files WHERE id=${id}`;
+      const pgPool = this.pgConfig.getPool();
+      const result = await pgPool.query(query, [id]);
+      const file: File = result.rows[0];
+
+      return file;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async deleteFile(id: number): Promise<boolean> {
     try {
       // Soft delete approach to match your 'row_status' pattern
