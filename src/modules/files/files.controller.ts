@@ -1,21 +1,29 @@
-import { Get, Controller, Res, Req, Inject, Post, UploadedFile, UseInterceptors, Param } from "@nestjs/common";
+import { Get, Controller, Res, Req, Inject, Post, Param, UseGuards } from "@nestjs/common";
 import { GarageService } from "../garage/garage.service";
 import type { Response, Request } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 import type { ApiResponse } from "src/types/api.types";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { AuthGuard } from "../auth/guards/auth.guard";
+import { FilesModel } from "./files.model";
+import { CurrentUser } from "../users/decorators/user.decorator";
+
 
 @Controller('files')
+@UseGuards(AuthGuard)
 export class FilesController{
 
   constructor(
     private readonly garageService: GarageService,
-    @Inject(APP_LOGGER) private readonly logger: AppLogger
-  ) {}
+    @Inject(APP_LOGGER) private readonly logger: AppLogger,
+    private readonly files:FilesModel
+  ) { }
+
+  // @Post('upload/v2')
+  // async
 
   @Post('upload')
-  async handleUpload(@Req() req: Request) {
+  async handleUpload(@Req() req: Request, @CurrentUser() currentUser:any) {
     const fileSize = parseInt(req.headers['content-length'] || '0');
     const busboy = require('busboy')({ headers: req.headers });
 
@@ -29,6 +37,10 @@ export class FilesController{
           if (fileSize > 100 * 1024 * 1024) {
 
             const key = await this.garageService.uploadMultiPart(fileStream, filename, mimeType);
+
+            const file2 = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
+            console.log("fileeee", file2);
+            console.log("fileeee", file2);
 
             const response: ApiResponse = {
               success: true,
