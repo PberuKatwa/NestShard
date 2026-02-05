@@ -1,11 +1,8 @@
 export interface File {
   id: number;
-  userId: number;
-  fileName: string;
-  fileUrl: string;
-  fileSize: number; // in bytes
-  mimeType: string;
-  status: 'active' | 'deleted';
-  createdAt: Date;
-  updated_at: Date;
+  user_id: number;
+  file_name: string;
+  file_url: string;
+  file_size: number;
+  mime_type: string;
 }
