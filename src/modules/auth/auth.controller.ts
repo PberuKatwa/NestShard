@@ -77,20 +77,18 @@ export class AuthController{
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  async getProfile( @Req() req:Request, @Res() res:Response,@CurrentUser() currentUser:any ): Promise<ApiResponse> {
+  async getProfile( @Res() res:Response,@CurrentUser() currentUser:any ): Promise<Response> {
     try {
 
-      const { id } = req.params;
-      const user = await this.user.fetchUser(parseInt(id));
+      const user = await this.user.fetchUser(currentUser.userId);
 
       const response: UserApiResponse = {
         success: true,
-        message: `Successfully fetched user profile`,
+        message: `Successfully fetched your profile`,
         data:user
       }
 
-      return response
-
+      return res.status(200).json(response)
     } catch (error) {
 
       this.logger.error(`Error in getting user profile`, error)
