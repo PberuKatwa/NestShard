@@ -56,9 +56,9 @@ export class FilesModel {
       this.logger.warn(`Storing metadata for file: ${fileName}`);
 
       const query = `
-        INSERT INTO files (user_id, file_name, file_url, file_size, mime_type)
+        INSERT INTO files (uploaded_by, file_name, file_url, file_size, mime_type)
         VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, user_id , file_name,file_url, file_size, mime_type;
+        RETURNING id, uploaded_by , file_name,file_url, file_size, mime_type;
       `;
 
       const pgPool = this.pgConfig.getPool();
