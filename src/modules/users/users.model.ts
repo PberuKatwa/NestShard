@@ -142,4 +142,16 @@ export class UsersModel{
     }
   }
 
+  async updateUser(id: number, firstName: string, lastName: string, email: string, image_url: string) {
+    try {
+
+      this.logger.info(`Attempting to update user with id:${id}`);
+
+      const query = ``
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
