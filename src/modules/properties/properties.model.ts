@@ -69,15 +69,15 @@ export class PropertiesModel {
 
       this.logger.warn(`Attempting to create property`)
 
-      const { name, price, isRental, imageUrl, location, description, userId } = payload;
+      const { name, price, isRental, fileId, location, description, userId } = payload;
       const query = `
-        INSERT INTO properties ( name, price, is_rental, image_url, location, description, created_by )
+        INSERT INTO properties ( name, price, is_rental, file_id, location, description, created_by )
         VALUES ( $1, $2, $3, $4, $5, $6, $7 )
-        RETURNING id, name, price, is_rental, image_url, location, description;
+        RETURNING id, name, price, is_rental, file_id, location, description;
       `;
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [name, price, isRental, imageUrl, location, description, userId]);
+      const result = await pgPool.query(query, [name, price, isRental, fileId, location, description, userId]);
       const property:Property = result.rows[0];
 
       this.logger.info(`Successfully created property`);

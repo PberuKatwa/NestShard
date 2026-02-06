@@ -17,7 +17,7 @@ export interface PropertyPayload {
   name: string;
   price: number;
   isRental: boolean;
-  imageUrl: string;
+  fileId: number;
   location: string;
   description: string;
 }

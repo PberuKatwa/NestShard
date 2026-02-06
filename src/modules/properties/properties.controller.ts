@@ -32,23 +32,13 @@ export class PropertyController{
   async createProperty(
     @CurrentUser() user:any,
     @Body() body:any,
-    @UploadedFile(
-        new ParseFilePipe({
-          validators: [
-            new MaxFileSizeValidator({ maxSize: 5242880 }),
-            new FileTypeValidator({ fileType: '.(png|jpeg|jpg|webp)' }),
-          ],
-        }),
-      )
-      file: Express.Multer.File,
+    file: Express.Multer.File
   ) {
     try {
 
-      const { name, price, isRental, location, description } = body;
+      const { name, price, isRental, fileId, location, description } = body;
 
-      const { key } = await this.garage.uploadFile(file);
-      const payload: PropertyPayload = { name, price, isRental, location, description, imageUrl: key, userId: user.userId };
-
+      const payload: PropertyPayload = { name, price, isRental, location, description, fileId, userId: user.userId };
 
       const property = await this.properties.createProperty(payload)
 
