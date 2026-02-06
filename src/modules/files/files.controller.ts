@@ -19,11 +19,23 @@ export class FilesController{
     private readonly files:FilesModel
   ) { }
 
-  // @Post('upload/v2')
-  // async
-
   @Post('upload')
-  async handleUpload(@Req() req: Request, @CurrentUser() currentUser:any) {
+  async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any, @Res() res:Response) {
+    try {
+
+    } catch (error) {
+      this.logger.error(`Error in handling single file upload`, error)
+      const response: ApiResponse<Array<any> > = {
+        success: false,
+        message:error.message
+      }
+
+      return res.status(500).json(response)
+    }
+  }
+
+  @Post('upload/multi-stream')
+  async handleMultiUpload(@Req() req: Request, @CurrentUser() currentUser:any) {
     const fileSize = parseInt(req.headers['content-length'] || '0');
     const busboy = require('busboy')({ headers: req.headers });
 
