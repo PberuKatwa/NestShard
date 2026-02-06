@@ -60,7 +60,11 @@ export class FilesController{
               }
 
               const finalBuffer = Buffer.concat(chunks);
-              const maxAllowed = parseInt(resultForm.fields['maxFileSize']) || 20 * 1024 * 1024;
+              let maxAllowed = 20 * 1024 * 1024;
+              if (parseInt(resultForm.fields['maxFileSize'])) {
+                maxAllowed = parseInt(resultForm.fields['maxFileSize']) * 1024 * 1024
+              }
+
               if (finalBuffer.length > maxAllowed) {
                 return reject(new BadRequestException('Compressed image exceeds size limit'));
               };
