@@ -23,6 +23,21 @@ export class FilesController{
   async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any, @Res() res:Response) {
     try {
 
+      const fileSize = parseInt(req.headers['content-length'] || '0');
+      const busboy = require('busboy')({ headers: req.headers });
+      const contentType = req.headers['content-type'];
+
+      if (fileSize > 20 * 1024 * 1024) throw new Error(`File is too large, maximum size is 20MB`);
+      if (!req.headers['content-type']?.includes('multipart/form-data')) throw new Error(`Invalid file format`);
+
+      return new Promise(
+        (resolve, reject) => {
+
+        }
+      )
+
+
+
     } catch (error) {
       this.logger.error(`Error in handling single file upload`, error)
       const response: ApiResponse<Array<any> > = {
