@@ -7,6 +7,7 @@ import type { ApiResponse } from "src/types/api.types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { FilesModel } from "./files.model";
 import { CurrentUser } from "../users/decorators/user.decorator";
+import { SingleFileAPiResponse,File } from "src/types/files.types";
 
 
 @Controller('files')
@@ -31,7 +32,6 @@ export class FilesController{
 
       return new Promise(
         (resolve, reject) => {
-
           busboy.on('file', async (name, fileStream, info) => {
             try {
 
@@ -49,32 +49,24 @@ export class FilesController{
               } as Express.Multer.File;
 
               const { key } = await this.garageService.uploadFile(mockFile);
-              const file = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
+              const file:File = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
 
-              const response: ApiResponse = {
+              const response: SingleFileAPiResponse = {
                 success: true,
                 message: `Successfully uploaded large file with key:${key}.`,
-                data: {
-                  key: key,
-                  fileSize:fileSize
-                }
+                data:file
               }
 
               resolve(response);
-
             } catch (error) {
               reject(error);
             }
-
-
-
-
           })
 
+          busboy.on('error', (error) => reject(error));
+          req.pipe(busboy);
         }
       )
-
-
 
     } catch (error) {
       this.logger.error(`Error in handling single file upload`, error)
