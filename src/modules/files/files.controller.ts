@@ -75,13 +75,13 @@ export class FilesController{
 
               const mockFile = {
                 buffer: Buffer.concat(chunks),
-                originalname: `${filename.split('.')[0]}.webp`,
-                mimetype: mimeType,
-                size: finalBuffer.length
+                originalname: newFileName,
+                mimetype: newMimeType,
+                size: newSize
               } as Express.Multer.File;
 
               const { key } = await this.garageService.uploadFile(mockFile);
-              const file:File = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
+              const file:File = await this.files.saveFile(currentUser.userId, newFileName, key, newSize, newMimeType);
 
               const response: SingleFileAPiResponse = {
                 success: true,
