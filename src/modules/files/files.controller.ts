@@ -1,4 +1,4 @@
-import { Get, Controller, Res, Req, Inject, Post, Param, UseGuards,HttpException,HttpStatus } from "@nestjs/common";
+import { Get, Controller, Res, Req, Inject, Post, Param, UseGuards,HttpException,HttpStatus,BadRequestException } from "@nestjs/common";
 import { GarageService } from "../garage/garage.service";
 import type { Response, Request } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
@@ -20,7 +20,7 @@ export class FilesController{
     private readonly files:FilesModel
   ) { }
 
-  @Post('upload')
+  @Post('upload/images')
   async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any): Promise<SingleFileAPiResponse> {
 
     try {
@@ -37,6 +37,12 @@ export class FilesController{
             try {
 
               const { filename, mimeType } = info;
+
+              if (!mimeType.startsWith('image/')) {
+                fileStream.resume();
+                return reject(new BadRequestException('Only images are allowed'));
+              }
+
               const chunks: Buffer[] = [];
               for await (const chunk of fileStream) {
                 chunks.push(chunk);
