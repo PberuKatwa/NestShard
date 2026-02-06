@@ -75,7 +75,7 @@ export class PropertyController{
         properties.map(
           async (property: Property) => {
 
-            let signedUrl =`No url`
+            let signedUrl:string | null = null
             if (property.file_url) {
               signedUrl = await this.garage.getSignedFileURl(property.file_url)
             }
