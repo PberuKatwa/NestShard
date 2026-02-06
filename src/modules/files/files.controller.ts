@@ -1,4 +1,6 @@
 import { Get, Controller, Res, Req, Inject, Post, Param, UseGuards,HttpException,HttpStatus,BadRequestException } from "@nestjs/common";
+import sharp = require('sharp');
+import { PassThrough } from 'stream';
 import { GarageService } from "../garage/garage.service";
 import type { Response, Request } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
@@ -44,17 +46,24 @@ export class FilesController{
 
               const { filename, mimeType } = info;
 
-
-
               if (!mimeType.startsWith('image/')) {
                 fileStream.resume();
                 return reject(new BadRequestException('Only images are allowed'));
               }
 
+              const transformer = sharp().webp({ quality: 70 })
               const chunks: Buffer[] = [];
-              for await (const chunk of fileStream) {
+              const processedStream = fileStream.pipe(transformer);
+
+              for await (const chunk of processedStream) {
                 chunks.push(chunk);
               }
+
+              const finalBuffer = Buffer.concat(chunks);
+              const maxAllowed = parseInt(resultForm.fields['maxFileSize']) || 20 * 1024 * 1024;
+              if (finalBuffer.length > maxAllowed) {
+                return reject(new BadRequestException('Compressed image exceeds size limit'));
+              };
 
               const mockFile = {
                 buffer: Buffer.concat(chunks),
