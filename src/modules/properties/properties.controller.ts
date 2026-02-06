@@ -37,9 +37,7 @@ export class PropertyController{
     try {
 
       const { name, price, isRental, fileId, location, description } = body;
-
       const payload: PropertyPayload = { name, price, isRental, location, description, fileId, userId: user.userId };
-
       const property = await this.properties.createProperty(payload)
 
       const response: ApiResponse = {
