@@ -1,3 +1,5 @@
+import { ApiResponse } from "./api.types";
+
 export interface File {
   id: number;
   user_id: number;
@@ -6,3 +8,5 @@ export interface File {
   file_size: number;
   mime_type: string;
 }
+
+export interface SingleFileAPiResponse extends ApiResponse<File> { };

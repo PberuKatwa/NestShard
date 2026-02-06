@@ -34,10 +34,9 @@ export class FilesController{
 
           busboy.on('file', async (name, fileStream, info) => {
             try {
+
               const { filename, mimeType } = info;
-
               const chunks: Buffer[] = [];
-
               for await (const chunk of fileStream) {
                 chunks.push(chunk);
               }
@@ -50,8 +49,18 @@ export class FilesController{
               } as Express.Multer.File;
 
               const { key } = await this.garageService.uploadFile(mockFile);
+              const file = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
 
-              const file2 = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
+              const response: ApiResponse = {
+                success: true,
+                message: `Successfully uploaded large file with key:${key}.`,
+                data: {
+                  key: key,
+                  fileSize:fileSize
+                }
+              }
+
+              resolve(response);
 
             } catch (error) {
               reject(error);
