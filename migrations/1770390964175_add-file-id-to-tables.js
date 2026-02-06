@@ -15,6 +15,25 @@ export const up = (pgm) => {
       onDelete: 'SET NULL',
     },
   });
+
+  pgm.addColumn('blogs', {
+    file_id: {
+      type: 'integer',
+      notNull: false,
+      references: '"files"',
+      onDelete: 'SET NULL',
+    },
+  });
+
+  pgm.addColumn('properties', {
+    file_id: {
+      type: 'integer',
+      notNull: false,
+      references: '"files"',
+      onDelete: 'SET NULL',
+    },
+  });
+
 };
 
 /**
@@ -22,4 +41,6 @@ export const up = (pgm) => {
  */
 export const down = (pgm) => {
   pgm.dropColumn('users', 'file_id');
+  pgm.dropColumn('properties', 'file_id');
+  pgm.dropColumn('blogs', 'file_id');
 };
