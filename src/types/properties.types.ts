@@ -6,6 +6,7 @@ export interface Property<T = string> {
   price: number;
   is_rental: boolean;
   image_url: string;
+  fileId: number;
   location: string;
   description: string;
   signedUrl?: T;

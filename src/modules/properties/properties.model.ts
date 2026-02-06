@@ -38,7 +38,7 @@ export class PropertiesModel {
 
           FOREIGN KEY (created_by)
             REFERENCES users(id)
-            ON DELETE SET NULL
+            ON DELETE SET NULL,
 
           FOREIGN KEY(file_id)
             REFERENCES files(id)

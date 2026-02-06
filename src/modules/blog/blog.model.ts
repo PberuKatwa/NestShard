@@ -33,7 +33,7 @@ export class BlogModel{
 
           FOREIGN KEY(author_id)
             REFERENCES users(id)
-            ON DELETE SET NULL
+            ON DELETE SET NULL,
 
           FOREIGN KEY(file_id)
             REFERENCES files(id)
