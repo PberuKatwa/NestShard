@@ -97,12 +97,23 @@ export class PropertiesModel {
       const limit = limitInput ? limitInput : 10;
       const offset = (page -1) * limit
 
-      const dataQuery = ` SELECT id,name,price,is_rental,file_id,location,description
-        FROM properties
-        WHERE status!= 'trash'
-        ORDER BY id DESC
+      const dataQuery = `
+        SELECT
+          p.id,
+          p.name,
+          p.price,
+          p.is_rental,
+          p.file_id,
+          p.location,
+          p.description,
+          f.url AS file_url
+        FROM properties p
+        LEFT JOIN files f ON p.file_id = f.id
+        WHERE p.status != 'trash'
+        ORDER BY p.id DESC
         LIMIT $1 OFFSET $2;
       `;
+
       const countQuery = `
         SELECT COUNT(*)
         FROM properties

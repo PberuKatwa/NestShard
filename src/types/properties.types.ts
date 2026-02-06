@@ -5,8 +5,8 @@ export interface Property<T = string> {
   name: string;
   price: number;
   is_rental: boolean;
-  image_url?: string;
-  fileId: number;
+  file_url?: string;
+  fileId: number | null;
   location: string;
   description: string;
   signedUrl?: T;
