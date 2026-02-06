@@ -67,9 +67,9 @@ export class FilesController{
 
               const mockFile = {
                 buffer: Buffer.concat(chunks),
-                originalname: filename,
+                originalname: `${filename.split('.')[0]}.webp`,
                 mimetype: mimeType,
-                size: fileSize
+                size: finalBuffer.length
               } as Express.Multer.File;
 
               const { key } = await this.garageService.uploadFile(mockFile);
