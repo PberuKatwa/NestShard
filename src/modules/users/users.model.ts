@@ -31,12 +31,17 @@ export class UsersModel{
           last_name TEXT NOT NULL,
           email TEXT NOT NULL UNIQUE,
           image_url TEXT,
+          file_id INTEGER NOT NULL,
           password VARCHAR NOT NULL,
           access_token TEXT,
           status row_status DEFAULT 'active',
           role user_role DEFAULT 'demo',
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+          updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+          FOREIGN KEY(file_id)
+            REFERENCES files(id)
+            ON DELETE SET NULL
         );
 
         DROP TRIGGER IF EXISTS update_users_timestamp ON users;

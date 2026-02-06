@@ -23,6 +23,7 @@ export class BlogModel{
           id SERIAL PRIMARY KEY,
           title VARCHAR(240) NOT NULL,
           author_id INTEGER NOT NULL,
+          file_id INTEGER NOT NULL,
           slug VARCHAR(240),
           content TEXT NOT NULL,
           image_url TEXT,
@@ -33,6 +34,11 @@ export class BlogModel{
           FOREIGN KEY(author_id)
             REFERENCES users(id)
             ON DELETE SET NULL
+
+          FOREIGN KEY(file_id)
+            REFERENCES files(id)
+            ON DELETE SET NULL
+
         );
 
         DROP TRIGGER IF EXISTS update_blog_timestamp ON blogs;
