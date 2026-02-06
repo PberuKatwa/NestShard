@@ -61,7 +61,8 @@ export class FilesController{
 
               const finalBuffer = Buffer.concat(chunks);
               let maxAllowed = 20 * 1024 * 1024;
-              if ( parseInt(resultForm.fields['maxFileSize']) && parseInt(resultForm.fields['maxFileSize']) > 0 ) {
+              if (parseInt(resultForm.fields['maxFileSize']) && parseInt(resultForm.fields['maxFileSize']) > 0) {
+                console.log("max sizeee", parseInt(resultForm.fields['maxFileSize']))
                 maxAllowed = parseInt(resultForm.fields['maxFileSize']) * 1024 * 1024
               }
 
