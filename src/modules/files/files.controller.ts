@@ -1,4 +1,4 @@
-import { Get, Controller, Res, Req, Inject, Post, Param, UseGuards } from "@nestjs/common";
+import { Get, Controller, Res, Req, Inject, Post, Param, UseGuards,HttpException,HttpStatus } from "@nestjs/common";
 import { GarageService } from "../garage/garage.service";
 import type { Response, Request } from "express";
 import { APP_LOGGER } from "src/logger/logger.provider";
@@ -21,7 +21,9 @@ export class FilesController{
   ) { }
 
   @Post('upload')
-  async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any):Promise<SingleFileAPiResponse> {
+  async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any): Promise<SingleFileAPiResponse> {
+
+    try {
 
       const fileSize = parseInt(req.headers['content-length'] || '0');
       const busboy = require('busboy')({ headers: req.headers });
@@ -66,10 +68,21 @@ export class FilesController{
           req.pipe(busboy);
         }
       )
+
+    } catch (error) {
+      this.logger.error(`Error in creating property`, error)
+      const response: ApiResponse = {
+        success: false,
+        message: `${error.message}`,
+      }
+
+      throw new HttpException(response,HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 
   @Post('upload/multi-stream')
-  async handleMultiUpload(@Req() req: Request, @CurrentUser() currentUser:any) {
+  async handleMultiUpload(@Req() req: Request, @CurrentUser() currentUser: any) {
+
     const fileSize = parseInt(req.headers['content-length'] || '0');
     const busboy = require('busboy')({ headers: req.headers });
 
