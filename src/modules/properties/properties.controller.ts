@@ -78,7 +78,7 @@ export class PropertyController{
           async (property: Property) => {
           return {
             ...property,
-            signedUrl:await this.garage.getSignedFileURl(property.image_url)
+            // signedUrl:await this.garage.getSignedFileURl(property.image_url)
           }
         }
       )
