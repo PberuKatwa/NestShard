@@ -21,7 +21,7 @@ export class FilesController{
   ) { }
 
   @Post('upload')
-  async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any) {
+  async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any):Promise<SingleFileAPiResponse> {
 
       const fileSize = parseInt(req.headers['content-length'] || '0');
       const busboy = require('busboy')({ headers: req.headers });
