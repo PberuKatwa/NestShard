@@ -61,13 +61,17 @@ export class FilesController{
 
               const finalBuffer = Buffer.concat(chunks);
               let maxAllowed = 20 * 1024 * 1024;
-              if (parseInt(resultForm.fields['maxFileSize'])) {
+              if ( parseInt(resultForm.fields['maxFileSize']) && parseInt(resultForm.fields['maxFileSize']) > 0 ) {
                 maxAllowed = parseInt(resultForm.fields['maxFileSize']) * 1024 * 1024
               }
 
               if (finalBuffer.length > maxAllowed) {
                 return reject(new BadRequestException('Compressed image exceeds size limit'));
               };
+
+              const newFileName = `${filename.split('.')[0]}.webp`;
+              const newSize = finalBuffer.length;
+              const newMimeType = 'image/webp';
 
               const mockFile = {
                 buffer: Buffer.concat(chunks),
@@ -81,7 +85,7 @@ export class FilesController{
 
               const response: SingleFileAPiResponse = {
                 success: true,
-                message: `Successfully uploaded large file with key:${key}.`,
+                message: `Successfully uploaded image file ${filename}.`,
                 data:file
               }
 
