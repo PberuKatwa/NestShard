@@ -106,7 +106,7 @@ export class PropertiesModel {
           p.file_id,
           p.location,
           p.description,
-          f.url AS file_url
+          f.file_url AS file_url
         FROM properties p
         LEFT JOIN files f ON p.file_id = f.id
         WHERE p.status != 'trash'

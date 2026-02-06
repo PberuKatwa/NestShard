@@ -1,16 +1,16 @@
 import type { ApiResponse } from "./api.types";
 
-export interface Property<T = string> {
+export interface Property {
   id: number;
   name: string;
   price: number;
   is_rental: boolean;
-  file_url?: string;
+  file_url: string | null;
   fileId: number | null;
   location: string;
   description: string;
-  signedUrl?: T;
-  status?: T;
+  signedUrl: string | null;
+  status?: string;
 }
 
 export interface PropertyPayload {
