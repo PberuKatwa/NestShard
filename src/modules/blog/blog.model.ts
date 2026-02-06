@@ -26,7 +26,6 @@ export class BlogModel{
           file_id INTEGER,
           slug VARCHAR(240),
           content TEXT NOT NULL,
-          image_url TEXT,
           status row_status DEFAULT 'active',
           created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

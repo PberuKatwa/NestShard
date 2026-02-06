@@ -28,7 +28,6 @@ export class PropertiesModel {
           price BIGINT NOT NULL,
           is_rental BOOLEAN DEFAULT TRUE,
           file_id INTEGER,
-          image_url VARCHAR NOT NULL,
           location TEXT NOT NULL,
           description TEXT NOT NULL,
           status row_status DEFAULT 'active',
@@ -98,7 +97,7 @@ export class PropertiesModel {
       const limit = limitInput ? limitInput : 10;
       const offset = (page -1) * limit
 
-      const dataQuery = ` SELECT id,name,price,is_rental,image_url,location,description
+      const dataQuery = ` SELECT id,name,price,is_rental,file_id,location,description
         FROM properties
         WHERE status!= 'trash'
         ORDER BY id DESC
@@ -138,7 +137,7 @@ export class PropertiesModel {
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(`
-        SELECT id,name,price,is_rental,image_url,location,description
+        SELECT id,name,price,is_rental,file_id,location,description
         FROM properties
         WHERE id=$1 AND status!= 'trash' ;
         `
@@ -161,7 +160,7 @@ export class PropertiesModel {
         UPDATE properties
         SET status=$1
         WHERE id=$2
-        RETURNING id,name,price,is_rental,image_url,location,description,status ;
+        RETURNING id,name,price,is_rental,file_id,location,description,status ;
       `;
 
       const result = await pool.query(query, ['trash', id]);
@@ -182,9 +181,9 @@ export class PropertiesModel {
       const pool = this.pgConfig.getPool();
       const query = `
         UPDATE properties
-        SET name=$1, price=$2, description=$3, image_url=$4
+        SET name=$1, price=$2, description=$3, file_id=$4
         WHERE id=$5
-        RETURNING id,name,price,is_rental,image_url,location,description,status;
+        RETURNING id,name,price,is_rental,file_id,location,description,status;
       `;
 
       const result = await pool.query(query,[name,price,description,imageUrl,id]);

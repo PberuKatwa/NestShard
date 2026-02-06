@@ -30,7 +30,6 @@ export class UsersModel{
           first_name TEXT NOT NULL,
           last_name TEXT NOT NULL,
           email TEXT NOT NULL UNIQUE,
-          image_url TEXT,
           file_id INTEGER,
           password VARCHAR NOT NULL,
           access_token TEXT,
