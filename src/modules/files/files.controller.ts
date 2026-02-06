@@ -1,5 +1,7 @@
 import { Get, Controller, Res, Req, Inject, Post, Param, UseGuards,HttpException,HttpStatus,BadRequestException } from "@nestjs/common";
 import sharp = require('sharp');
+import { Busboy, BusboyConfig, FileInfo } from 'busboy';
+import { Readable } from 'stream';
 import { PassThrough } from 'stream';
 import { GarageService } from "../garage/garage.service";
 import type { Response, Request } from "express";
@@ -24,94 +26,85 @@ export class FilesController{
 
   @Post('upload/images')
   async handleUpload(@Req() req: Request, @CurrentUser() currentUser: any): Promise<SingleFileAPiResponse> {
-
     try {
-
       const fileSize = parseInt(req.headers['content-length'] || '0');
-      const busboy = require('busboy')({ headers: req.headers });
+      const busboy: Busboy = require('busboy')({ headers: req.headers } as BusboyConfig);
       const resultForm = { fileKey: '', fields: {} as Record<string, string> };
 
-      if (fileSize > 20 * 1024 * 1024) throw new Error(`File is too large, maximum size is 20MB`);
-      if (!req.headers['content-type']?.includes('multipart/form-data')) throw new Error(`Invalid file format`);
+      if (fileSize > 20 * 1024 * 1024) throw new Error('File is too large, maximum size is 20MB');
+      if (!req.headers['content-type']?.includes('multipart/form-data')) throw new Error('Invalid file format');
 
-      return new Promise(
+      return new Promise<SingleFileAPiResponse>(
         (resolve, reject) => {
-
-          busboy.on('field', (name, val) => {
+          busboy.on('field', (name: string, val: string) => {
             resultForm.fields[name] = val;
           });
 
-          busboy.on('file', async (name, fileStream, info) => {
+          busboy.on('file', async (name: string, fileStream: Readable, info: FileInfo) => {
             try {
-
               const { filename, mimeType } = info;
-
               if (!mimeType.startsWith('image/')) {
                 fileStream.resume();
                 return reject(new BadRequestException('Only images are allowed'));
               }
 
-              const transformer = sharp().webp({ quality: 70 })
+              const transformer = sharp().webp({ quality: 70 });
               const chunks: Buffer[] = [];
               const processedStream = fileStream.pipe(transformer);
 
               for await (const chunk of processedStream) {
-                chunks.push(chunk);
+                chunks.push(chunk as Buffer);
               }
 
               const finalBuffer = Buffer.concat(chunks);
               let maxAllowed = 20 * 1024 * 1024;
+
               if (parseInt(resultForm.fields['maxFileSize']) && parseInt(resultForm.fields['maxFileSize']) > 0) {
-                console.log("max sizeee", parseInt(resultForm.fields['maxFileSize']))
-                maxAllowed = parseInt(resultForm.fields['maxFileSize']) * 1024 * 1024
+                maxAllowed = parseInt(resultForm.fields['maxFileSize']) * 1024 * 1024;
               }
 
               if (finalBuffer.length > maxAllowed) {
                 return reject(new BadRequestException('Compressed image exceeds size limit'));
-              };
+              }
 
               const newFileName = `${filename.split('.')[0]}.webp`;
               const newSize = finalBuffer.length;
               const newMimeType = 'image/webp';
 
               const mockFile = {
-                buffer: Buffer.concat(chunks),
+                buffer: finalBuffer,
                 originalname: newFileName,
                 mimetype: newMimeType,
                 size: newSize
               } as Express.Multer.File;
 
               const { key } = await this.garageService.uploadFile(mockFile);
-              const file:File = await this.files.saveFile(currentUser.userId, newFileName, key, newSize, newMimeType);
+              const file: File = await this.files.saveFile(currentUser.userId, newFileName, key, newSize, newMimeType);
 
               const response: SingleFileAPiResponse = {
                 success: true,
                 message: `Successfully uploaded image file ${filename}.`,
-                data:file
-              }
-
+                data: file
+              };
               resolve(response);
             } catch (error) {
               reject(error);
             }
-          })
+          });
 
-          busboy.on('error', (error) => reject(error));
+          busboy.on('error', (error: Error) => reject(error));
           req.pipe(busboy);
         }
-      )
-
+      );
     } catch (error) {
-      this.logger.error(`Error in creating property`, error)
+      this.logger.error('Error in creating property', error);
       const response: ApiResponse = {
         success: false,
         message: `${error.message}`,
-      }
-
-      throw new HttpException(response,HttpStatus.INTERNAL_SERVER_ERROR)
+      };
+      throw new HttpException(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
   @Post('upload/multi-stream')
   async handleMultiUpload(@Req() req: Request, @CurrentUser() currentUser: any) {
 
