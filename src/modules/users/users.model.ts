@@ -31,7 +31,7 @@ export class UsersModel{
           last_name TEXT NOT NULL,
           email TEXT NOT NULL UNIQUE,
           image_url TEXT,
-          file_id INTEGER NOT NULL,
+          file_id INTEGER,
           password VARCHAR NOT NULL,
           access_token TEXT,
           status row_status DEFAULT 'active',

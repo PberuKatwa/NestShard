@@ -27,6 +27,7 @@ export class PropertiesModel {
           name TEXT NOT NULL,
           price BIGINT NOT NULL,
           is_rental BOOLEAN DEFAULT TRUE,
+          file_id INTEGER,
           image_url VARCHAR NOT NULL,
           location TEXT NOT NULL,
           description TEXT NOT NULL,
@@ -37,6 +38,10 @@ export class PropertiesModel {
 
           FOREIGN KEY (created_by)
             REFERENCES users(id)
+            ON DELETE SET NULL
+
+          FOREIGN KEY(file_id)
+            REFERENCES files(id)
             ON DELETE SET NULL
         );
 

@@ -23,7 +23,7 @@ export class BlogModel{
           id SERIAL PRIMARY KEY,
           title VARCHAR(240) NOT NULL,
           author_id INTEGER NOT NULL,
-          file_id INTEGER NOT NULL,
+          file_id INTEGER,
           slug VARCHAR(240),
           content TEXT NOT NULL,
           image_url TEXT,
