@@ -33,6 +33,30 @@ export class FilesController{
         (resolve, reject) => {
 
           busboy.on('file', async (name, fileStream, info) => {
+            try {
+              const { filename, mimeType } = info;
+
+              const chunks: Buffer[] = [];
+
+              for await (const chunk of fileStream) {
+                chunks.push(chunk);
+              }
+
+              const mockFile = {
+                buffer: Buffer.concat(chunks),
+                originalname: filename,
+                mimetype: mimeType,
+                size: fileSize
+              } as Express.Multer.File;
+
+              const { key } = await this.garageService.uploadFile(mockFile);
+
+              const file2 = await this.files.saveFile(currentUser.userId, filename, key, fileSize, mimeType);
+
+            } catch (error) {
+              reject(error);
+            }
+
 
 
 
