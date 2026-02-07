@@ -6,7 +6,7 @@ import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import type { AuthUser, BaseUser, DecodedUser, User, UserPayload } from "src/types/users.types";
+import type { AuthUser, BaseUser, DecodedUser, SignedUser, User, UserPayload } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
@@ -93,7 +93,7 @@ export class UsersModel{
   async validateUserPassword(email: string, password: string): Promise<AuthUser> {
     try {
 
-      const query = `SELECT id, email, first_name, password FROM users WHERE email =$1;`;
+      const query = `SELECT id, email, first_name, role, password FROM users WHERE email =$1;`;
 
       const pgPool = this.pgConfig.getPool()
       const result = await pgPool.query(query, [email])
@@ -103,11 +103,10 @@ export class UsersModel{
       const isMatch = await bcrypt.compare(password, user.password)
       if (!isMatch) throw new Error(`Invalid password`);
 
-      const payload:AuthUser = {
-        userId:user.id,
-        userName: user.first_name,
-        email:email
-      }
+      const payload: SignedUser = {
+        userId: user.id,
+        role: user.role
+      };
 
       const token = this.jwtService.sign(payload)
 
