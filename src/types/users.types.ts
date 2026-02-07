@@ -12,11 +12,11 @@ export interface User {
 
 
 export interface BaseUser {
-  id?: number;
   first_name: string;
 }
 
 export interface UserPayload extends BaseUser {
+  id?: number;
   lastName: string;
   email: string;
   password: string;
