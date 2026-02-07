@@ -73,7 +73,7 @@ export class UsersModel{
       const query = `
         INSERT INTO users ( first_name, last_name, email, password, file_id )
         VALUES( $1, $2, $3, $4, $5 )
-        RETURNING id, first_name, last_name, email, file_id;
+        RETURNING id, first_name, last_name, email, file_id, role;
       `
 
       const pgPool = this.pgConfig.getPool();
