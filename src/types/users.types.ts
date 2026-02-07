@@ -10,12 +10,21 @@ export interface User {
   signedUrl?: string;
 }
 
+
 export interface BaseUser {
-  id: number;
+  id?: number;
   first_name: string;
 }
 
+export interface UserPayload extends BaseUser {
+  lastName: string;
+  email: string;
+  password: string;
+  fileId: number;
+}
+
 export interface AuthUser extends BaseUser {
+  id: number;
   access_token: string;
   role: string;
   iat: number;
@@ -23,14 +32,12 @@ export interface AuthUser extends BaseUser {
 };
 
 export interface UserProfile extends BaseUser {
-  first_name: string;
+  id: number;
   last_name: string;
   file_id: number | null;
   file_url: string | null;
   signed_url: string | null;
 }
-
-export interface DecodedUser extends BaseUser {}
 
 export interface DecodedUser {
   userId: string,
