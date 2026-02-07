@@ -197,8 +197,7 @@ export class PropertiesModel {
       const query = `
         UPDATE properties
         SET name=$1, price=$2, description=$3, file_id=$4
-        WHERE id=$5
-        RETURNING id,name,price,is_rental,file_id,location,description,status;
+        WHERE id=$5;
       `;
 
       const result = await pool.query(query,[name,price,description,imageUrl,id]);
