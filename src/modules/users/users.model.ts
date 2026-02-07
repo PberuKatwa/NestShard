@@ -67,8 +67,8 @@ export class UsersModel{
     try {
 
       const { first_name, last_name, email, password, fileId } = payload;
-      this.logger.warn(`Atttempting to create user with name:${first_name}.`)
 
+      this.logger.warn(`Atttempting to create user with name:${first_name}.`);
       const hashedPassword = await bcrypt.hash(password, 10)
 
       const query = `
