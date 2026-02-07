@@ -180,7 +180,7 @@ export class PropertyController{
     try {
 
       const { id, name, price, description, fileId } = body;
-      const property = await this.properties.updateProperty(id, name, price, description, fileId);
+      await this.properties.updateProperty(id, name, price, description, fileId);
 
       const response: ApiResponse = {
         success: true,
