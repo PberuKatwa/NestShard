@@ -116,10 +116,8 @@ export class UsersModel{
         [ token, user.id ]
       )
 
-      const updatedUser:User = updateResult.rows[0]
-
+      const updatedUser:AuthUser = updateResult.rows[0]
       return updatedUser;
-
     } catch (error) {
       throw error;
     }
