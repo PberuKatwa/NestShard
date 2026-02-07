@@ -14,7 +14,7 @@ import { PropertiesModel } from "./properties.model";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { GarageService } from "../garage/garage.service";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { AllProperties, Property, PropertyPayload } from "src/types/properties.types";
+import { AllProperties, Property, PropertyPayload, SinglePropertyApiResponse } from "src/types/properties.types";
 
 
 @Controller('properties')
@@ -125,13 +125,10 @@ export class PropertyController{
         property.signedUrl = await this.garage.getSignedFileURl(property.file_url)
       }
 
-      const response: ApiResponse = {
+      const response: SinglePropertyApiResponse = {
         success: true,
         message: "Successfully fetched property",
-        data: {
-          property: property,
-          imageUrll:imageUrl
-        }
+        data:property
       }
 
       return res.status(200).json(response);
