@@ -6,7 +6,7 @@ import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import type { AuthUser, BaseUser, DecodedUser, SignedUser, User, UserPayload } from "src/types/users.types";
+import type { AuthUser, BaseUser, DecodedUser, SignedUser, User, UserPayload, UserProfile } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
@@ -163,7 +163,7 @@ export class UsersModel{
     }
   }
 
-  async fetchUser(id: number): Promise<User> {
+  async fetchUser(id: number): Promise<UserProfile> {
     try {
       this.logger.warn(`Atempting to fetch user`);
 
@@ -172,10 +172,8 @@ export class UsersModel{
           u.id,
           u.first_name,
           u.last_name,
-          u.email,
           u.file_id,
           f.file_url as file_url
-          image_url
         FROM users u
         LEFT JOIN files f ON u.file_id = f.id
         WHERE u.id=$1 AND u.status!='trash'
@@ -183,7 +181,7 @@ export class UsersModel{
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query, [id]);
-      const user: User = result.rows[0];
+      const user: UserProfile = result.rows[0];
 
       return user;
 
