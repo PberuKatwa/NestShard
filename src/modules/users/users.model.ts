@@ -103,7 +103,7 @@ export class UsersModel{
       const isMatch = await bcrypt.compare(password, user.password)
       if (!isMatch) throw new Error(`Invalid password`);
 
-      const payload = {
+      const payload:AuthUser = {
         userId:user.id,
         userName: user.first_name,
         email:email

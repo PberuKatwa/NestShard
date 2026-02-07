@@ -23,6 +23,11 @@ export interface UserPayload extends BaseUser {
   fileId?: number;
 }
 
+export interface SignedUser extends BaseUser {
+  id: number;
+  role: string;
+}
+
 export interface AuthUser extends BaseUser {
   id: number;
   access_token: string;
