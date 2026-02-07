@@ -81,7 +81,7 @@ export class UsersModel{
       const result = await pgPool.query(query, [first_name, last_name, email.toLowerCase(), hashedPassword ]);
       const user:BaseUser = result.rows[0]
 
-      this.logger.info(`Successfully created user`)
+      this.logger.info(`Successfully created user`);
 
       return user
 
