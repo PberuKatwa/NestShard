@@ -141,19 +141,27 @@ export class PropertiesModel {
     }
   }
 
-  async getProperty(id: number) {
+  async getProperty(id: number):Promise<Property> {
     try {
 
       this.logger.warn(`Attempting to fetch blog with id:${id}`)
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(`
-        SELECT id,name,price,is_rental,file_id,location,description
-        FROM properties
-        WHERE id=$1 AND status!= 'trash' ;
+      const query = `
+        SELECT
+          p.id,
+          p.name,
+          p.price,
+          p.is_rental,
+          p.file_id,
+          p.location,
+          f.file_url AS file_url
+        FROM properties p
+        LEFT JOIN files ON p.file_id = f.id
+        WHERE id=$1 AND status!='trash';
         `
-        , [id])
-      const property = result.rows[0];
+      const result = await pgPool.query(query, [id]);
+      const property:Property = result.rows[0];
 
       return property;
 
