@@ -5,8 +5,18 @@ export interface User {
   first_name: string;
   last_name: string;
   email: string;
+  fileId: number;
   access_token?: string;
-  image_url?: string | null;
+  signedUrl?: string;
+}
+
+export interface BaseUser {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  fileId: number;
+  access_token?: string;
   signedUrl?: string;
 }
 
