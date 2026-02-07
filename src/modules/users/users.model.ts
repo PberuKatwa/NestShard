@@ -167,7 +167,20 @@ export class UsersModel{
     try {
       this.logger.warn(`Atempting to fetch user`);
 
-      const query = `SELECT id, first_name, last_name, email, image_url FROM users WHERE id=$1`;
+      const query = `
+        SELECT
+          u.id,
+          u.first_name,
+          u.last_name,
+          u.email,
+          u.file_id,
+          f.file_url as file_url
+          image_url
+        FROM users u
+        LEFT JOIN files f ON u.file_id = f.id
+        WHERE u.id=$1 AND u.status!='trash'
+        `;
+
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query, [id]);
       const user: User = result.rows[0];

@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { DecodedUser, UserApiResponse, User, UserPayload, BaseUser } from "src/types/users.types";
+import type { DecodedUser, UserApiResponse, User, UserPayload, BaseUser, SignedUser } from "src/types/users.types";
 
 @Controller('auth')
 export class AuthController{
@@ -84,7 +84,7 @@ export class AuthController{
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  async getProfile( @Res() res:Response,@CurrentUser() currentUser:any ): Promise<Response> {
+  async getProfile( @Res() res:Response,@CurrentUser() currentUser:SignedUser ): Promise<Response> {
     try {
 
       const user = await this.user.fetchUser(currentUser.userId);
