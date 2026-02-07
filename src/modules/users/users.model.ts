@@ -129,9 +129,7 @@ export class UsersModel{
       const pgPool = this.pgConfig.getPool();
       const user = await pgPool.query(` SELECT access_token FROM users WHERE access_token=$1;`, [token])
 
-      if (user.rowCount === 0 ) {
-        throw new Error(`No access token was found.`);
-      }
+      if (user.rowCount === 0 ) throw new Error(`No access token was found.`);
 
       const decoded:SignedUser = this.jwtService.verify(token, {
         secret:this.configService.get<string>('jwtSecret')
