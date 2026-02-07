@@ -123,17 +123,17 @@ export class UsersModel{
     }
   }
 
-  async validateToken(token: string): Promise<DecodedUser> {
+  async validateToken(token: string): Promise<SignedUser> {
     try {
 
       const pgPool = this.pgConfig.getPool();
       const user = await pgPool.query(` SELECT access_token FROM users WHERE access_token=$1;`, [token])
 
       if (user.rowCount === 0 ) {
-        throw new Error(`No access token was found.`)
+        throw new Error(`No access token was found.`);
       }
 
-      const decoded:DecodedUser = this.jwtService.verify(token, {
+      const decoded:SignedUser = this.jwtService.verify(token, {
         secret:this.configService.get<string>('jwtSecret')
       })
 
