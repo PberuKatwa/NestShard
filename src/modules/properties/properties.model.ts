@@ -158,7 +158,7 @@ export class PropertiesModel {
           f.file_url AS file_url
         FROM properties p
         LEFT JOIN files f ON p.file_id = f.id
-        WHERE p.id=$1 AND status!='trash';
+        WHERE p.id=$1 AND p.status!='trash';
         `
       const result = await pgPool.query(query, [id]);
       const property:Property = result.rows[0];
