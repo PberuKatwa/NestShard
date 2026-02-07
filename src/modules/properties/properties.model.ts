@@ -180,13 +180,9 @@ export class PropertiesModel {
         SET status=$1
         WHERE id=$2;
       `;
-      // RETURNING id,name,price,is_rental,file_id,location,description,status ;
 
-      const result = await pool.query(query, ['trash', id]);
-      // const property:Property = result.rows[0];
+      await pool.query(query, ['trash', id]);
       this.logger.info(`Successfully trashed property`)
-
-      // return property;
     } catch (error) {
       throw error;
     }
