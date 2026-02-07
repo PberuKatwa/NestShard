@@ -120,7 +120,10 @@ export class PropertyController{
       const { id } = req.params;
 
       const property = await this.properties.getProperty(parseInt(id));
-      const imageUrl = await this.garage.getSignedFileURl(property.image_url)
+
+      if (property.file_url) {
+        property.signedUrl = await this.garage.getSignedFileURl(property.file_url)
+      }
 
       const response: ApiResponse = {
         success: true,

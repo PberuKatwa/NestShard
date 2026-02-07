@@ -33,3 +33,4 @@ export interface AllProperties {
 }
 
 export interface PropertyApiResponse extends ApiResponse<AllProperties> { };
+export interface SinglePropertyApiResponse extends ApiResponse<Property> { };
