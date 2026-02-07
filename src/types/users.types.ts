@@ -27,8 +27,8 @@ export interface AuthUser extends BaseUser {
   id: number;
   access_token: string;
   role: string;
-  iat: number;
-  exp: number;
+  iat?: number;
+  exp?: number;
 };
 
 export interface UserProfile extends BaseUser {
