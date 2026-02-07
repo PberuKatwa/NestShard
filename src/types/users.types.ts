@@ -17,7 +17,8 @@ export interface BaseUser {
 
 export interface UserPayload extends BaseUser {
   id?: number;
-  lastName: string;
+
+  last_name: string;
   email: string;
   password: string;
   fileId: number;
@@ -47,4 +48,4 @@ export interface DecodedUser {
   exp:number
 }
 
-export interface UserApiResponse extends ApiResponse<User> { };
+export interface UserApiResponse extends ApiResponse<BaseUser> { };

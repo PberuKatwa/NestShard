@@ -6,7 +6,7 @@ import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import type { DecodedUser, User } from "src/types/users.types";
+import type { BaseUser, DecodedUser, User, UserPayload } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
@@ -63,22 +63,23 @@ export class UsersModel{
     }
   }
 
-  async createUser( firstName:string, lastName:string, email:string, password:string, fileId:number ):Promise<User> {
+  async createUser( payload:UserPayload ):Promise<BaseUser> {
     try {
 
-      this.logger.warn(`Atttempting to create user with name:${firstName} with email:${email}.`)
+      const { first_name, last_name, email, password, fileId } = payload;
+      this.logger.warn(`Atttempting to create user with name:${first_name}.`)
 
       const hashedPassword = await bcrypt.hash(password, 10)
 
       const query = `
         INSERT INTO users ( first_name, last_name, email, password, file_id )
         VALUES( $1, $2, $3, $4, $5 )
-        RETURNING id, first_name, last_name, email, file_id, role;
+        RETURNING first_name;
       `
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [firstName, lastName, email.toLowerCase(), hashedPassword, fileId ]);
-      const user:User = result.rows[0]
+      const result = await pgPool.query(query, [first_name, last_name, email.toLowerCase(), hashedPassword, fileId ]);
+      const user:BaseUser = result.rows[0]
 
       this.logger.info(`Successfully created user`)
 
