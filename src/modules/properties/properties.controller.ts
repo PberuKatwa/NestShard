@@ -151,12 +151,11 @@ export class PropertyController{
 
       const { id } = req.params;
 
-      const property:Property = await this.properties.trashProperty(parseInt(id))
+      await this.properties.trashProperty(parseInt(id))
 
       const response: ApiResponse = {
         success: true,
         message: 'Successfully trashed property',
-        data:property
       }
 
       return res.status(200).json(response)

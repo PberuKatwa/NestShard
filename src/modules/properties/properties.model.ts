@@ -170,7 +170,7 @@ export class PropertiesModel {
     }
   }
 
-  async trashProperty(id:number):Promise<Property> {
+  async trashProperty(id:number):Promise<void> {
     try {
 
       this.logger.warn(`Attempting to trash property with id:${id}`)
@@ -178,15 +178,15 @@ export class PropertiesModel {
       const query = `
         UPDATE properties
         SET status=$1
-        WHERE id=$2
-        RETURNING id,name,price,is_rental,file_id,location,description,status ;
+        WHERE id=$2;
       `;
+      // RETURNING id,name,price,is_rental,file_id,location,description,status ;
 
       const result = await pool.query(query, ['trash', id]);
-      const property:Property = result.rows[0];
+      // const property:Property = result.rows[0];
       this.logger.info(`Successfully trashed property`)
 
-      return property;
+      // return property;
     } catch (error) {
       throw error;
     }
