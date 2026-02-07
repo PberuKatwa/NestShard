@@ -21,6 +21,14 @@ export interface AuthUser extends BaseUser {
   role: string;
 };
 
+export interface UserProfile extends BaseUser {
+  first_name: string;
+  last_name: string;
+  file_id: number | null;
+  file_url: string | null;
+  signed_url: string | null;
+}
+
 export interface DecodedUser {
   userId: string,
   email: string,
