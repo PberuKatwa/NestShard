@@ -66,19 +66,19 @@ export class UsersModel{
   async createUser( payload:UserPayload ):Promise<BaseUser> {
     try {
 
-      const { first_name, last_name, email, password, fileId } = payload;
+      const { first_name, last_name, email, password } = payload;
 
       this.logger.warn(`Atttempting to create user with name:${first_name}.`);
       const hashedPassword = await bcrypt.hash(password, 10)
 
       const query = `
-        INSERT INTO users ( first_name, last_name, email, password, file_id )
-        VALUES( $1, $2, $3, $4, $5 )
+        INSERT INTO users ( first_name, last_name, email, password )
+        VALUES( $1, $2, $3, $4 )
         RETURNING first_name;
       `
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [first_name, last_name, email.toLowerCase(), hashedPassword, fileId ]);
+      const result = await pgPool.query(query, [first_name, last_name, email.toLowerCase(), hashedPassword ]);
       const user:BaseUser = result.rows[0]
 
       this.logger.info(`Successfully created user`)

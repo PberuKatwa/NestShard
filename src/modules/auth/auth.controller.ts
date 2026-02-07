@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import { DecodedUser, UserApiResponse, User } from "src/types/users.types";
+import { DecodedUser, UserApiResponse, User, UserPayload } from "src/types/users.types";
 
 @Controller('auth')
 export class AuthController{
@@ -25,6 +25,13 @@ export class AuthController{
     try {
 
       const { firstName, lastName, email, password } = createUserDto;
+
+      const payload: UserPayload = {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password
+      }
 
       const user = await this.user.createUser(firstName, lastName, email, password)
 

@@ -17,11 +17,10 @@ export interface BaseUser {
 
 export interface UserPayload extends BaseUser {
   id?: number;
-
   last_name: string;
   email: string;
   password: string;
-  fileId: number;
+  fileId?: number;
 }
 
 export interface AuthUser extends BaseUser {
