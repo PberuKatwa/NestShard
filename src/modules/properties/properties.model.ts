@@ -188,7 +188,7 @@ export class PropertiesModel {
     }
   }
 
-  async updateProperty( id:number, name:string, price:number, description:string, imageUrl:string ):Promise<void> {
+  async updateProperty( id:number, name:string, price:number, description:string, fileId:number ):Promise<void> {
     try {
 
       this.logger.warn(`Attempting to update property`);
@@ -200,7 +200,7 @@ export class PropertiesModel {
         WHERE id=$5;
       `;
 
-      await pool.query(query,[name,price,description,imageUrl,id]);
+      await pool.query(query, [name, price, description, fileId, id]);
     } catch (error) {
       throw error;
     }

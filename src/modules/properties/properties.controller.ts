@@ -175,21 +175,11 @@ export class PropertyController{
   @UseInterceptors(FileInterceptor('image'))
   async updateProperty(
     @Body() body:any,
-    @UploadedFile(
-        new ParseFilePipe({
-          validators: [
-            new MaxFileSizeValidator({ maxSize: 5242880 }),
-            new FileTypeValidator({ fileType: '.(png|jpeg|jpg|webp)' }),
-          ],
-        }),
-      )
-    file: Express.Multer.File,
     @Res() res:Response
   ) {
     try {
 
-      const { id, name, price, description } = body;
-      const { key } = await this.garage.uploadFile(file);
+      const { id, name, price, fileId, description } = body;
       const property = await this.properties.updateProperty(id, name, price, description, key )
 
       const response: ApiResponse = {
