@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import type { DecodedUser, UserApiResponse, User, UserPayload, BaseUser, SignedUser } from "src/types/users.types";
+import type { DecodedUser, UserApiResponse, User, BaseUser, SignedUser, CreateUserPayload, UpdateUserPayload } from "src/types/users.types";
 
 @Controller('auth')
 export class AuthController{
@@ -26,7 +26,7 @@ export class AuthController{
 
       const { firstName, lastName, email, password } = createUserDto;
 
-      const payload: UserPayload = {
+      const payload: CreateUserPayload = {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -113,9 +113,16 @@ export class AuthController{
   async updateUser(@Req() req:Request, @Res() res:Response) {
     try {
 
-      const data: UserPayload = req.body;
+      const { id, firstName, lastName, fileId } = req.body;
 
-      const { id, email, first_name, last_name, file_id } = data;
+      const payload: UpdateUserPayload = {
+        id,
+        first_name: firstName,
+        last_name: lastName,
+        file_id:fileId
+      }
+
+      const { id, first_name, last_name, file_id } = data;
       const user = await this.user.updateUser(data);
 
       const response: UserApiResponse = {
