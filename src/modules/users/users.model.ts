@@ -151,8 +151,8 @@ export class UsersModel{
 
       this.logger.warn(`Attempting to update user.`);
 
-      const query = ` UPDATE users SET first_name=$1, last_name=$2, fileId=$4
-                      WHERE id=$5;`
+      const query = ` UPDATE users SET first_name=$1, last_name=$2, file_id=$3
+                      WHERE id=$4;`
 
       const pgPool = this.pgConfig.getPool();
       await pgPool.query(query, [firstName, lastName, fileId, id]);
