@@ -6,7 +6,7 @@ import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import type { AuthUser, BaseUser, DecodedUser, SignedUser, User, UserPayload, UserProfile } from "src/types/users.types";
+import type { AuthUser, BaseUser, CreateUserPayload, DecodedUser, SignedUser, User, UserPayload, UserProfile } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
@@ -63,11 +63,12 @@ export class UsersModel{
     }
   }
 
-  async createUser( payload:UserPayload ):Promise<BaseUser> {
+  async createUser( payload:CreateUserPayload ):Promise<BaseUser> {
     try {
 
       const { first_name, last_name, email, password } = payload;
       if (!password) throw new Error(`Please provide a password`);
+      if (!email) throw new Error(`Please provide an email`);
 
       this.logger.warn(`Atttempting to create user with name:${first_name}.`);
       const hashedPassword = await bcrypt.hash(password, 10)

@@ -114,7 +114,9 @@ export class AuthController{
     try {
 
       const data: UserPayload = req.body;
-      await this.user.updateUser(data);
+
+      const { id, email, first_name, last_name, file_id } = data;
+      const user = await this.user.updateUser(data);
 
       const response: UserApiResponse = {
         success: true,
@@ -128,7 +130,9 @@ export class AuthController{
         success: true,
         message:`${error}`
       }
+
       this.logger.error(`Error in updating user`, error)
+
       return res.status(500).json(response)
 
     }

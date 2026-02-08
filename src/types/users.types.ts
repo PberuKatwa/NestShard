@@ -15,12 +15,16 @@ export interface BaseUser {
   first_name: string;
 }
 
-export interface UserPayload extends BaseUser {
-  id?: number;
+export interface CreateUserPayload extends BaseUser {
   last_name: string;
   email: string;
-  password?: string;
-  file_id?: number | null;
+  password: string;
+}
+
+export interface UpdateUserPayload extends BaseUser{
+  id: number;
+  last_name: string;
+  file_id: number | null;
 }
 
 export interface SignedUser {
