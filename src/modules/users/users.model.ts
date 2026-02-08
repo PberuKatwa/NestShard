@@ -66,11 +66,11 @@ export class UsersModel{
   async createUser( payload:CreateUserPayload ):Promise<BaseUser> {
     try {
 
-      const { first_name, last_name, email, password } = payload;
+      const { firstName, lastName, email, password } = payload;
       if (!password) throw new Error(`Please provide a password`);
       if (!email) throw new Error(`Please provide an email`);
 
-      this.logger.warn(`Atttempting to create user with name:${first_name}.`);
+      this.logger.warn(`Atttempting to create user with name:${firstName}.`);
       const hashedPassword = await bcrypt.hash(password, 10)
 
       const query = `
@@ -80,7 +80,7 @@ export class UsersModel{
       `
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [first_name, last_name, email.toLowerCase(), hashedPassword ]);
+      const result = await pgPool.query(query, [firstName, lastName, email.toLowerCase(), hashedPassword ]);
       const user:BaseUser = result.rows[0]
 
       this.logger.info(`Successfully created user`);
