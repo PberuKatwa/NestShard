@@ -106,15 +106,7 @@ export class AuthController{
   async updateUser(@Req() req:Request, @Res() res:Response) {
     try {
 
-      const { id, firstName, lastName, fileId } = req.body;
-
-      const payload: UpdateUserPayload = {
-        id,
-        first_name: firstName,
-        last_name: lastName,
-        file_id:fileId
-      }
-
+      const payload: UpdateUserPayload = req.body;
       await this.user.updateUser(payload);
 
       const response: UserApiResponse = {
@@ -131,7 +123,6 @@ export class AuthController{
       }
 
       this.logger.error(`Error in updating user`, error)
-
       return res.status(500).json(response)
 
     }
