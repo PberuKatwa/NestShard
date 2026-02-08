@@ -24,20 +24,13 @@ export class AuthController{
   ): Promise<ApiResponse> {
     try {
 
-      const { firstName, lastName, email, password } = createUserDto;
-
-      const payload: CreateUserPayload = {
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        password
-      }
+      const payload:CreateUserPayload = createUserDto;
 
       const user:BaseUser = await this.user.createUser(payload)
 
       const response: ApiResponse = {
         success: true,
-        message: `Successfully created user with email ${email}`,
+        message: `Successfully created user with email ${payload.email}`,
         data:user
       }
 
