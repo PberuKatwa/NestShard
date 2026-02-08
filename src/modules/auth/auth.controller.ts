@@ -128,9 +128,7 @@ export class AuthController{
         success: true,
         message:`${error}`
       }
-
       this.logger.error(`Error in updating user`, error)
-
       return res.status(500).json(response)
 
     }
