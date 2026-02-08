@@ -19,8 +19,8 @@ export interface UserPayload extends BaseUser {
   id?: number;
   last_name: string;
   email: string;
-  password: string;
-  fileId?: number;
+  password?: string;
+  file_id: number | null;
 }
 
 export interface SignedUser {

@@ -67,6 +67,7 @@ export class UsersModel{
     try {
 
       const { first_name, last_name, email, password } = payload;
+      if (!password) throw new Error(`Please provide a password`);
 
       this.logger.warn(`Atttempting to create user with name:${first_name}.`);
       const hashedPassword = await bcrypt.hash(password, 10)
@@ -142,16 +143,18 @@ export class UsersModel{
     }
   }
 
-  async updateUser(id: number, firstName: string, lastName: string, email: string):Promise<User> {
+  async updateUser(payload:UserPayload):Promise<User> {
     try {
 
-      this.logger.warn(`Attempting to update user with id:${id}`);
+      const { id, first_name, last_name, email, file_id} = payload;
 
-      const query = ` UPDATE users SET first_name=$1, last_name=$2, email=$3
-                      WHERE id=$4 RETURNING id, first_name, last_name, email, image_url;`
+      this.logger.warn(`Attempting to update user.`);
+
+      const query = ` UPDATE users SET first_name=$1, last_name=$2, email=$3, fileId=$4
+                      WHERE id=$5;`
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [firstName, lastName, email, id]);
+      const result = await pgPool.query(query, [first_name, last_name, email, file_id, id]);
       const user: User = result.rows[0];
 
       this.logger.info(`Successfully updated user with id ${id}`);
