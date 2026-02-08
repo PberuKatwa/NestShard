@@ -4,11 +4,13 @@ import { AuthController } from "./auth.controller";
 import { UsersModule } from "../users/users.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { GarageModule } from "../garage/garage.module";
 
 @Global()
 @Module({
   imports: [
     UsersModule,
+    GarageModule,
     JwtModule.registerAsync({
       global: true,
       useFactory: async (configService: ConfigService) => ({

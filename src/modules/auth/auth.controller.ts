@@ -9,13 +9,15 @@ import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
 import type { DecodedUser, UserApiResponse, User, BaseUser, SignedUser, CreateUserPayload, UpdateUserPayload } from "src/types/users.types";
+import { GarageService } from "../garage/garage.service";
 
 @Controller('auth')
 export class AuthController{
 
   constructor(
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
-    private readonly user:UsersModel
+    private readonly user: UsersModel,
+    private readonly garage:GarageService
   ) { }
 
   @Post('register')
@@ -81,6 +83,9 @@ export class AuthController{
     try {
 
       const user = await this.user.fetchUser(currentUser.userId);
+      if (user.file_url) {
+        user.signed_url = await this.garage.getSignedFileURl(user.file_url);
+      }
 
       const response: UserApiResponse = {
         success: true,
