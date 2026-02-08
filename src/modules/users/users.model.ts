@@ -146,7 +146,7 @@ export class UsersModel{
   async updateUser(payload:UserPayload):Promise<User> {
     try {
 
-      const { id, first_name, last_name, email, file_id} = payload;
+      const { id, first_name, last_name, email, file_id } = payload;
 
       this.logger.warn(`Attempting to update user.`);
 
