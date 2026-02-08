@@ -1,12 +1,11 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { DecodedUser } from "src/types/users.types";
 
 export const CurrentUser = createParamDecorator(
   function (data: string, ctx: ExecutionContext) {
     try {
 
       const request = ctx.switchToHttp().getRequest();
-      const user:DecodedUser = request.user;
+      const user = request.user;
 
       if (!user) {
         throw new Error(`No user was found`)
