@@ -143,7 +143,7 @@ export class UsersModel{
     }
   }
 
-  async updateUser(payload:UserPayload):Promise<User> {
+  async updateUser(payload:UserPayload):Promise<void> {
     try {
 
       const { id, first_name, last_name, email, file_id } = payload;
@@ -155,12 +155,9 @@ export class UsersModel{
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(query, [first_name, last_name, email, file_id, id]);
-      const user: User = result.rows[0];
+
 
       this.logger.info(`Successfully updated user with id ${id}`);
-
-      return user;
-
     } catch (error) {
       throw error;
     }
