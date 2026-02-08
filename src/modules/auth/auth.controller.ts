@@ -113,15 +113,14 @@ export class AuthController{
   async updateUser(@Req() req:Request, @Res() res:Response) {
     try {
 
-      const data: User = req.body;
+      const data: UserPayload = req.body;
 
-      const { id, email, first_name, last_name } = data;
-      const user = await this.user.updateUser(id, first_name, last_name, email);
+      const { id, email, first_name, last_name, file_id } = data;
+      const user = await this.user.updateUser(data);
 
       const response: UserApiResponse = {
         success: true,
         message: `Successfully updated user`,
-        data:user
       }
 
       return res.status(200).json(response)

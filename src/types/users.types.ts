@@ -20,7 +20,7 @@ export interface UserPayload extends BaseUser {
   last_name: string;
   email: string;
   password?: string;
-  file_id: number | null;
+  file_id?: number | null;
 }
 
 export interface SignedUser {
