@@ -147,7 +147,7 @@ export class UsersModel{
   async updateUser(payload:UpdateUserPayload):Promise<void> {
     try {
 
-      const { id, first_name, last_name, file_id } = payload;
+      const { id, firstName, lastName, fileId } = payload;
 
       this.logger.warn(`Attempting to update user.`);
 
@@ -155,7 +155,7 @@ export class UsersModel{
                       WHERE id=$5;`
 
       const pgPool = this.pgConfig.getPool();
-      await pgPool.query(query, [first_name, last_name, file_id, id]);
+      await pgPool.query(query, [firstName, lastName, fileId, id]);
 
 
       this.logger.info(`Successfully updated user with id ${id}`);

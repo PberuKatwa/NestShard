@@ -22,7 +22,7 @@ export interface CreateUserPayload {
   password: string;
 }
 
-export interface UpdateUserPayload extends BaseUser{
+export interface UpdateUserPayload{
   id: number;
   firstName: string;
   lastName: string;
