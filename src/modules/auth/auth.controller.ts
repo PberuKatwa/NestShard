@@ -122,7 +122,7 @@ export class AuthController{
         file_id:fileId
       }
 
-      const user = await this.user.updateUser(payload);
+      await this.user.updateUser(payload);
 
       const response: UserApiResponse = {
         success: true,
