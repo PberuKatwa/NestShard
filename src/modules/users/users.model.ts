@@ -6,7 +6,7 @@ import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import type { AuthUser, BaseUser, CreateUserPayload, DecodedUser, SignedUser, UpdateUserPayload, User, UserProfile } from "src/types/users.types";
+import type { AuthUser, BaseUser, CreateUserPayload, SignedUser, UpdateUserPayload, UserProfile } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
