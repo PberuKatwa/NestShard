@@ -6,7 +6,7 @@ import type { AppLogger } from "src/logger/winston.logger";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import type { AuthUser, BaseUser, CreateUserPayload, DecodedUser, SignedUser, User, UserPayload, UserProfile } from "src/types/users.types";
+import type { AuthUser, BaseUser, CreateUserPayload, DecodedUser, SignedUser, UpdateUserPayload, User, UserProfile } from "src/types/users.types";
 
 @Injectable()
 export class UsersModel{
@@ -144,18 +144,18 @@ export class UsersModel{
     }
   }
 
-  async updateUser(payload:UserPayload):Promise<void> {
+  async updateUser(payload:UpdateUserPayload):Promise<void> {
     try {
 
-      const { id, first_name, last_name, email, file_id } = payload;
+      const { id, first_name, last_name, file_id } = payload;
 
       this.logger.warn(`Attempting to update user.`);
 
-      const query = ` UPDATE users SET first_name=$1, last_name=$2, email=$3, fileId=$4
+      const query = ` UPDATE users SET first_name=$1, last_name=$2, fileId=$4
                       WHERE id=$5;`
 
       const pgPool = this.pgConfig.getPool();
-      const result = await pgPool.query(query, [first_name, last_name, email, file_id, id]);
+      await pgPool.query(query, [first_name, last_name, file_id, id]);
 
 
       this.logger.info(`Successfully updated user with id ${id}`);
