@@ -6,7 +6,7 @@ import type { ApiResponse } from "src/types/api.types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
 import { BlogModel } from "./blog.model";
-import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload, SingleBlogMinimalApiResponse } from "src/types/blog.types";
+import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload, SingleBlogMinimalApiResponse, FullBlog } from "src/types/blog.types";
 
 @Controller('blogs')
 @UseGuards(AuthGuard)
@@ -64,7 +64,17 @@ export class BlogController{
 
       const { page, limit } = req.params;
 
-      const blogResult:AllBlogs = await this.blog.getAllBlogs(parseInt(page), parseInt(limit))
+      const blogResult: AllBlogs = await this.blog.getAllBlogs(parseInt(page), parseInt(limit))
+
+      const blogMap = await Promise.all(
+        blogResult.blogs.map(
+          async function (blog:FullBlog) {
+            if (blog.file_url) {
+              blog.signed_url = await
+            }
+          }
+        )
+      )
 
       const response: AllBlogsApiResponse = {
         success: true,
