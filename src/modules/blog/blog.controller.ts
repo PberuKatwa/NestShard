@@ -107,6 +107,10 @@ export class BlogController{
 
       const blog = await this.blog.getBlog(parseInt(id));
 
+      if (blog.file_url) {
+        blog.signed_url = await this.garage.getSignedFileURl(blog.file_url)
+      }
+
       const response: SingleBlogApiResponse = {
         success: true,
         message: `Successfully fetched blog`,
