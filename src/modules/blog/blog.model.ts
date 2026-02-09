@@ -66,7 +66,7 @@ export class BlogModel{
       const query = `
         INSERT INTO blogs (title,author_id,content, file_id)
         VALUES($1,$2,$3,$4)
-        RETURNING id,title,author_id;
+        RETURNING id,title;
       `
 
       const pool = this.pgConfig.getPool();
@@ -91,8 +91,15 @@ export class BlogModel{
       const offset = (page -1) * limit
 
       const dataQuery = `
-      SELECT id, title, author_id,content,image_url
-      FROM blogs
+      SELECT
+        b.id,
+        b.title,
+        b.author_id,
+        b.content,
+        b.file_id
+        f.file_url as file_url
+      FROM blogs b
+      LEFT JOIN files f ON b.file_id = f.id
       WHERE status!= 'trash'
       ORDER BY created_at DESC
       LIMIT $1 OFFSET $2;
