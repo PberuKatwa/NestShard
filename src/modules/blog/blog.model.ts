@@ -178,18 +178,15 @@ export class BlogModel{
 
   }
 
-  async trashBlog(id:number):Promise<Blog> {
+  async trashBlog(id:number):Promise<void> {
     try {
 
       this.logger.warn(`Attempting to trash blog with id:${id}`)
       const pool = this.pgConfig.getPool();
       const query = ` UPDATE blogs SET status=$1 WHERE id=$2;`;
 
-      const result = await pool.query(query, ['trash', id]);
-      const blog:Blog = result.rows[0];
+      await pool.query(query, ['trash', id]);
       this.logger.info(`Successfully trashed blog`)
-
-      return blog
     } catch (error) {
       throw error;
     }
