@@ -5,7 +5,7 @@ export interface Blog{
   title: string;
 }
 
-export interface FullBlog {
+export interface FullBlog extends Blog{
   author_id: number;
   content: string;
   file_id: number | null;
