@@ -6,7 +6,7 @@ import type { ApiResponse } from "src/types/api.types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
 import { BlogModel } from "./blog.model";
-import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse } from "src/types/blog.types";
+import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload } from "src/types/blog.types";
 
 @Controller('blogs')
 @UseGuards(AuthGuard)
@@ -26,12 +26,13 @@ export class BlogController{
   ): Promise<Response> {
     try {
 
-      const { title, content } = req.body;
+      const { title, content, fileId } = req.body;
 
-      const payload: BlogPayload = {
+      const payload: CreateBlogPayload = {
         title,
         authorId: user.userId,
-        content
+        content,
+        fileId
       }
 
       const blog = await this.blog.createBlog(payload);

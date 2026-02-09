@@ -28,7 +28,7 @@ export interface UpdateBlogPayload extends BlogPayload{
 }
 
 export interface AllBlogs {
-  blogs: Blog[];
+  blogs: FullBlog[];
   pagination: {
     totalCount: number;
     currentPage: number;
@@ -37,4 +37,4 @@ export interface AllBlogs {
 }
 
 export interface AllBlogsApiResponse extends ApiResponse<AllBlogs> { };
-export interface SingleBlogApiResponse extends ApiResponse<Blog> { };
+export interface SingleBlogApiResponse extends ApiResponse<FullBlog> { };

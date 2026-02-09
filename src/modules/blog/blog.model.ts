@@ -3,7 +3,7 @@ import { Pool } from "pg";
 import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
-import { AllBlogs, Blog, BlogPayload, CreateBlogPayload } from "src/types/blog.types";
+import { AllBlogs, Blog, BlogPayload, CreateBlogPayload, FullBlog } from "src/types/blog.types";
 
 @Injectable()
 export class BlogModel{
@@ -100,8 +100,8 @@ export class BlogModel{
         f.file_url as file_url
       FROM blogs b
       LEFT JOIN files f ON b.file_id = f.id
-      WHERE status!= 'trash'
-      ORDER BY created_at DESC
+      WHERE b.status!= 'trash'
+      ORDER BY b.created_at DESC
       LIMIT $1 OFFSET $2;
       `;
       const countQuery = `SELECT COUNT (*)
@@ -133,18 +133,26 @@ export class BlogModel{
     }
   }
 
-  async getBlog(blogId: number):Promise<Blog> {
+  async getBlog(blogId: number):Promise<FullBlog> {
     try {
 
       this.logger.warn(`Attempting to fetch blog with id:${blogId}`)
 
       const pgPool = this.pgConfig.getPool();
       const result = await pgPool.query(`
-        SELECT id,title,author_id,content,image_url
-        FROM blogs WHERE id=$1 AND status!= 'trash' ;`,
+        SELECT
+          b.id,
+          b.title,
+          b.author_id,
+          b.content,
+          b.file_id,
+          f.file_url as file_url
+        FROM blogs b
+
+        WHERE id=$1 AND status!= 'trash' ;`,
         [blogId]
       );
-      const blog:Blog = result.rows[0];
+      const blog:FullBlog = result.rows[0];
 
       if (!blog || blog === undefined) throw new Error(`No blog was found`);
 
