@@ -9,7 +9,6 @@ export class LoggerMiddleware implements NestMiddleware {
 
     logger.logAPIStart(req);
 
-    // Listen for the 'finish' event to log completion
     res.on('finish', () => {
       const duration = Date.now() - startTime;
       logger.logAPIRequest(req, res, duration);
