@@ -96,7 +96,7 @@ export class BlogModel{
         b.title,
         b.author_id,
         b.content,
-        b.file_id
+        b.file_id,
         f.file_url as file_url
       FROM blogs b
       LEFT JOIN files f ON b.file_id = f.id
