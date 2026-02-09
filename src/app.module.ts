@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { s3Config,postgresEnv,globalConfig } from './config';
 import { AppLoggerModule } from './logger/logger.module';
@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { BlogModule } from './modules/blog/blog.module';
 import Joi from 'joi';
+import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 
 @Module({
   imports: [
@@ -37,4 +38,8 @@ import Joi from 'joi';
     BlogModule
   ]
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
