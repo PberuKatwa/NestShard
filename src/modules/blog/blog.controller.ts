@@ -6,7 +6,7 @@ import type { ApiResponse } from "src/types/api.types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
 import { BlogModel } from "./blog.model";
-import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload } from "src/types/blog.types";
+import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload, SingleBlogMinimalApiResponse } from "src/types/blog.types";
 
 @Controller('blogs')
 @UseGuards(AuthGuard)
@@ -37,7 +37,7 @@ export class BlogController{
 
       const blog = await this.blog.createBlog(payload);
 
-      const response:SingleBlogApiResponse = {
+      const response:SingleBlogMinimalApiResponse = {
         success: true,
         message: `Successfully created post`,
         data:blog
@@ -91,7 +91,7 @@ export class BlogController{
 
       const { id } = req.params;
 
-      const blog:Blog = await this.blog.getBlog(parseInt(id));
+      const blog = await this.blog.getBlog(parseInt(id));
 
       const response: SingleBlogApiResponse = {
         success: true,
@@ -120,10 +120,9 @@ export class BlogController{
       const { id, title, content } = req.body;
       const blog:Blog = await this.blog.updateBlog(id, title, content);
 
-      const response: SingleBlogApiResponse= {
+      const response: ApiResponse= {
         success: true,
         message: `Successfully updated blog`,
-        data:blog
       }
 
       return res.status(200).json(response)
@@ -147,10 +146,9 @@ export class BlogController{
 
       const blog:Blog = await this.blog.trashBlog(parseInt(id))
 
-      const response: SingleBlogApiResponse = {
+      const response: ApiResponse = {
         success: true,
         message: 'Successfully trashed blog',
-        data:blog
       }
 
       return res.status(200).json(response)

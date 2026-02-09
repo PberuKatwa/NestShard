@@ -38,3 +38,4 @@ export interface AllBlogs {
 
 export interface AllBlogsApiResponse extends ApiResponse<AllBlogs> { };
 export interface SingleBlogApiResponse extends ApiResponse<FullBlog> { };
+export interface SingleBlogMinimalApiResponse extends ApiResponse<Blog> { };

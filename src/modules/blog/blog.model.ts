@@ -148,7 +148,7 @@ export class BlogModel{
           b.file_id,
           f.file_url as file_url
         FROM blogs b
-
+        LEFT JOIN files f ON b.file_id = f.id
         WHERE id=$1 AND status!= 'trash' ;`,
         [blogId]
       );
