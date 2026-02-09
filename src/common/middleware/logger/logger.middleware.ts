@@ -4,7 +4,12 @@ import { logger } from 'src/logger/winston.logger';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: any, res: any, next: () => void) {
+  use(req: Request, res: Response, next: () => void) {
+    const startTime = Date.now();
+
+    logger.logAPIStart(req);
+
+
     next();
   }
 }
