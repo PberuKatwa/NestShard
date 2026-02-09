@@ -6,7 +6,7 @@ import type { ApiResponse } from "src/types/api.types";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
 import { BlogModel } from "./blog.model";
-import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload, SingleBlogMinimalApiResponse, FullBlog } from "src/types/blog.types";
+import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload, SingleBlogMinimalApiResponse, FullBlog, UpdateBlogPayload } from "src/types/blog.types";
 import { GarageService } from "../garage/garage.service";
 
 @Controller('blogs')
@@ -135,8 +135,8 @@ export class BlogController{
   async updateBlog( @Req() req:Request, @Res() res:Response ):Promise<Response> {
     try {
 
-      const { id, title, content } = req.body;
-      const blog:Blog = await this.blog.updateBlog(id, title, content);
+      const data:UpdateBlogPayload = req.body;
+      await this.blog.updateBlog(data);
 
       const response: ApiResponse= {
         success: true,

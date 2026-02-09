@@ -169,15 +169,9 @@ export class BlogModel{
 
       const { id, title, content, fileId } = payload;
       const pgPool = this.pgConfig.getPool();
-      const query = ` UPDATE blogs SET title=$1, content=$2, file_id=$3 WHERE id=$4
-                      RETURNING id,title,author_id,content,image_url ;
-                    `;
+      const query = ` UPDATE blogs SET title=$1, content=$2, file_id=$3 WHERE id=$4;`;
       const result = await pgPool.query(query, [title, content, fileId, id]);
-      const blog = result.rows[0];
-      this.logger.info(`Successfully updated blogs`)
-
-      return blog;
-
+      this.logger.info(`Successfully updated blog`)
     } catch (error) {
       throw error;
     }
