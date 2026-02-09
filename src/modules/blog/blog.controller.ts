@@ -162,7 +162,7 @@ export class BlogController{
 
       const { id } = req.params;
 
-      const blog:Blog = await this.blog.trashBlog(parseInt(id))
+      await this.blog.trashBlog(parseInt(id))
 
       const response: ApiResponse = {
         success: true,
