@@ -1,14 +1,19 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, Next } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
 import { logger } from 'src/logger/winston.logger';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: () => void) {
+  use(req: Request, res: Response, next: NextFunction) {
     const startTime = Date.now();
 
     logger.logAPIStart(req);
 
+    // Listen for the 'finish' event to log completion
+    res.on('finish', () => {
+      const duration = Date.now() - startTime;
+      logger.logAPIRequest(req, res, duration);
+    });
 
     next();
   }
