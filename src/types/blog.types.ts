@@ -13,7 +13,16 @@ export interface BlogPayload{
   title: string;
   authorId?: number|null;
   content: string;
+  fileId: number;
 }
+
+export interface CreateBlogPayload extends BlogPayload{
+  title: string;
+  content: string;
+  fileId: number;
+}
+
+export inte
 
 export interface AllBlogs {
   blogs: Blog[];
