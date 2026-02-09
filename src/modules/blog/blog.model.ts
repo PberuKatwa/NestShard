@@ -149,17 +149,15 @@ export class BlogModel{
           f.file_url as file_url
         FROM blogs b
         LEFT JOIN files f ON b.file_id = f.id
-        WHERE id=$1 AND status!= 'trash' ;`,
+        WHERE b.id=$1 AND b.status!= 'trash' ;`,
         [blogId]
       );
       const blog:FullBlog = result.rows[0];
 
       if (!blog || blog === undefined) throw new Error(`No blog was found`);
-
       this.logger.info(`Successfully fetched individual blog`)
 
       return blog;
-
     } catch (error) {
       throw error;
     }
