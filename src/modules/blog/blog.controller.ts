@@ -7,6 +7,7 @@ import { AuthGuard } from "../auth/guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
 import { BlogModel } from "./blog.model";
 import { AllBlogs, AllBlogsApiResponse, Blog, BlogPayload, SingleBlogApiResponse, CreateBlogPayload, SingleBlogMinimalApiResponse, FullBlog } from "src/types/blog.types";
+import { GarageService } from "../garage/garage.service";
 
 @Controller('blogs')
 @UseGuards(AuthGuard)
@@ -14,8 +15,8 @@ export class BlogController{
 
   constructor(
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
-    private readonly blog:BlogModel
-
+    private readonly blog: BlogModel,
+    private readonly garage:GarageService
   ) { }
 
   @Post('')
@@ -68,9 +69,9 @@ export class BlogController{
 
       const blogMap = await Promise.all(
         blogResult.blogs.map(
-          async function (blog:FullBlog) {
+          async (blog:FullBlog)=> {
             if (blog.file_url) {
-              blog.signed_url = await
+              blog.signed_url = await this.garage.getSignedFileURl(blog.file_url);
             }
           }
         )
