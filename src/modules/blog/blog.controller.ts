@@ -64,20 +64,18 @@ export class BlogController{
     try {
 
       const { page, limit } = req.params;
+      const { blogs, pagination } = await this.blog.getAllBlogs(parseInt(page), parseInt(limit));
 
-      const {blogs, pagination} = await this.blog.getAllBlogs(parseInt(page), parseInt(limit))
-
-
-      const blogMap:FullBlog[] = await Promise.all(
+      const blogMap: FullBlog[] = await Promise.all(
         blogs.map(
-          async (blog:FullBlog)=> {
+          async (blog: FullBlog) => {
             if (blog.file_url) {
               blog.signed_url = await this.garage.getSignedFileURl(blog.file_url);
             }
             return blog
           }
         )
-      )
+      );
 
       const response: AllBlogsApiResponse = {
         success: true,
