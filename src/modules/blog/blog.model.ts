@@ -3,7 +3,7 @@ import { Pool } from "pg";
 import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
-import { AllBlogs, Blog, BlogPayload, CreateBlogPayload, FullBlog } from "src/types/blog.types";
+import { AllBlogs, Blog, BlogPayload, CreateBlogPayload, FullBlog, UpdateBlogPayload } from "src/types/blog.types";
 
 @Injectable()
 export class BlogModel{
@@ -163,15 +163,16 @@ export class BlogModel{
     }
   }
 
-  async updateBlog(blogId: number, title:string, content:string):Promise<Blog> {
+  async updateBlog(payload:UpdateBlogPayload):Promise<void> {
     try {
       this.logger.warn(`Attempting to update blog`)
 
+      const { id, title, content, fileId } = payload;
       const pgPool = this.pgConfig.getPool();
       const query = ` UPDATE blogs SET title=$1, content=$2 WHERE id=$3
                       RETURNING id,title,author_id,content,image_url ;
                     `;
-      const result = await pgPool.query(query, [title, content, blogId]);
+      const result = await pgPool.query(query, [title, content, id]);
       const blog = result.rows[0];
       this.logger.info(`Successfully updated blogs`)
 
