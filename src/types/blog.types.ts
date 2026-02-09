@@ -3,9 +3,14 @@ import { ApiResponse } from "./api.types";
 export interface Blog{
   id: number;
   title: string;
+}
+
+export interface FullBlog {
   author_id: number;
   content: string;
-  image_url: string;
+  file_id: number | null;
+  file_url: string | null;
+  signed_url: string | null;
 }
 
 export interface BlogPayload{

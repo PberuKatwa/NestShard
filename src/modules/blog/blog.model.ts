@@ -3,7 +3,7 @@ import { Pool } from "pg";
 import { PostgresConfig } from "src/databases/postgres.config";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
-import { AllBlogs, Blog, BlogPayload } from "src/types/blog.types";
+import { AllBlogs, Blog, BlogPayload, CreateBlogPayload } from "src/types/blog.types";
 
 @Injectable()
 export class BlogModel{
@@ -58,19 +58,19 @@ export class BlogModel{
     }
   }
 
-  async createBlog( payload:BlogPayload):Promise<Blog> {
+  async createBlog( payload:CreateBlogPayload):Promise<Blog> {
     try {
       this.logger.warn(`Attempting to create blog post`)
 
-      const { title, authorId, content } = payload;
+      const { title, authorId, content, fileId } = payload;
       const query = `
-        INSERT INTO blogs (title,author_id,content)
-        VALUES($1,$2,$3)
-        RETURNING id,title,author_id,content,image_url;
+        INSERT INTO blogs (title,author_id,content, file_id)
+        VALUES($1,$2,$3,$4)
+        RETURNING id,title,author_id;
       `
 
       const pool = this.pgConfig.getPool();
-      const result = await pool.query(query,[title,authorId,content]);
+      const result = await pool.query(query,[title,authorId,content,fileId]);
       const blog:Blog = result.rows[0];
 
       this.logger.info(`Successfully created blog`)
