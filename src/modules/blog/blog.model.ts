@@ -183,9 +183,8 @@ export class BlogModel{
 
       this.logger.warn(`Attempting to trash blog with id:${id}`)
       const pool = this.pgConfig.getPool();
-      const query = ` UPDATE blogs SET status=$1 WHERE id=$2
-        RETURNING id,title,author_id,content,image_url ;
-        `;
+      const query = ` UPDATE blogs SET status=$1 WHERE id=$2;`;
+
       const result = await pool.query(query, ['trash', id]);
       const blog:Blog = result.rows[0];
       this.logger.info(`Successfully trashed blog`)
