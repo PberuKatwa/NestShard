@@ -9,20 +9,18 @@ export interface Blog{
 }
 
 export interface BlogPayload{
-  id?:number|null;
   title: string;
-  authorId?: number|null;
   content: string;
   fileId: number;
 }
 
 export interface CreateBlogPayload extends BlogPayload{
-  title: string;
-  content: string;
-  fileId: number;
+  authorId: number;
 }
 
-export inte
+export interface UpdateBlogPayload extends BlogPayload{
+  id: number;
+}
 
 export interface AllBlogs {
   blogs: Blog[];
