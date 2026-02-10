@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import type { UserApiResponse, BaseUser, SignedUser, CreateUserPayload, UpdateUserPayload, AuthUserApiResponse } from "src/types/users.types";
+import type { UserApiResponse, BaseUser, SignedUser, CreateUserPayload, UpdateUserPayload, AuthUserApiResponse, ProfileApiResponse } from "src/types/users.types";
 import { GarageService } from "../garage/garage.service";
 
 @Controller('auth')
@@ -87,7 +87,7 @@ export class AuthController{
         user.signed_url = await this.garage.getSignedFileURl(user.file_url);
       }
 
-      const response: UserApiResponse = {
+      const response: ProfileApiResponse = {
         success: true,
         message: `Successfully fetched your profile`,
         data:user
