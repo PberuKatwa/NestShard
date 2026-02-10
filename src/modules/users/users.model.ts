@@ -114,7 +114,7 @@ export class UsersModel{
 
       const updateResult = await pgPool.query(
         `UPDATE users SET access_token=$1 WHERE id=$2
-        RETURNING id, access_token,first_name; `,
+        RETURNING id, first_name, access_token; `,
         [ token, user.id ]
       )
 
