@@ -8,7 +8,7 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthGuard } from "./guards/auth.guard";
 import { CurrentUser } from "../users/decorators/user.decorator";
-import type { UserApiResponse, BaseUser, SignedUser, CreateUserPayload, UpdateUserPayload } from "src/types/users.types";
+import type { UserApiResponse, BaseUser, SignedUser, CreateUserPayload, UpdateUserPayload, AuthUserApiResponse } from "src/types/users.types";
 import { GarageService } from "../garage/garage.service";
 
 @Controller('auth')
@@ -58,7 +58,7 @@ export class AuthController{
 
       const result = await this.user.validateUserPassword(email, password);
 
-      const response: UserApiResponse = {
+      const response: AuthUserApiResponse = {
         success: true,
         message: `Successfully logged in user ${email}`,
         data:result

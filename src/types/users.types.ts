@@ -39,3 +39,4 @@ export interface UserProfile extends BaseUser {
 }
 
 export interface UserApiResponse extends ApiResponse<BaseUser> { };
+export interface AuthUserApiResponse extends ApiResponse<AuthUser> { };
