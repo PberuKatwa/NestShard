@@ -1,4 +1,4 @@
-import { Controller, Inject, Get, Query, Res, ParseIntPipe } from "@nestjs/common";
+import { Controller, Inject, Get, Query, Res, ParseIntPipe, Req } from "@nestjs/common";
 import type { Request, Response } from "express";
 import { PropertiesModel } from "../properties/properties.model";
 import { BlogModel } from "../blog/blog.model";
@@ -8,7 +8,7 @@ import { AllProperties, Property, PropertyApiResponse } from "src/types/properti
 import { GarageService } from "../garage/garage.service";
 import { isInstance } from "class-validator";
 import { ApiResponse } from "src/types/api.types";
-import { AllBlogsApiResponse, FullBlog } from "src/types/blog.types";
+import { AllBlogsApiResponse, FullBlog, SingleBlogApiResponse } from "src/types/blog.types";
 
 @Controller('public')
 export class PublicController{
@@ -141,6 +141,38 @@ export class PublicController{
       }
 
       return res.status(500).json(response);
+    }
+  }
+
+  @Get('blogs/:id')
+  async getBlog( @Req() req:Request, @Res() res:Response ) {
+    try {
+
+      const { id } = req.params;
+
+      const blog = await this.blog.getBlog(parseInt(id));
+
+      if (blog.file_url) {
+        blog.signed_url = await this.garage.getSignedFileURl(blog.file_url)
+      }
+
+      const response: SingleBlogApiResponse = {
+        success: true,
+        message: `Successfully fetched blog`,
+        data:blog
+      }
+
+      return res.status(200).json(response)
+
+    } catch (error) {
+
+      this.logger.error(`error in fetching blog post`, error)
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+      return res.status(500).json(response);
+
     }
   }
 
