@@ -5,10 +5,12 @@ import { PropertiesModel } from "../properties/properties.model";
 import { BlogModel } from "../blog/blog.model";
 import { GarageModule } from "../garage/garage.module";
 import { GarageService } from "../garage/garage.service";
+import { PublicController } from "./public.controller";
 
 @Module({
   imports: [PropertiesModule, BlogModule, GarageModule],
-  providers:[PropertiesModel,BlogModel,GarageService]
+  controllers:[PublicController],
+  providers:[]
 })
 
 export class PublicModule { };
