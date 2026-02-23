@@ -21,6 +21,7 @@ export class AuthController{
   ) { }
 
   @Post('register')
+  @UseGuards(AuthGuard)
   async createUser(
     @Body() createUserDto: RegisterUserDto
   ): Promise<ApiResponse> {
