@@ -18,6 +18,7 @@ import { AllProperties, Property, PropertyPayload, SinglePropertyApiResponse } f
 
 
 @Controller('properties')
+@UseGuards(AuthGuard)
 export class PropertyController{
 
   constructor(
@@ -27,7 +28,6 @@ export class PropertyController{
   ) { }
 
   @Post('')
-  @UseGuards(AuthGuard)
   @UseInterceptors( FileInterceptor('image') )
   async createProperty(
     @CurrentUser() user:any,
@@ -63,7 +63,6 @@ export class PropertyController{
   }
 
   @Get('all/:page/:limit')
-  @UseGuards(AuthGuard)
   async getAllProperty(@Req() req:Request, @Res() res:Response):Promise<Response> {
     try {
 
@@ -113,7 +112,6 @@ export class PropertyController{
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
   async getProperty( @Req() req:Request, @Res() res:Response ) {
     try {
 
@@ -145,7 +143,6 @@ export class PropertyController{
   }
 
   @Post('trash/:id')
-  @UseGuards(AuthGuard)
   async trashProperty(@Req() req:Request, @Res() res:Response) {
     try {
 
