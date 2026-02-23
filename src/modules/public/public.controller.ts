@@ -25,6 +25,11 @@ export class PublicController{
       let message = "Unknown error";
       let stack = null;
 
+      if (error instanceof Error) {
+        message: error.message;
+        stack: error.stack;
+      }
+
       this.logger.error(`Error in fetching properties for public api`, {
         errorMessage: error.message,
         errorStack:error.stack
