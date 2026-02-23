@@ -11,6 +11,7 @@ import { PropertiesModule } from './modules/properties/properties.module';
 import { BlogModule } from './modules/blog/blog.module';
 import Joi from 'joi';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
+import { PublicModule } from './modules/public/public.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
     UsersModule,
     AuthModule,
     PropertiesModule,
-    BlogModule
+    BlogModule,
+    PublicModule
   ]
 })
 export class AppModule implements NestModule{
