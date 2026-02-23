@@ -1,4 +1,5 @@
-import { Controller,Inject, Get, Query, Res, ParseIntPipe } from "@nestjs/common";
+import { Controller, Inject, Get, Query, Res, ParseIntPipe } from "@nestjs/common";
+import type { Request, Response } from "express";
 import { PropertiesModel } from "../properties/properties.model";
 import { BlogModel } from "../blog/blog.model";
 import { APP_LOGGER } from "src/logger/logger.provider";
@@ -22,7 +23,7 @@ export class PublicController{
   ) {
     try {
 
-    } catch (error: any) {
+    } catch (error: unknown) {
 
       let message = "Unknown error";
       let stack:string | null = null;
@@ -44,8 +45,6 @@ export class PublicController{
 
       return res.status(500).json(response)
     }
-
-
   }
 
 }
