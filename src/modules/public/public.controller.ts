@@ -4,7 +4,8 @@ import { PropertiesModel } from "../properties/properties.model";
 import { BlogModel } from "../blog/blog.model";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
-import { PropertyApiResponse } from "src/types/properties.types";
+import { AllProperties, Property, PropertyApiResponse } from "src/types/properties.types";
+import { GarageService } from "../garage/garage.service";
 
 @Controller('public')
 export class PublicController{
@@ -12,6 +13,7 @@ export class PublicController{
   constructor(
     private readonly properties: PropertiesModel,
     private readonly blog: BlogModel,
+    private readonly garage:GarageService,
     @Inject(APP_LOGGER) private readonly logger:AppLogger
   ) { }
 
@@ -23,6 +25,38 @@ export class PublicController{
   ) {
     try {
 
+      const allProperties: AllProperties = await this.properties.getAllProperties(page, limit);
+
+      const { properties, pagination } = allProperties;
+      const propertiesMap = await Promise.all(
+        properties.map(
+          async (property: Property) => {
+
+            let signedUrl:string | null = null
+            if (property.file_url) {
+              signedUrl = await this.garage.getSignedFileURl(property.file_url)
+            }
+
+            const result = {
+              ...property,
+              signedUrl
+            }
+
+            return result;
+        }
+      )
+      )
+
+      const response: PropertyApiResponse = {
+        success: true,
+        message: "Successsfully fetched properties",
+        data: {
+          properties:propertiesMap,
+          pagination
+        }
+      }
+
+      return res.status(200).json(response)
     } catch (error: unknown) {
 
       let message = "Unknown error";
