@@ -6,6 +6,8 @@ import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
 import { AllProperties, Property, PropertyApiResponse } from "src/types/properties.types";
 import { GarageService } from "../garage/garage.service";
+import { isInstance } from "class-validator";
+import { ApiResponse } from "src/types/api.types";
 
 @Controller('public')
 export class PublicController{
@@ -94,6 +96,22 @@ export class PublicController{
       let message = "Unknown error";
       let stack: string | null = null;
 
+      if (error instanceof Error) {
+        message = error.message,
+        stack = error.stack ?? null;
+      }
+
+      this.logger.error(`Error in getting all blogs`, {
+        errorMessage: message,
+        errorStack:stack
+      })
+
+      const response: ApiResponse = {
+        success: false,
+        message:message
+      }
+
+      return res.status(500).json(response);
     }
   }
 
