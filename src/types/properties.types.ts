@@ -13,6 +13,16 @@ export interface Property {
   status?: string;
 }
 
+export interface CreatePropertyPayload {
+  userId: number | null;
+  name: string;
+  price: number;
+  isRental: boolean;
+  fileId: number|null;
+  location: string;
+  description: string;
+}
+
 export interface PropertyPayload {
   userId: number;
   name: string;
