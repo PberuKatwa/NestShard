@@ -119,6 +119,7 @@ export class PublicController{
         }
       }
 
+      res.status(200).json(response);
     } catch (error:any) {
 
       let message = "Unknown error";
