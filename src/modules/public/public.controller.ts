@@ -4,7 +4,7 @@ import { PropertiesModel } from "../properties/properties.model";
 import { BlogModel } from "../blog/blog.model";
 import { APP_LOGGER } from "src/logger/logger.provider";
 import type { AppLogger } from "src/logger/winston.logger";
-import { AllProperties, Property, PropertyApiResponse } from "src/types/properties.types";
+import { AllProperties, Property, PropertyApiResponse, SinglePropertyApiResponse } from "src/types/properties.types";
 import { GarageService } from "../garage/garage.service";
 import { isInstance } from "class-validator";
 import { ApiResponse } from "src/types/api.types";
@@ -173,6 +173,37 @@ export class PublicController{
       }
       return res.status(500).json(response);
 
+    }
+  }
+
+  @Get('properties/:id')
+  async getProperty( @Req() req:Request, @Res() res:Response ) {
+    try {
+
+      const { id } = req.params;
+
+      const property = await this.properties.getProperty(parseInt(id));
+
+      if (property.file_url) {
+        property.signedUrl = await this.garage.getSignedFileURl(property.file_url)
+      }
+
+      const response: SinglePropertyApiResponse = {
+        success: true,
+        message: "Successfully fetched property",
+        data:property
+      }
+
+      return res.status(200).json(response);
+
+    } catch (error) {
+
+      this.logger.error(`Error in getting all properties from database`, error)
+      const response: ApiResponse = {
+        success: false,
+        message:`${error}`
+      }
+      return res.status(500).json(response)
     }
   }
 
