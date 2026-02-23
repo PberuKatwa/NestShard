@@ -8,6 +8,7 @@ import { AllProperties, Property, PropertyApiResponse } from "src/types/properti
 import { GarageService } from "../garage/garage.service";
 import { isInstance } from "class-validator";
 import { ApiResponse } from "src/types/api.types";
+import { AllBlogsApiResponse, FullBlog } from "src/types/blog.types";
 
 @Controller('public')
 export class PublicController{
@@ -90,6 +91,33 @@ export class PublicController{
     @Res() res:Response
   ) {
     try {
+
+      const allBlogs = await this.blog.getAllBlogs(page, limit);
+
+      const { blogs, pagination } = allBlogs;
+
+      const blogMap: FullBlog[] = await Promise.all(
+        blogs.map(
+
+          async (blog) => {
+            if (blog.file_url) {
+              blog.signed_url = await this.garage.getSignedFileURl(blog.file_url)
+            }
+
+            return blog;
+          }
+
+        )
+      )
+
+      const response: AllBlogsApiResponse = {
+        success: true,
+        message: "Successfully fetched all blogs",
+        data: {
+          blogs: blogMap,
+          pagination:pagination
+        }
+      }
 
     } catch (error:any) {
 
