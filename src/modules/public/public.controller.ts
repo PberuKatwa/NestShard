@@ -81,4 +81,20 @@ export class PublicController{
     }
   }
 
+  @Get('blogs')
+  async getBlogs(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit: number,
+    @Res() res:Response
+  ) {
+    try {
+
+    } catch (error:any) {
+
+      let message = "Unknown error";
+      let stack: string | null = null;
+
+    }
+  }
+
 }
