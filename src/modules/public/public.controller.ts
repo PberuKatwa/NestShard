@@ -190,7 +190,7 @@ export class PublicController{
 
       const response: SinglePropertyApiResponse = {
         success: true,
-        message: "Sucessfully fetched property",
+        message: "Successfully fetched property",
         data:property
       }
 
