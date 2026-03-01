@@ -20,6 +20,16 @@ export interface PostgresEnv{
   pgDatabase: string;
 }
 
+export interface EmailConfig{
+  host: string;
+  port: number;
+  secure:string;
+  auth: {
+    user: string,
+    pass: string;
+  }
+}
+
 export type EnvConfig = PostgresEnv | S3Config | GlobalEnvironment
 
 export type SuffixChecker = (value:string,suffix:string) => boolean;
