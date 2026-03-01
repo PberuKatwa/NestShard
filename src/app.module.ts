@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { s3Config,postgresEnv,globalConfig } from './config';
+import { s3Config,postgresEnv,globalConfig, emailConfig } from './config';
 import { AppLoggerModule } from './logger/logger.module';
 import { GarageModule } from './modules/garage/garage.module';
 import { FilesModule } from './modules/files/files.module';
@@ -12,12 +12,13 @@ import { BlogModule } from './modules/blog/blog.module';
 import Joi from 'joi';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { PublicModule } from './modules/public/public.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(
       {
-        load: [s3Config, postgresEnv, globalConfig],
+        load: [s3Config, postgresEnv, globalConfig, emailConfig],
         isGlobal: true,
 
         // validationSchema: Joi.object({
@@ -37,7 +38,8 @@ import { PublicModule } from './modules/public/public.module';
     AuthModule,
     PropertiesModule,
     BlogModule,
-    PublicModule
+    PublicModule,
+    MailModule
   ]
 })
 export class AppModule implements NestModule{

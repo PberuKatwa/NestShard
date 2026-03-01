@@ -4,21 +4,27 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Module } from "@nestjs/common";
 import { emailConfig } from "src/config";
 import { MailService } from "./mail.service";
-const { host, port, secure, auth } = emailConfig();
+import { ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
-    MailerModule.forRoot({
-      transport: { host, port, secure, auth },
-      defaults: { from: `"No Reply" <${auth.user}>`, },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
+    MailerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        transport: {
+          host: configService.get('smtpHost'),
+          port: configService.get<number>('smtpPort'),
+          secure: configService.get<boolean>('smtpPort'),
+          auth: {
+            user: configService.get('smtpUser'),
+            pass: configService.get('smtpUser'),
+          },
         },
-      },
-    })
+        defaults: {
+          from: `"No Reply" <${configService.get('SMTP_USER')}>`,
+        },
+      }),
+    }),
   ],
   providers: [MailService]
 })

@@ -21,13 +21,11 @@ export interface PostgresEnv{
 }
 
 export interface EmailConfig{
-  host: string;
-  port: number;
-  secure:boolean;
-  auth: {
-    user: string,
-    pass: string;
-  }
+  smtpHost: string;
+  smtpPort: number;
+  smtpSecure: boolean;
+  smtpUser: string,
+  smtpPassword: string;
 }
 
 export type EnvConfig = PostgresEnv | S3Config | GlobalEnvironment
