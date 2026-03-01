@@ -22,6 +22,7 @@ export class MailService{
         subject: 'Welcome!',
         template: 'enhanced',
        context: {
+         message,
          logoUrl: 'https://ardhitech.com/wp-content/uploads/2022/10/ardhitech_logo-.png',
          year: new Date().getFullYear(),
        },
