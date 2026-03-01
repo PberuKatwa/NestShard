@@ -20,7 +20,8 @@ export class MailService{
      const response = await this.mailerService.sendMail({
         to,
         subject: 'Welcome!',
-        text: message,
+        template: 'welcome',
+        context: { message },
       });
 
       return response;

@@ -24,6 +24,13 @@ import { MailController } from "./mail.controller";
         defaults: {
           from: `"No Reply" <${configService.get('smtpUser')}>`,
         },
+        template: {
+          dir: join(process.cwd(), 'src/modules/mail/templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
       }),
     }),
   ],
