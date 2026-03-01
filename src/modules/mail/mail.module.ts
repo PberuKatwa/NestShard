@@ -1,4 +1,6 @@
 import { MailerModule } from "@nestjs-modules/mailer";
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from "@nestjs/common";
 import { emailConfig } from "src/config";
 const { host, port, secure, auth } = emailConfig();
@@ -7,7 +9,14 @@ const { host, port, secure, auth } = emailConfig();
   imports: [
     MailerModule.forRoot({
       transport: { host, port, secure, auth },
-      defaults:{ from: `"No Reply" <${auth.user}>`,}
+      defaults: { from: `"No Reply" <${auth.user}>`, },
+      template: {
+        dir: join(__dirname, 'templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
     })
   ]
 })
