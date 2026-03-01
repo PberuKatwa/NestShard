@@ -19,7 +19,15 @@ export class MailController{
 
       const { to, message } = req.body;
 
-      const response = await this.mailService.testEmail(to, message);
+      const result = await this.mailService.testEmail(to, message);
+
+      const response: ApiResponse = {
+        success: true,
+        message: "Successfully sent email",
+        data:result
+      }
+
+      return res.status(200).json(response);
 
     } catch (error) {
       let message = "Unknown error";
