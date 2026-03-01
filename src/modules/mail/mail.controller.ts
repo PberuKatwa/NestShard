@@ -1,14 +1,43 @@
-import { Controller, Post, Req } from "@nestjs/common";
+import { Controller, Post, Req, Res, Inject } from "@nestjs/common";
 import { MailService } from "./mail.service";
 import type { Request, Response } from "express";
+import type { AppLogger } from "src/logger/winston.logger";
+import { APP_LOGGER } from "src/logger/logger.provider";
+import { ApiResponse } from "src/types/api.types";
 
 @Controller("mail")
 export class MailController{
 
-  constructor(private readonly mailService: MailService) { }
+  constructor(
+    private readonly mailService: MailService,
+    @Inject(APP_LOGGER) private readonly logger: AppLogger,
+  ) { }
 
   @Post()
-  async sendTestEmail(@Req() req:Request, ) {
+  async sendTestEmail(@Req() req: Request, @Res() res: Response) {
+    try {
+
+    } catch (error) {
+      let message = "Unknown error";
+      let stack: string | null = null;
+
+      if (error instanceof Error) {
+        message = error.message,
+        stack = error.stack ?? null;
+      }
+
+      this.logger.error(`Error in sending test emails`, {
+        errorMessage: message,
+        errorStack:stack
+      })
+
+      const response: ApiResponse = {
+        success: false,
+        message:message
+      }
+
+      return res.status(500).json(response);
+    }
 
   }
 

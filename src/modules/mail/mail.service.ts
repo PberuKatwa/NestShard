@@ -1,13 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import type  { AppLogger } from "src/logger/winston.logger";
+import { APP_LOGGER } from "src/logger/logger.provider";
 
 @Injectable()
 export class MailService{
 
   constructor(
     private readonly mailerService: MailerService,
-    @Inject() private readonly logger:AppLogger
+    @Inject(APP_LOGGER) private readonly logger:AppLogger
   ) {
 
   }
