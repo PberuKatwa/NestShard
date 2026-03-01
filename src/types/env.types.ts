@@ -22,8 +22,8 @@ export interface PostgresEnv{
 
 export interface EmailConfig{
   host: string;
-  port: string;
-  secure:string;
+  port: number;
+  secure:boolean;
   auth: {
     user: string,
     pass: string;

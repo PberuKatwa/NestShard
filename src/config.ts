@@ -60,11 +60,11 @@ export const globalConfig = (): GlobalEnvironment => ({
 });
 
 export const emailConfig = (): EmailConfig => ({
-  host: getEnv(getGlobalEnvironment, "EMAIL_HOST"),
-  port: getEnv(getGlobalEnvironment, "EMAIL_HOST"),
-  secure:getEnv(getGlobalEnvironment, "EMAIL_SECURE"),
+  host: getEnv(getGlobalEnvironment, "SMTP_HOST"),
+  port: parseInt( getEnv(getGlobalEnvironment, "SMTP_HOST")),
+  secure:Boolean( getEnv(getGlobalEnvironment, "SMTP_SECURE")),
   auth: {
-    user: getEnv(getGlobalEnvironment, "EMAIL_USER"),
-    pass: getEnv(getGlobalEnvironment, "EMAIL_PASSWORD")
+    user: getEnv(getGlobalEnvironment, "SMTP_USER"),
+    pass: getEnv(getGlobalEnvironment, "SMTP_PASSWORD")
   }
 })
