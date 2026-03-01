@@ -29,7 +29,6 @@ export class AuthGuard implements CanActivate{
       if (!authorization || authorization.trim() === '') {
         throw new UnauthorizedException('No authorization token was provided');
       }
-
       const token = authorization.replace(/bearer/gim, '').trim();
       const decoded = await this.users.validateToken(token);
       request['user'] = decoded;

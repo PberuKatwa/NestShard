@@ -97,7 +97,7 @@ export class FilesController{
         }
       );
     } catch (error) {
-      this.logger.error('Error in creating property', error);
+      this.logger.error('Error in creating image', error);
       const response: ApiResponse = {
         success: false,
         message: `${error.message}`,

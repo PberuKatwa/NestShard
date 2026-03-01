@@ -33,6 +33,7 @@ export interface AuthUser extends BaseUser {
 export interface UserProfile extends BaseUser {
   id: number;
   last_name: string;
+  email: string;
   file_id: number | null;
   file_url: string | null;
   signed_url: string | null;

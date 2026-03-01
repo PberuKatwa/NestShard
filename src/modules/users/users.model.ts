@@ -174,6 +174,7 @@ export class UsersModel{
           u.first_name,
           u.last_name,
           u.file_id,
+          u.email,
           f.file_url as file_url
         FROM users u
         LEFT JOIN files f ON u.file_id = f.id
