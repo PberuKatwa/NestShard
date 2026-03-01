@@ -17,7 +17,7 @@ export class MailService{
     try {
       this.logger.info(`Attempting test email`, message);
 
-      await this.mailerService.sendMail({
+     const response = await this.mailerService.sendMail({
         to,
         subject: 'Welcome!',
         template: 'welcome',
@@ -25,6 +25,9 @@ export class MailService{
           message
         },
       });
+
+      return response;
+
     } catch (error) {
       throw error;
     }

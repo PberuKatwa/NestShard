@@ -17,6 +17,10 @@ export class MailController{
   async sendTestEmail(@Req() req: Request, @Res() res: Response) {
     try {
 
+      const { to, message } = req.body;
+
+      const response = await this.mailService.testEmail(to, message);
+
     } catch (error) {
       let message = "Unknown error";
       let stack: string | null = null;
