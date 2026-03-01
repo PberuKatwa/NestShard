@@ -14,14 +14,14 @@ import { ConfigService } from "@nestjs/config";
         transport: {
           host: configService.get('smtpHost'),
           port: configService.get<number>('smtpPort'),
-          secure: configService.get<boolean>('smtpPort'),
+          secure: configService.get<boolean>('smtpSecure'),
           auth: {
             user: configService.get('smtpUser'),
-            pass: configService.get('smtpUser'),
+            pass: configService.get('smtpPassword'),
           },
         },
         defaults: {
-          from: `"No Reply" <${configService.get('SMTP_USER')}>`,
+          from: `"No Reply" <${configService.get('smtpUser')}>`,
         },
       }),
     }),
