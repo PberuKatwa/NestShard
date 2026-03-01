@@ -20,9 +20,12 @@ export class MailService{
      const response = await this.mailerService.sendMail({
         to,
         subject: 'Welcome!',
-        template: 'welcome',
-        context: { message },
-      });
+        template: 'enhanced',
+       context: {
+         logoUrl: 'https://ardhitech.com/wp-content/uploads/2022/10/ardhitech_logo-.png',
+         year: new Date().getFullYear(),
+       },
+     });
 
       return response;
 
