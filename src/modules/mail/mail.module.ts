@@ -3,6 +3,7 @@ import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from "@nestjs/common";
 import { emailConfig } from "src/config";
+import { MailService } from "./mail.service";
 const { host, port, secure, auth } = emailConfig();
 
 @Module({
@@ -18,7 +19,8 @@ const { host, port, secure, auth } = emailConfig();
         },
       },
     })
-  ]
+  ],
+  providers:[MailService]
 })
 
 export class MailModule { };
