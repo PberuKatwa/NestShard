@@ -13,7 +13,7 @@ export class MailController{
     @Inject(APP_LOGGER) private readonly logger: AppLogger,
   ) { }
 
-  @Post()
+  @Post('test-email')
   async sendTestEmail(@Req() req: Request, @Res() res: Response) {
     try {
 
