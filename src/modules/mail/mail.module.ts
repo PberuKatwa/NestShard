@@ -20,7 +20,7 @@ const { host, port, secure, auth } = emailConfig();
       },
     })
   ],
-  providers:[MailService]
+  providers: [MailService]
 })
 
 export class MailModule { };
