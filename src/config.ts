@@ -4,7 +4,8 @@ import {
   EnvConfig,
   S3Config,
   GlobalEnvironment,
-  PostgresEnv
+  PostgresEnv,
+  EmailConfig
 } from "./types/env.types"
 
 const getGlobalEnvironment: GlobalEnvironmentChecker = function (): string {
@@ -57,3 +58,13 @@ export const globalConfig = (): GlobalEnvironment => ({
   port: getEnv(getGlobalEnvironment, "PORT"),
   jwtSecret:getEnv(getGlobalEnvironment,"JWT_SECRET")
 });
+
+export const emailConfig = (): EmailConfig => ({
+  host: getEnv(getGlobalEnvironment, "EMAIL_HOST"),
+  port: getEnv(getGlobalEnvironment, "EMAIL_HOST"),
+  secure:getEnv(getGlobalEnvironment, "EMAIL_SECURE"),
+  auth: {
+    user: getEnv(getGlobalEnvironment, "EMAIL_USER"),
+    pass: getEnv(getGlobalEnvironment, "EMAIL_PASSWORD")
+  }
+})

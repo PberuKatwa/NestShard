@@ -22,7 +22,7 @@ export interface PostgresEnv{
 
 export interface EmailConfig{
   host: string;
-  port: number;
+  port: string;
   secure:string;
   auth: {
     user: string,
